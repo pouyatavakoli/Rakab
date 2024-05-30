@@ -1,15 +1,19 @@
 #include <string>
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
-class Player{
-    public:
-    //setters
+class Player
+{
+public:
+    // constructor
+    Player(int, std::string);
+    // setters
     void setAge(int);
     void setName(std::string);
-    //getters
+    // getters
     int getAge();
     std::string getName();
-    private:
+
+private:
     int age;
     std::string name;
 };

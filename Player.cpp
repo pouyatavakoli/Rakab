@@ -1,16 +1,26 @@
 #include "Player.hpp"
-//setters
-void Player::setAge(int ageVal){
+// constructor
+Player::Player(int ageVal, std::string nameVal)
+{
+    age = ageVal;
+    name = nameVal;
+}
+
+// setters
+void Player::setAge(int ageVal)
+{
     age = ageVal;
 }
-void Player::setName(std::string nameVal){
+void Player::setName(std::string nameVal)
+{
     name = nameVal;
-
 }
-//getters
-int Player::getAge(){
+// getters
+int Player::getAge()
+{
     return age;
 }
-std::string Player::getName(){
+std::string Player::getName()
+{
     return name;
 }
