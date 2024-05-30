@@ -7,10 +7,15 @@ void Game::setPlayersCount(int PlayerCountVal)
     playerCount = PlayerCountVal;
 }
 
-void Game::setPlayersName(std::string nameVal)
+void Game::run()
 {
-    for (Player &player : Players)
+    Interface interface;
+    setPlayersCount(interface.getPlayersCountFromUser());
+    players.resize(playerCount);
+    for (Player &player : players)
     {
-        player.setName(nameVal);
+        int i = 0;
+        player.setName(interface.getPlayersNameFromUser(i));
+        i++;
     }
 }

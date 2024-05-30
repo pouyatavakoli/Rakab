@@ -3,15 +3,16 @@
 
 #include <vector>
 #include "Player.hpp"
+#include "Interface.hpp"
 
 class Game {
 public:
     Game(); 
+    void run();
     void setPlayersCount(int);
-    void setPlayersName(std::string);
 private:
     int playerCount;
-    std::vector<Player> Players;
+    std::vector<Player> players;
 };
 
 #endif
