@@ -1,8 +1,8 @@
-#include "YellowCard.hpp"
+#include "PurpleCard.hpp"
 
 #ifndef MATARSAK_HPP
 #define MATARSAK_HPP
-class Matarsak : public YellowCard
+class Matarsak : public PurpleCard
 {
 public:
 private:
