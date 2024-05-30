@@ -3,7 +3,7 @@
 #ifndef SEASON_HPP
 #define SEASON_HPP
 
-class season : public PurpleCard
+class Season : public PurpleCard
 {
 public:
 private:
