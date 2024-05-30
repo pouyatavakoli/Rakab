@@ -1,4 +1,6 @@
 #include "Game.hpp"
+#include "Interface.hpp"
+
 
 Game::Game() : playerCount(0) {}
 

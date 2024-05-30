@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "Player.hpp"
-#include "Interface.hpp"
 
 class Game {
 public:
