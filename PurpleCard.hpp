@@ -3,7 +3,7 @@
 #ifndef PURPLE_HPP
 #define PURPLE_Hpp
 
-class YellowCard : public Card
+class PurpleCard : public Card
 {
 public:
 private:
