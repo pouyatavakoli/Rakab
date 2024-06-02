@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 
+#ifndef MAP_HPP
+#define MAP_HPP
 class Map
 {
 public:
@@ -12,3 +14,5 @@ public:
 private:
     std::unordered_map<std::string, std::vector<std::string>> map;
 };
+
+#endif
