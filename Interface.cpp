@@ -30,7 +30,14 @@ std::string Interface::getPlayersNameFromUser(int i)
 int Interface::getPlayerAgeFromUser(int i)
 {
     int age;
-    std::cout << "enter player " <<i+1 << "age : ";
+    std::cout << "enter player " << i + 1 << "age : ";
     std::cin >> age;
     return age;
+}
+std::string Interface::askUserToPickACard()
+{
+    std::cout << "enter cards name : ";
+    std::string cardsName;
+    std::cin >> cardsName;
+    return cardsName ;
 }
