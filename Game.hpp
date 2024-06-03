@@ -16,6 +16,7 @@ private:
     int playerCount;
     std::vector<Player> players;
     Deck mainDeck;
+    bool winnerIsPicked;
 };
 
 #endif

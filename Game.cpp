@@ -1,7 +1,12 @@
+#include <algorithm>
+
 #include "Game.hpp"
 #include "Interface.hpp"
 
-Game::Game() : playerCount(0) {}
+Game::Game() : playerCount(0)
+{
+    winnerIsPicked = false;
+}
 
 void Game::setPlayersCount(int PlayerCountVal)
 {
@@ -25,7 +30,7 @@ void Game::run()
     }
 
     // give 10 cards to each player
-    // TODO: implement shuffle 
+    // TODO: implement shuffle
     for (int i = 0; i < 10; i++)
     {
         for (Player &player : players)
@@ -35,8 +40,36 @@ void Game::run()
                 Card card = mainDeck.getCardsVector().back(); // Get the top card from the main deck
                 mainDeck.removeCardFromDeck(card);            // Remove the card from the main deck
                 player.addCardToDeck(card);                   // Add the card to the player's deck
+                // TODO: increase card count in players deck
             }
         }
     }
+    // the game starts form here
+    while (!winnerIsPicked)
+    {
+        for (Player &player : players)
+        {
+            std::string userChoice = interface.askUserToPickACard();
 
-}
+            if (userChoice == "TablZan")
+            {
+                // Check if TablZan exists in player deck
+                std::vector<Card> cardsInPlayerDeck = player.getPlayerDeck().getCardsVector();
+                auto it = std::find(cardsInPlayerDeck.begin(), cardsInPlayerDeck.end(), "TablZan");
+
+                if (it != cardsInPlayerDeck.end())
+                {
+                    // Play TablZan
+                    std::cout << "Playing TablZan for player..." << std::endl;
+                }
+                else
+                {
+                    std::cout << "TablZan not found in player's deck. Try again." << std::endl;
+                }
+            }
+            else
+            {
+                std::cout << "Invalid card choice. Try again." << std::endl;
+            }
+        }
+    }
