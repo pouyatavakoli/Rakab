@@ -1,3 +1,4 @@
+#include <algorithm>
 
 #include "Deck.hpp"
 void Deck::AddToDeck(Card card)
