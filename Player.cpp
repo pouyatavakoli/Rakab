@@ -32,3 +32,7 @@ std::vector<std::string> Player::get_owned_provinces() const
 {
     return owned_provinces;
 }
+void Player::addCardToDeck(Card card)
+{
+    playerDeck.AddToDeck(card);
+}
