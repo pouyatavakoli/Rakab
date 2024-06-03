@@ -3,7 +3,9 @@
 class Card
 {
 public:
+    Card();
     Card(int);
+    virtual int get_score() const;
 
 private:
     int score;

@@ -6,6 +6,9 @@
 class YellowCard : public Card
 {
 public:
+    YellowCard();
+    YellowCard(int);
+
 private:
 };
 #endif
