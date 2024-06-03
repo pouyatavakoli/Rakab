@@ -1,8 +1,11 @@
+#include <vector>
+
+#include "Player.hpp"
+#include "Deck.hpp"
+
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <vector>
-#include "Player.hpp"
 
 class Game {
 public:
@@ -12,6 +15,7 @@ public:
 private:
     int playerCount;
     std::vector<Player> players;
+    Deck mainDeck;
 };
 
 #endif
