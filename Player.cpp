@@ -15,6 +15,10 @@ void Player::setName(std::string nameVal)
 {
     name = nameVal;
 }
+void Player::add_owned_provinces(std::string newProvince)
+{
+    owned_provinces.push_back(newProvince);
+}
 // getters
 int Player::getAge()
 {
@@ -23,4 +27,8 @@ int Player::getAge()
 std::string Player::getName()
 {
     return name;
+}
+std::vector<std::string> Player::get_owned_provinces() const
+{
+    return owned_provinces;
 }
