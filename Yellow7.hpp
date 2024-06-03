@@ -1,11 +1,11 @@
 #include "YellowCard.hpp"
 
-#ifndef YELLOW1_HPP
-#define YELLOW1_HPP
-class Yellow1 : public YellowCard
+#ifndef YELLOW7_HPP
+#define YELLOW7_HPP
+class Yellow7 : public YellowCard
 {
 public:
-    Yellow1();
+    Yellow7();
     virtual int get_score() const;
 
 private:
