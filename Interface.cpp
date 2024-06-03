@@ -27,3 +27,10 @@ std::string Interface::getPlayersNameFromUser(int i)
     std::cin >> name;
     return name;
 }
+int Interface::getPlayerAgeFromUser(int i)
+{
+    int age;
+    std::cout << "enter player " <<i+1 << "age : ";
+    std::cin >> age;
+    return age;
+}

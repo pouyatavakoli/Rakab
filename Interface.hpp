@@ -8,6 +8,7 @@ class Interface {
 public:
     int getPlayersCountFromUser();
     std::string getPlayersNameFromUser(int);
+    int getPlayerAgeFromUser(int);
 };
 
 #endif
