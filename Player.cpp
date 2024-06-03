@@ -36,3 +36,7 @@ void Player::addCardToDeck(Card card)
 {
     playerDeck.AddToDeck(card);
 }
+Deck Player::getPlayerDeck()
+{
+    return playerDeck;
+}

@@ -19,6 +19,7 @@ public:
     std::string getName();
     std::vector<std::string> get_owned_provinces() const;
     void addCardToDeck(Card);
+    Deck getPlayerDeck();
 
 private:
     int age;
