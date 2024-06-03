@@ -1,6 +1,12 @@
 #include <algorithm>
 
 #include "Deck.hpp"
+
+Deck::Deck()
+{
+    cardsCount = 0;
+}
+
 void Deck::AddToDeck(Card card)
 {
     deckOfCards.push_back(card);
@@ -22,4 +28,8 @@ void Deck::removeCardFromDeck(Card card)
         deckOfCards.erase(it);
         cardsCount--;
     }
+}
+void Deck::setCardCount(int countVal)
+{
+    cardsCount = countVal;
 }

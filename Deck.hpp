@@ -7,9 +7,11 @@
 class Deck
 {
 public:
+    Deck();
     void AddToDeck(Card);
     void removeCardFromDeck(Card);
     int getCardsCount();
+    void setCardCount(int);
     std::vector<Card> getCardsVector();
 
 private:
