@@ -7,7 +7,7 @@ class PurpleCard : public Card
 {
 public:
     PurpleCard();
-    PurpleCard(int, std::string);
+    PurpleCard(int);
 
 private:
 };
