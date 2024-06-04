@@ -4,6 +4,7 @@ Player::Player(int ageVal, std::string nameVal)
 {
     age = ageVal;
     name = nameVal;
+    score = 0 ;
 }
 
 // setters
