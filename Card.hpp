@@ -4,11 +4,13 @@ class Card
 {
 public:
     Card();
-    Card(int);
+    Card(int, std::string);
     void play();
     virtual int get_score() const;
+    std::string getType();
 
 private:
+    std::string type;
     int score;
 };
 #endif
