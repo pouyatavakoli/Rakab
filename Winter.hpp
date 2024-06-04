@@ -5,6 +5,10 @@
 class Winter : public Season
 {
 public:
+    Winter();
+    void start(Player);
+    void end(Player);
+
 private:
 };
 #endif

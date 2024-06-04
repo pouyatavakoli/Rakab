@@ -6,6 +6,9 @@
 class Spring : public Season
 {
 public:
+    Spring();
+    void start(Player);
+    void end(Player);
 private:
 };
 #endif

@@ -6,6 +6,7 @@
 class PurpleCard : public Card
 {
 public:
+    PurpleCard();
 private:
 };
 #endif

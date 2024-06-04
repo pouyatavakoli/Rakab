@@ -29,5 +29,6 @@ private:
     std::string name;
     std::vector<std::string> owned_provinces;
     std::vector<Card> playerDeck;
+    std::vector<Card> hand;
 };
 #endif
