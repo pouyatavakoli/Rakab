@@ -4,7 +4,7 @@ Player::Player(int ageVal, std::string nameVal)
 {
     age = ageVal;
     name = nameVal;
-    score = 0 ;
+    score = 0;
 }
 
 // setters
@@ -40,4 +40,12 @@ void Player::addCardToDeck(Card card)
 std::vector<Card> Player::getPlayerDeck()
 {
     return playerDeck;
+}
+void Player::setScore(int scoreVal)
+{
+    score = scoreVal;
+}
+int Player::getScore()
+{
+    return score ;
 }

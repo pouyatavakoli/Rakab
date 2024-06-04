@@ -20,6 +20,8 @@ public:
     std::vector<std::string> get_owned_provinces() const;
     void addCardToDeck(Card);
     std::vector<Card> Player::getPlayerDeck();
+    void setScore(int score);
+    int getScore();
     
 
 private:
