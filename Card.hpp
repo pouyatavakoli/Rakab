@@ -5,6 +5,7 @@ class Card
 public:
     Card();
     Card(int);
+    void play();
     virtual int get_score() const;
 
 private:

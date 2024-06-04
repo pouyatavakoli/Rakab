@@ -13,6 +13,17 @@ void Game::setPlayersCount(int PlayerCountVal)
     playerCount = PlayerCountVal;
 }
 
+void Game::removeCardFromDeck(Card card , std::vector<Card> deckOfCards)
+{
+    auto it = std::find(deckOfCards.begin(), deckOfCards.end(), card);
+
+    if (it != deckOfCards.end())
+    {
+        deckOfCards.erase(it);
+    }
+}
+
+
 void Game::run()
 {
     Interface interface;                                  // create interface for the game
@@ -35,12 +46,11 @@ void Game::run()
     {
         for (Player &player : players)
         {
-            if (!mainDeck.getCardsVector().empty())
+            if (!mainDeck.empty())
             {
-                Card card = mainDeck.getCardsVector().back(); // Get the top card from the main deck
-                mainDeck.removeCardFromDeck(card);            // Remove the card from the main deck
-                player.addCardToDeck(card);                   // Add the card to the player's deck
-                // TODO: increase card count in players deck
+                Card card = mainDeck.back();                    // Get the top card from the main deck
+                removeCardFromDeck(card , mainDeck);            // Remove the card from the main deck
+                player.addCardToDeck(card);                       // Add the card to the player's deck
             }
         }
     }
@@ -54,7 +64,7 @@ void Game::run()
             if (userChoice == "TablZan")
             {
                 // Check if TablZan exists in player deck
-                std::vector<Card> cardsInPlayerDeck = player.getPlayerDeck().getCardsVector();
+                std::vector<Card> cardsInPlayerDeck = player.getPlayerDeck();
                 auto it = std::find(cardsInPlayerDeck.begin(), cardsInPlayerDeck.end(), "TablZan");
 
                 if (it != cardsInPlayerDeck.end())
@@ -73,3 +83,5 @@ void Game::run()
             }
         }
     }
+
+}

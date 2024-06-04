@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-#include "Deck.hpp"
+#include "Card.hpp"
 
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
@@ -19,12 +19,13 @@ public:
     std::string getName();
     std::vector<std::string> get_owned_provinces() const;
     void addCardToDeck(Card);
-    Deck getPlayerDeck();
+    std::vector<Card> Player::getPlayerDeck();
+    
 
 private:
     int age;
     std::string name;
     std::vector<std::string> owned_provinces;
-    Deck playerDeck;
+    std::vector<Card> playerDeck;
 };
 #endif

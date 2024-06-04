@@ -1,7 +1,6 @@
 #include <vector>
 
 #include "Player.hpp"
-#include "Deck.hpp"
 
 #ifndef GAME_HPP
 #define GAME_HPP
@@ -12,10 +11,11 @@ public:
     Game(); 
     void run();
     void setPlayersCount(int);
+    void removeCardFromDeck(Card card , std::vector<Card> deckOfCards);
 private:
     int playerCount;
     std::vector<Player> players;
-    Deck mainDeck;
+    std::vector<Card> mainDeck;
     bool winnerIsPicked;
 };
 
