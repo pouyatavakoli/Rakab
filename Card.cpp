@@ -2,8 +2,10 @@
 
 #include "Card.hpp"
 
-Card::Card(){
-    type = "Yellow"}
+Card::Card()
+{
+    type = "Yellow";
+}
 
 Card::Card(int scoreVal, std::string typeVal)
 {
