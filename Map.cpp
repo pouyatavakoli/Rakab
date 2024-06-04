@@ -2,19 +2,19 @@
 
 Map::Map()
 {
-    map["BELLA"] = {"PLADACI", "CALINE"};
-    map["CALINE"] = {"ENNA", "ATELA", "BORGE"};
+    map["BELLA"] = {"PLADACI", "CALINE" , "BORGE"};
+    map["CALINE"] = {"ENNA", "ATELA", "BORGE" , "PALADACI"};
     map["ENNA"] = {"BORGE", "CALINE", "DIMASE", "ATELA"};
     map["ATELA"] = {"CALINE", "ENNA", "DISAME"};
-    map["BORGE"] = {"ENNA", "CALINE", "DIMASE", "PALADACI", "MORINA", "OLIVADI"};
-    map["PALADACI"] = {"BELLA", "BORGE", "MORINA", "ROLLO"};
+    map["BORGE"] = {"ENNA", "CALINE", "DIMASE", "PALADACI", "MORINA", "OLIVADI" , "BELLA"};
+    map["PALADACI"] = {"BELLA", "BORGE", "MORINA", "ROLLO" , "CALINE"};
     map["DISMASE"] = {"ATELA", "ENNA", "BORGE", "OLIVADI"};
     map["MORINA"] = {"PALADACI", "BORGE", "ROLLO", "TALMONE", "OLIVADI", "ARMENTO"};
     map["OLIVADI"] = {"DIMASE", "MORINA", "ARMENTO", "LIA"};
     map["ROLLO"] = {"PLADACI", "TALMONE", "MORINA", "ELINIA"};
-    map["TALMONE"] = {"MORINA", "ROLLO", "ELINIA"};
+    map["TALMONE"] = {"MORINA", "ROLLO", "ELINIA" ,"ARMENTO"};
     map["ELINIA"] = {"ROLLO", "TALMONE"};
-    map["ARMENTO"] = {"LIA", "OLIVADI", "MORINA"};
+    map["ARMENTO"] = {"LIA", "OLIVADI", "MORINA" , "TALMONE"};
     map["LIA"] = {"OLIVADI", "ARMENTO"};
 }
 

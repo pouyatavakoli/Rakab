@@ -13,20 +13,19 @@ public:
     // setters
     void setAge(int);
     void setName(std::string);
-    void add_owned_provinces(std::string);
-    // getters
-    int getAge();
-    std::string getName();
-    std::vector<std::string> get_owned_provinces() const;
-    void addCardToDeck(Card);
-    std::vector<Card> Player::getPlayerDeck();
     void setScore(int score);
-    int getScore();
-    
+    void add_owned_provinces(std::string);
+    void addCardToDeck(Card);
+    // getters
+    int getAge() const;
+    std::string getName() const;
+    std::vector<std::string> get_owned_provinces() const;
+    std::vector<Card> Player::getPlayerDeck() const;
+    int getScore() const;
 
 private:
     int age;
-    int score ;
+    int score;
     std::string name;
     std::vector<std::string> owned_provinces;
     std::vector<Card> playerDeck;

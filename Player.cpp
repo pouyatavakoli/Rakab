@@ -21,11 +21,11 @@ void Player::add_owned_provinces(std::string newProvince)
     owned_provinces.push_back(newProvince);
 }
 // getters
-int Player::getAge()
+int Player::getAge() const
 {
     return age;
 }
-std::string Player::getName()
+std::string Player::getName() const
 {
     return name;
 }
@@ -33,11 +33,11 @@ std::vector<std::string> Player::get_owned_provinces() const
 {
     return owned_provinces;
 }
-void Player::addCardToDeck(Card card)
+void Player::addCardToDeck(Card card) 
 {
     playerDeck.push_back(card);
 }
-std::vector<Card> Player::getPlayerDeck()
+std::vector<Card> Player::getPlayerDeck() const
 {
     return playerDeck;
 }
@@ -45,7 +45,7 @@ void Player::setScore(int scoreVal)
 {
     score = scoreVal;
 }
-int Player::getScore()
+int Player::getScore() const
 {
     return score ;
 }
