@@ -8,8 +8,8 @@ Card::Card()
 
 Card::Card(int scoreVal, std::string typeVal)
 {
-    type = typeVal;
     score = scoreVal;
+    type = typeVal;
 }
 void Card::play()
 {

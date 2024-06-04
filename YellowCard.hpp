@@ -7,7 +7,7 @@ class YellowCard : public Card
 {
 public:
     YellowCard();
-    YellowCard(int , std::string);
+    YellowCard(int);
 
 private:
 };
