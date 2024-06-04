@@ -1,3 +1,5 @@
 #include "PurpleCard.hpp"
 
-PurpleCard::PurpleCard() : Card() {}
+PurpleCard::PurpleCard() {}
+
+PurpleCard::PurpleCard(int point, std::string valName) : Card(point, valName) {}

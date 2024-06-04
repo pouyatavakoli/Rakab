@@ -1,12 +1,14 @@
-#include <iostream>
-#include <vector>
-
-#include "Card.hpp"
-
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
-class Player
-{
+
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <string>
+#include "YellowCard.hpp"
+#include "PurpleCard.hpp"
+
+class Player {
 public:
     // constructor
     Player(int, std::string);
@@ -14,13 +16,19 @@ public:
     void setAge(int);
     void setName(std::string);
     void setScore(int score);
-    void add_owned_provinces(std::string);
-    void addCardToDeck(Card);
+    void addOwnedProvinces(const std::string&);
+    void addCardToPlayedYellow(std::shared_ptr<YellowCard>);
+    void addCardToHandYellow(std::shared_ptr<YellowCard>);
+    void addCardToPlayedPurple(std::shared_ptr<PurpleCard>);
+    void addCardToHandPurple(std::shared_ptr<PurpleCard>);
     // getters
     int getAge() const;
     std::string getName() const;
-    std::vector<std::string> get_owned_provinces() const;
-    std::vector<Card> Player::getPlayerDeck() const;
+    std::vector<std::string> getOwnedProvinces() const;
+    std::vector<std::shared_ptr<YellowCard>> getPlayedYellowDeck() const;
+    std::vector<std::shared_ptr<YellowCard>> getYellowHand() const;
+    std::vector<std::shared_ptr<PurpleCard>> getPlayedPurpleDeck() const;
+    std::vector<std::shared_ptr<PurpleCard>> getPurpleHand() const;
     int getScore() const;
 
 private:
@@ -28,7 +36,10 @@ private:
     int score;
     std::string name;
     std::vector<std::string> owned_provinces;
-    std::vector<Card> playerDeck;
-    std::vector<Card> hand;
+    std::vector<std::shared_ptr<YellowCard>> playedYellowDeck;
+    std::vector<std::shared_ptr<YellowCard>> yellowHand;
+    std::vector<std::shared_ptr<PurpleCard>> playedPurpleDeck;
+    std::vector<std::shared_ptr<PurpleCard>> purpleHand;
 };
-#endif
+
+#endif // PLAYER_HPP

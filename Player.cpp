@@ -1,51 +1,86 @@
 #include "Player.hpp"
+
 // constructor
-Player::Player(int ageVal, std::string nameVal)
-{
-    age = ageVal;
-    name = nameVal;
-    score = 0;
-}
+Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), score(0) {}
 
 // setters
 void Player::setAge(int ageVal)
 {
     age = ageVal;
 }
+
 void Player::setName(std::string nameVal)
 {
     name = nameVal;
 }
-void Player::add_owned_provinces(std::string newProvince)
+
+void Player::setScore(int scoreVal)
+{
+    score = scoreVal;
+}
+
+void Player::addOwnedProvinces(const std::string &newProvince)
 {
     owned_provinces.push_back(newProvince);
 }
+
+void Player::addCardToPlayedYellow(std::shared_ptr<YellowCard> card)
+{
+    playedYellowDeck.push_back(card);
+}
+
+void Player::addCardToHandYellow(std::shared_ptr<YellowCard> card)
+{
+    yellowHand.push_back(card);
+}
+
+void Player::addCardToPlayedPurple(std::shared_ptr<PurpleCard> card)
+{
+    playedPurpleDeck.push_back(card);
+}
+
+void Player::addCardToHandPurple(std::shared_ptr<PurpleCard> card)
+{
+    purpleHand.push_back(card);
+}
+
 // getters
 int Player::getAge() const
 {
     return age;
 }
+
 std::string Player::getName() const
 {
     return name;
 }
-std::vector<std::string> Player::get_owned_provinces() const
+
+std::vector<std::string> Player::getOwnedProvinces() const
 {
     return owned_provinces;
 }
-void Player::addCardToDeck(Card card) 
+
+std::vector<std::shared_ptr<YellowCard>> Player::getPlayedYellowDeck() const
 {
-    playerDeck.push_back(card);
+    return playedYellowDeck;
 }
-std::vector<Card> Player::getPlayerDeck() const
+
+std::vector<std::shared_ptr<YellowCard>> Player::getYellowHand() const
 {
-    return playerDeck;
+    return yellowHand;
 }
-void Player::setScore(int scoreVal)
+
+std::vector<std::shared_ptr<PurpleCard>> Player::getPlayedPurpleDeck() const
 {
-    score = scoreVal;
+    return playedPurpleDeck;
 }
+
+std::vector<std::shared_ptr<PurpleCard>> Player::getPurpleHand() const
+{
+    return purpleHand;
+}
+
 int Player::getScore() const
 {
-    return score ;
+    return score;
 }
