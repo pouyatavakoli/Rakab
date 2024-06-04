@@ -2,4 +2,4 @@
 
 YellowCard::YellowCard() {}
 
-YellowCard::YellowCard(int point) : Card(point , "Yellow") {}
+YellowCard::YellowCard(int point, std::string typeVal) : Card(point, typeVal) {}

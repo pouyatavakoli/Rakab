@@ -10,4 +10,4 @@ public:
 
 private:
 };
-#endif
+#endif // YELLOW2_HPP
