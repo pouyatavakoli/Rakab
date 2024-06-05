@@ -10,7 +10,7 @@ void TablZan::effect(Player player)
         {
             /* card score was added to players score when the card was played
             now this addition doubles the score in total*/
-            player.setScore(player.getScore() + card.get_score());
+            player.setPoints(player.getPoints() + card.getPoints());
         }
     }
 }

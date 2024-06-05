@@ -1,45 +1,43 @@
 #include "Player.hpp"
 
 // constructor
-Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), score(0) {}
+Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), totalScore(0) {}
 
 // setters
 void Player::setAge(int ageVal)
 {
     age = ageVal;
 }
-
 void Player::setName(std::string nameVal)
 {
-    name = nameVal;
+    name = nameVal ;
 }
-
 void Player::setScore(int scoreVal)
 {
-    score = scoreVal;
+    totalScore = scoreVal;
 }
 
 void Player::addOwnedProvinces(const std::string &newProvince)
 {
-    owned_provinces.push_back(newProvince);
+    dominatedAreas.push_back(newProvince);
 }
 
-void Player::addCardToPlayedYellow(std::shared_ptr<YellowCard> card)
+void Player::addCardToYellowOnTable(std::shared_ptr<Card> card)
 {
-    playedYellowDeck.push_back(card);
+    yellowOnTable.push_back(card);
 }
 
-void Player::addCardToHandYellow(std::shared_ptr<YellowCard> card)
+void Player::addCardToYellowHand(std::shared_ptr<Card> card)
 {
     yellowHand.push_back(card);
 }
 
-void Player::addCardToPlayedPurple(std::shared_ptr<PurpleCard> card)
+void Player::addCardToPurpleOnTable(std::shared_ptr<Card> card)
 {
-    playedPurpleDeck.push_back(card);
+    purpleOnTable.push_back(card);
 }
 
-void Player::addCardToHandPurple(std::shared_ptr<PurpleCard> card)
+void Player::addCardToPurpleHand(std::shared_ptr<Card> card)
 {
     purpleHand.push_back(card);
 }
@@ -57,30 +55,30 @@ std::string Player::getName() const
 
 std::vector<std::string> Player::getOwnedProvinces() const
 {
-    return owned_provinces;
+    return dominatedAreas;
 }
 
-std::vector<std::shared_ptr<YellowCard>> Player::getPlayedYellowDeck() const
+std::vector<std::shared_ptr<Card>> Player::getYellowOnTable() const
 {
-    return playedYellowDeck;
+    return yellowOnTable;
 }
 
-std::vector<std::shared_ptr<YellowCard>> Player::getYellowHand() const
+std::vector<std::shared_ptr<Card>> Player::getYellowHand() const
 {
     return yellowHand;
 }
 
-std::vector<std::shared_ptr<PurpleCard>> Player::getPlayedPurpleDeck() const
+std::vector<std::shared_ptr<Card>> Player::getPurpleOnTable() const
 {
-    return playedPurpleDeck;
+    return purpleOnTable;
 }
 
-std::vector<std::shared_ptr<PurpleCard>> Player::getPurpleHand() const
+std::vector<std::shared_ptr<Card>> Player::getPurpleHand() const
 {
     return purpleHand;
 }
 
-int Player::getScore() const
+int Player::getPoints() const
 {
-    return score;
+    return totalScore;
 }

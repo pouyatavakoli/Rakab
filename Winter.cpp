@@ -8,9 +8,9 @@ void Winter::start(std::vector<Player> &player)
     {
         for (auto &yellowcards : changePlayer.getYellowHand())
         {
-            if (yellowcards->get_score() != 1)
+            if (yellowcards->getPoints() != 1)
             {
-                yellowcards->set_score(1);
+                yellowcards->setPoints(1);
             }
         }
     }
@@ -24,7 +24,7 @@ void Winter::end(std::vector<Player> &player)
         {
             if (yellowcards->getType() != "Yellow1")
             {
-                yellowcards->set_score(yellowcards->getOriginalScore());
+                yellowcards->setPoints(yellowcards->getOriginalScore());
             }
         }
     }

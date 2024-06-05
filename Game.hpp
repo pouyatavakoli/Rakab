@@ -5,17 +5,20 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-
-class Game {
+class Game
+{
 public:
-    Game(); 
+    Game();
     void run();
     void setPlayersCount(int);
-    void removeCardFromDeck(Card card , std::vector<Card> deckOfCards);
+    void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &deckOfCards) ;
+    int getHighestYellowCardInGame(std::vector<Player> &);
+    std::vector<Player> getGamePlayers() const;
+
 private:
     int playerCount;
     std::vector<Player> players;
-    std::vector<Card> mainDeck;
+    std::vector<std::shared_ptr<Card>> mainDeck;
     bool winnerIsPicked;
 };
 

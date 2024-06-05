@@ -5,15 +5,25 @@
 class Card
 {
 public:
-    Card();
-    Card(int, std::string);
+    Card(int numberOnTheCard, std::string type, std::string name);
     void play();
-    virtual void set_score(int);
-    virtual int get_score() const;
+
+    // getters
+    virtual std::string getName() const;
     virtual std::string getType() const;
+    virtual int getNumerOnTheCard() const;
+    virtual int getPoints() const;
+    // setters
+    virtual void setPoints(int points);
 
 private:
-    std::string type;
-    int score;
+    // exact name of the card
+    const std::string name;
+    // purple or yellow
+    const std::string type;
+    // number written on the card
+    const int numberOnTheCard;
+    // how much the card is worth depending on game situation
+    int points;
 };
 #endif

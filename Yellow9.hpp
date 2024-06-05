@@ -6,10 +6,5 @@ class Yellow9 : public YellowCard
 {
 public:
     Yellow9();
-    virtual int get_score() const;
-    virtual int getOriginalScore() const override;
-    virtual std::string getType() const override;
-
-private:
 };
 #endif

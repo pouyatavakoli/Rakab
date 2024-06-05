@@ -6,10 +6,6 @@
 class PurpleCard : public Card
 {
 public:
-    PurpleCard();
-    PurpleCard(int ,std::string);
-
-
-private:
+    PurpleCard(int numberOnTheCard , std::string name);
 };
 #endif

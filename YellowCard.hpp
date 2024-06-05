@@ -6,12 +6,6 @@
 class YellowCard : public Card
 {
 public:
-    YellowCard();
-    YellowCard(int, int, std::string);
-    void set_score(int);
-    virtual int getOriginalScore() const;
-
-private:
-    const int originalScore;
+    YellowCard(int numberOnTheCard, std::string name);
 };
 #endif

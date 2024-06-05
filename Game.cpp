@@ -13,7 +13,7 @@ void Game::setPlayersCount(int PlayerCountVal)
     playerCount = PlayerCountVal;
 }
 
-void Game::removeCardFromDeck(Card card , std::vector<Card> deckOfCards)
+void Game::removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &deckOfCards)
 {
     auto it = std::find(deckOfCards.begin(), deckOfCards.end(), card);
 
@@ -22,7 +22,6 @@ void Game::removeCardFromDeck(Card card , std::vector<Card> deckOfCards)
         deckOfCards.erase(it);
     }
 }
-
 
 void Game::run()
 {
@@ -48,9 +47,13 @@ void Game::run()
         {
             if (!mainDeck.empty())
             {
-                Card card = mainDeck.back();                    // Get the top card from the main deck
-                removeCardFromDeck(card , mainDeck);            // Remove the card from the main deck
-                player.addCardToDeck(card);                       // Add the card to the player's deck
+                std::shared_ptr<Card> card = mainDeck.back(); // Get the top card from the main deck
+                removeCardFromDeck(card, mainDeck);           // Remove the card from the main deck
+                // Add the card to the player's deck
+                if (card->getType() == "Purple")
+                {
+                    player.addCardToPurpleHand(card);
+                }
             }
         }
     }
@@ -83,5 +86,23 @@ void Game::run()
             }
         }
     }
-
+}
+int Game::getHighestYellowCardInGame(std::vector<Player> &players)
+{
+    int max = 1;
+    for (auto player : players)
+    {
+        for (auto yellowCard : player.getPlayedYellowDeck())
+        {
+            if (yellowCard->getPoints() > max)
+            {
+                max = yellowCard->getPoints();
+            }
+        }
+    }
+    return max;
+}
+std::vector<Player> Game::getGamePlayers() const
+{
+    return players;
 }

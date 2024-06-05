@@ -1,15 +1,10 @@
 
 #include "Card.hpp"
 
-Card::Card()
+Card::Card(int numberOnTheCardVal, std::string typeVal, std::string nameVal)
+    : numberOnTheCard(numberOnTheCardVal), type(typeVal), name(nameVal)
 {
-    type = "Yellow";
-}
-
-Card::Card(int scoreVal, std::string typeVal)
-{
-    score = scoreVal;
-    type = typeVal;
+    points = numberOnTheCard;
 }
 void Card::play()
 {
@@ -17,15 +12,24 @@ void Card::play()
     // apply effect ( can be moved to only be in purple cards)
     // remove card from player deck add to played cards deck
 }
-void Card::set_score(int score)
+void Card::setPoints(int score)
 {
-    this->score = score;
+    this->points = score;
 }
-int Card::get_score() const
+int Card::getPoints() const
 {
-    return score;
+    return points;
 }
 std::string Card::getType() const
 {
     return type;
+}
+int Card::getNumerOnTheCard() const
+{
+    return numberOnTheCard;
+}
+
+std::string Card::getName() const
+{
+    return name;
 }
