@@ -7,5 +7,6 @@ class Yellow8 : public YellowCard
 {
 public:
     Yellow8();
+    void play() override;
 };
 #endif

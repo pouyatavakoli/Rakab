@@ -24,7 +24,7 @@ void Winter::end(std::vector<Player> &player)
         {
             if (yellowcards->getType() != "Yellow1")
             {
-                yellowcards->setPoints(yellowcards->getOriginalScore());
+                yellowcards->setPoints(yellowcards->getNumerOnTheCard());
             }
         }
     }

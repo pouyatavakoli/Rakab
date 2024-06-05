@@ -9,7 +9,7 @@ public:
     int getPlayersCountFromUser();
     std::string getPlayersNameFromUser(int);
     int getPlayerAgeFromUser(int);
-    std::string askUserToPickACard();
+    std::string askUserToPickACard(Player);
 };
 
 #endif

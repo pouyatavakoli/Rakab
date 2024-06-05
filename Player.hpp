@@ -10,6 +10,7 @@ class Player
 {
 public:
     // constructor
+    Player();
     Player(int age, std::string name);
     // setters
     void setAge(int age);

@@ -5,7 +5,6 @@
 
 #include "Player.hpp"
 
-
 class Game
 {
 public:
@@ -13,9 +12,11 @@ public:
     void run();
     void fillMainDeck();
     void setPlayersCount(int);
-    void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &deckOfCards) ;
+    void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &deckOfCards);
     int getHighestYellowCardInGame(std::vector<Player> &);
     std::vector<Player> getGamePlayers() const;
+    int getPlayersCount() const;
+    void addPlayer(Player);
 
 private:
     int playerCount;

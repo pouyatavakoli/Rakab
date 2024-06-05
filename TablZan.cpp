@@ -3,14 +3,14 @@
 
 void TablZan::effect(Player player)
 {
-    std::vector<Card> deck = player.getPlayerDeck();
-    for (Card &card : deck)
+    std::vector<std::shared_ptr<Card>> deck = player.getYellowOnTable();
+    for (auto &card : deck)
     {
-        if (card.getType() == "Yellow")
+        if (card->getType() == "Yellow")
         {
             /* card score was added to players score when the card was played
             now this addition doubles the score in total*/
-            player.setPoints(player.getPoints() + card.getPoints());
+            player.setScore(player.getPoints() + card->getPoints());
         }
     }
 }

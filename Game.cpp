@@ -37,7 +37,8 @@ void Game::removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::share
 }
 void Game::fillMainDeck()
 {
-    // 10 yellow1
+    // TODO: add purple cards to main deck
+    //  10 yellow1
     for (int i = 1; i <= 10; ++i)
     {
         std::shared_ptr<Yellow1> yellowCard = std::make_shared<Yellow1>();
@@ -91,17 +92,23 @@ void Game::run()
 {
     Interface interface;                                  // create interface for the game
     setPlayersCount(interface.getPlayersCountFromUser()); // how many players are gonna play
-    players.resize(playerCount);
-
+    for (int i = 0; i < getPlayersCount(); i++)
+    {
+        Player player;
+        players.push_back(player);
+    }
     // get players name , age , color
-    for (Player &player : players)
     {
         int i = 0;
-        player.setName(interface.getPlayersNameFromUser(i));
-        player.setAge(interface.getPlayerAgeFromUser(i));
-        // TODO: get color
-        i++;
+        for (Player &player : players)
+        {
+            player.setName(interface.getPlayersNameFromUser(i));
+            player.setAge(interface.getPlayerAgeFromUser(i));
+            ++i;
+            // TODO: get color
+        }
     }
+    fillMainDeck();
 
     // give 10 cards to each player
     // TODO: implement shuffle
@@ -129,12 +136,23 @@ void Game::run()
             }
         }
     }
+    // show players hands
+    for (Player &player : players)
+    {
+        std::cout << player.getName()<< " yellow cards : ";
+        auto yellowHand = player.getYellowHand();
+        for (auto card : yellowHand)
+        {
+            std::cout << card->getName() << " ";
+        }
+        std::cout << std::endl;
+    }
     // the game starts form here
     while (!winnerIsPicked)
     {
         for (Player &player : players)
         {
-            std::string userChoice = interface.askUserToPickACard();
+            std::string userChoice = interface.askUserToPickACard(player);
             if (userChoice == "Winter")
             {
                 // Check if winter exists in player deck
@@ -203,4 +221,12 @@ int Game::getHighestYellowCardInGame(std::vector<Player> &players)
 std::vector<Player> Game::getGamePlayers() const
 {
     return players;
+}
+void Game::addPlayer(Player player)
+{
+    players.push_back(player);
+}
+int Game::getPlayersCount() const
+{
+    return playerCount;
 }

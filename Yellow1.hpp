@@ -6,9 +6,6 @@ class Yellow1 : public YellowCard
 {
 public:
     Yellow1();
-    void play() override
-    {
-        std::cout << "playing yellow1";
-    }
+    void play() override;
 };
 #endif

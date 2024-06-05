@@ -1,6 +1,7 @@
 #include "Player.hpp"
 
 // constructor
+Player::Player(){};
 Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), totalScore(0) {}
 
 // setters
