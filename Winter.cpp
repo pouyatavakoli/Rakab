@@ -16,7 +16,7 @@ void Winter::start(std::vector<Player> &player)
     }
 }
 
-void end(std::vector<Player> &player)
+void Winter::end(std::vector<Player> &player)
 {
     for (auto &changePlayer : player)
     {
