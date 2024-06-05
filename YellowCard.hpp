@@ -1,11 +1,13 @@
+#ifndef YELLOW_HPP
+#define YELLOW_HPP
+
 #include "Card.hpp"
 
-#ifndef YELLOW_HPP
-#define YELLOW_Hpp
 
 class YellowCard : public Card
 {
 public:
     YellowCard(int numberOnTheCard, std::string name);
 };
+
 #endif
