@@ -2,7 +2,7 @@
 
 Yellow3::Yellow3() {}
 
-Yellow3::Yellow3() : YellowCard(3, "Yellow3") {}
+Yellow3::Yellow3() : YellowCard(3, 3, "Yellow3") {}
 
 int Yellow3::get_score() const
 {

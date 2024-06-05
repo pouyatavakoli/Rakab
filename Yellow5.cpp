@@ -1,6 +1,6 @@
 #include "Yellow5.hpp"
 
-Yellow5::Yellow5() : YellowCard(5, "Yellow5") {}
+Yellow5::Yellow5() : YellowCard(5, 5, "Yellow5") {}
 
 int Yellow5::get_score() const
 {
