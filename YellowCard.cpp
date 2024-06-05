@@ -9,11 +9,6 @@ void YellowCard::set_score(int score)
     Card::set_score(score);
 }
 
-std::string YellowCard::getType()
-{
-    return Card::getType();
-}
-
 int YellowCard::getOriginalScore() const
 {
     return originalScore;

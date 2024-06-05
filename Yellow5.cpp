@@ -7,8 +7,12 @@ int Yellow5::get_score() const
    return Card::get_score();
 }
 
-
 int Yellow5::getOriginalScore() const
 {
    return YellowCard::getOriginalScore();
+}
+
+std::string Yellow5::getType() const
+{
+   return Card::getType();
 }

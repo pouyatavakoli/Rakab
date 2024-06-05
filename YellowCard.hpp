@@ -9,7 +9,6 @@ public:
     YellowCard();
     YellowCard(int, int, std::string);
     void set_score(int);
-    virtual std::string getType();
     virtual int getOriginalScore() const;
 
 private:

@@ -12,3 +12,7 @@ int Yellow9::getOriginalScore() const
    return YellowCard::getOriginalScore();
 }
 
+std::string Yellow9::getType() const
+{
+   return Card::getType();
+}
