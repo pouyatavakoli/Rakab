@@ -8,3 +8,9 @@ int Yellow3::get_score() const
 {
    return Card::get_score();
 }
+
+int Yellow3::getOriginalScore() const
+{
+   return YellowCard::getOriginalScore();
+}
+

@@ -7,7 +7,7 @@ class Yellow7 : public YellowCard
 public:
     Yellow7();
     virtual int get_score() const;
-
+    virtual int getOriginalScore() const override;
 private:
 };
 #endif

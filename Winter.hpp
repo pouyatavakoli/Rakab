@@ -10,6 +10,5 @@ public:
     void end(std::vector<Player> &);
 
 private:
-    static std::vector<std::shared_ptr<YellowCard>> original_scores;
 };
 #endif

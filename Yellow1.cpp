@@ -9,5 +9,5 @@ int Yellow1::get_score() const
 
 int Yellow1::getOriginalScore() const
 {
-   return originalScore;
+   return YellowCard::getOriginalScore();
 }

@@ -6,3 +6,9 @@ int Yellow4::get_score() const
 {
    return Card::get_score();
 }
+
+int Yellow4::getOriginalScore() const
+{
+   return YellowCard::getOriginalScore();
+}
+
