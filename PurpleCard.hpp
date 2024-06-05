@@ -9,6 +9,7 @@ public:
     PurpleCard();
     PurpleCard(int);
 
+
 private:
 };
 #endif

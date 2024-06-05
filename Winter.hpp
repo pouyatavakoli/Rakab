@@ -6,9 +6,10 @@ class Winter : public Season
 {
 public:
     Winter();
-    void start(Player);
-    void end(Player);
+    void start(std::vector<Player> &);
+    void end(std::vector<Player> &);
 
 private:
+    static std::vector<std::shared_ptr<YellowCard>> original_scores;
 };
 #endif

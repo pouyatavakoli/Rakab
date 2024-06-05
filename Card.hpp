@@ -8,8 +8,9 @@ public:
     Card();
     Card(int, std::string);
     void play();
+    virtual void set_score(int);
     virtual int get_score() const;
-    std::string getType();
+    virtual std::string getType();
 
 private:
     std::string type;
