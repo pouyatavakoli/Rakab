@@ -2,6 +2,19 @@
 
 #include "Game.hpp"
 #include "Interface.hpp"
+#include "Card.hpp"
+#include "PurpleCard.hpp"
+#include "YellowCard.hpp"
+#include "Yellow1.hpp"
+#include "Yellow2.hpp"
+#include "Yellow3.hpp"
+#include "Yellow4.hpp"
+#include "Yellow5.hpp"
+#include "Yellow6.hpp"
+// #include "Yellow7.hpp"
+// #include "Yellow8.hpp"
+// #include "Yellow9.hpp"
+#include "Yellow10.hpp"
 
 Game::Game() : playerCount(0)
 {
@@ -21,6 +34,57 @@ void Game::removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::share
     {
         deckOfCards.erase(it);
     }
+}
+void Game::fillMainDeck()
+{
+    // 10 yellow1
+    for (int i = 1; i <= 10; ++i)
+    {
+        std::shared_ptr<Yellow1> yellowCard = std::make_shared<Yellow1>();
+        mainDeck.push_back(yellowCard);
+    }
+    // 8 yellow2
+    for (int i = 1; i <= 8; ++i)
+    {
+        std::shared_ptr<Yellow2> yellowCard = std::make_shared<Yellow2>();
+        mainDeck.push_back(yellowCard);
+    }
+    // 8 Yellow3
+    for (int i = 1; i <= 8; ++i)
+    {
+        std::shared_ptr<Yellow3> yellowCard3 = std::make_shared<Yellow3>();
+        mainDeck.push_back(yellowCard3);
+    }
+
+    // 8 Yellow4
+    for (int i = 1; i <= 8; ++i)
+    {
+        std::shared_ptr<Yellow4> yellowCard4 = std::make_shared<Yellow4>();
+        mainDeck.push_back(yellowCard4);
+    }
+
+    // 8 Yellow5
+    for (int i = 1; i <= 8; ++i)
+    {
+        std::shared_ptr<Yellow5> yellowCard5 = std::make_shared<Yellow5>();
+        mainDeck.push_back(yellowCard5);
+    }
+
+    // 8 Yellow6
+    for (int i = 1; i <= 8; ++i)
+    {
+        std::shared_ptr<Yellow6> yellowCard6 = std::make_shared<Yellow6>();
+        mainDeck.push_back(yellowCard6);
+    }
+
+    // 8 Yellow10
+    for (int i = 1; i <= 8; ++i)
+    {
+        std::shared_ptr<Yellow10> yellowCard10 = std::make_shared<Yellow10>();
+        mainDeck.push_back(yellowCard10);
+    }
+
+    std::cout << "Main Deck initialized with " << mainDeck.size() << " cards!" << std::endl;
 }
 
 void Game::run()
@@ -54,6 +118,14 @@ void Game::run()
                 {
                     player.addCardToPurpleHand(card);
                 }
+                else if (card->getType() == "Yellow")
+                {
+                    player.addCardToYellowHand(card);
+                }
+            }
+            else
+            {
+                std::cout << "main deck is empty cant give cards to players";
             }
         }
     }
@@ -63,26 +135,52 @@ void Game::run()
         for (Player &player : players)
         {
             std::string userChoice = interface.askUserToPickACard();
-
-            if (userChoice == "TablZan")
+            if (userChoice == "Winter")
             {
-                // Check if TablZan exists in player deck
-                std::vector<Card> cardsInPlayerDeck = player.getPlayerDeck();
-                auto it = std::find(cardsInPlayerDeck.begin(), cardsInPlayerDeck.end(), "TablZan");
+                // Check if winter exists in player deck
+                std::vector<std::shared_ptr<Card>> purpleHand = player.getPurpleHand();
+                auto it = std::find_if(purpleHand.begin(), purpleHand.end(), [](const std::shared_ptr<Card> &card)
+                                       { return card->getName() == "Winter"; });
 
-                if (it != cardsInPlayerDeck.end())
+                if (it != purpleHand.end())
                 {
-                    // Play TablZan
-                    std::cout << "Playing TablZan for player..." << std::endl;
+                    (*it)->play();
                 }
                 else
                 {
-                    std::cout << "TablZan not found in player's deck. Try again." << std::endl;
+                    std::cout << "winter not found in player's deck. Try another card." << std::endl;
                 }
             }
+
             else
             {
-                std::cout << "Invalid card choice. Try again." << std::endl;
+                for (int i = 1; i <= 10; ++i)
+                {
+                    if (i == 7 || i == 8 || i == 9)
+                    {
+                        continue;
+                    }
+                    else if (userChoice == "Yellow" + std::to_string(i))
+                    {
+                        // Check if specific yellow card exists in player deck
+                        std::vector<std::shared_ptr<Card>> yellowHand = player.getYellowHand();
+
+                        auto it = std::find_if(yellowHand.begin(), yellowHand.end(), [i](const std::shared_ptr<Card> &card)
+                                               { return card->getName() == "Yellow" + std::to_string(i); });
+
+                        if (it != yellowHand.end())
+                        {
+                            // Play the specific yellow card
+                            (*it)->play();
+                        }
+                        else
+                        {
+                            std::cout << "Yellow" << i << " not found in player's deck. Try another card." << std::endl;
+                        }
+
+                        break; // exit the loop
+                    }
+                }
             }
         }
     }
@@ -92,7 +190,7 @@ int Game::getHighestYellowCardInGame(std::vector<Player> &players)
     int max = 1;
     for (auto player : players)
     {
-        for (auto yellowCard : player.getPlayedYellowDeck())
+        for (auto yellowCard : player.getYellowOnTable())
         {
             if (yellowCard->getPoints() > max)
             {

@@ -6,7 +6,7 @@ class Card
 {
 public:
     Card(int numberOnTheCard, std::string type, std::string name);
-    void play();
+    virtual void play();
 
     // getters
     virtual std::string getName() const;
