@@ -25,7 +25,7 @@ int Card::get_score() const
 {
     return score;
 }
-std::string Card::getType()
+std::string Card::getType() const
 {
     return type;
 }

@@ -1,10 +1,10 @@
 #include "Spring.hpp"
 
 Spring::Spring() : Season() {}
-void Spring::start(Player player)
+void Spring::start(std::vector<Player> &)
 {
     
 }
-void Spring::end(Player player) 
+void Spring::end(std::vector<Player> &) 
 {
 }

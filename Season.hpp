@@ -7,7 +7,7 @@
 class Season : public PurpleCard
 {
 public:
-    Season();
+    Season(int , std::string);
     void start(Player);
     void end(Player);
 

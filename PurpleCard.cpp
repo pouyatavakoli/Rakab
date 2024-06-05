@@ -2,4 +2,4 @@
 
 PurpleCard::PurpleCard() {}
 
-PurpleCard::PurpleCard(int point) : Card(point , "Purple") {}
+PurpleCard::PurpleCard(int point, std::string typeVal) : Card(point, typeVal) {}

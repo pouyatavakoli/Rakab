@@ -1,6 +1,7 @@
 #include "Winter.hpp"
 
-Winter::Winter() : Season() {}
+Winter::Winter() : Season(0, "Winter") {}
+
 void Winter::start(std::vector<Player> &player)
 {
     for (auto &changePlayer : player)
@@ -27,4 +28,9 @@ void end(std::vector<Player> &player)
             }
         }
     }
+}
+
+std::string Winter::getType() const
+{
+    return Card::getType();
 }

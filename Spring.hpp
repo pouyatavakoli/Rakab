@@ -7,8 +7,8 @@ class Spring : public Season
 {
 public:
     Spring();
-    void start(Player);
-    void end(Player);
+    void start(std::vector<Player> &);
+    void end(std::vector<Player> &);
 private:
 };
 #endif
