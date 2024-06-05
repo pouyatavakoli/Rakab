@@ -9,11 +9,11 @@ void Spring::start(Game &game)
     int max = game.getHighestYellowCardInGame(players);
     for (auto player : players)
     {
-        for (auto &yellowCard : player.getPlayedYellowDeck())
+        for (auto &yellowCard : player.getYellowOnTable())
         {
-            if (yellowCard->get_score() == max)
+            if (yellowCard->getPoints() == max)
             {
-                yellowCard->set_score(max + 3);
+                yellowCard->setPoints(max + 3);
             }
         }
     }
@@ -25,9 +25,9 @@ void Spring::end(Game &game)
     std::vector<Player> players = game.getGamePlayers();
     for (auto &player : players)
     {
-        for (auto &yellowCard : player.getPlayedYellowDeck())
+        for (auto &yellowCard : player.getYellowOnTable())
         {
-            yellowCard->set_score(yellowCard->getOriginalScore());
+            yellowCard->setPoints(yellowCard->getNumerOnTheCard());
         }
     }
 }
