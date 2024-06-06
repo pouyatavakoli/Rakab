@@ -1,8 +1,8 @@
-#include "Season.hpp"
-#include "Game.hpp"
-
 #ifndef SPRING_HPP
 #define SPRING_HPP
+
+#include "Season.hpp"
+#include "Game.hpp"
 
 class Spring : public Season
 {

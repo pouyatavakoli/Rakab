@@ -1,8 +1,8 @@
-#include "PurpleCard.hpp"
-#include "player.hpp"
-
 #ifndef MATARSAK_HPP
 #define MATARSAK_HPP
+
+#include "PurpleCard.hpp"
+#include "Player.hpp"
 
 class Matarsak : public PurpleCard
 {

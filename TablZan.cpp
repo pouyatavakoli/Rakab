@@ -1,4 +1,3 @@
-
 #include "TablZan.hpp"
 
 TablZan::TablZan() : PurpleCard(0, "TablZan") {}

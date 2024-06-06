@@ -1,7 +1,7 @@
-#include "Card.hpp"
-
 #ifndef PURPLE_HPP
-#define PURPLE_Hpp
+#define PURPLE_HPP
+
+#include "Card.hpp"
 
 class PurpleCard : public Card
 {

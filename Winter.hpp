@@ -1,6 +1,7 @@
-#include "Season.hpp"
 #ifndef WINTER_HPP
 #define WINTER_HPP
+
+#include "Season.hpp"
 
 class Winter : public Season
 {

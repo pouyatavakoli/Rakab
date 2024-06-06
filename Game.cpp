@@ -3,8 +3,13 @@
 #include "Game.hpp"
 #include "Interface.hpp"
 #include "Card.hpp"
-#include "PurpleCard.hpp"
-#include "YellowCard.hpp"
+#include "Matarsak.hpp"
+#include "ShirZan.hpp"
+#include "ShirDokht.hpp"
+#include "ParchamDar.hpp"
+#include "Winter.hpp"
+#include "Spring.hpp"
+#include "TablZan.hpp"
 #include "Yellow1.hpp"
 #include "Yellow2.hpp"
 #include "Yellow3.hpp"
@@ -37,7 +42,6 @@ void Game::removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::share
 }
 void Game::fillMainDeck()
 {
-    // TODO: add purple cards to main deck
     //  10 yellow1
     for (int i = 1; i <= 10; ++i)
     {
@@ -83,6 +87,48 @@ void Game::fillMainDeck()
     {
         std::shared_ptr<Yellow10> yellowCard10 = std::make_shared<Yellow10>();
         mainDeck.push_back(yellowCard10);
+    }
+
+    for (int i = 1; i <= 16; ++i)
+    {
+        std::shared_ptr<Matarsak> matarsak = std::make_shared<Matarsak>();
+        mainDeck.push_back(matarsak);
+    }
+
+    for (int i = 1; i <= 3; ++i)
+    {
+        std::shared_ptr<ParchamDar> parchamDar = std::make_shared<ParchamDar>();
+        mainDeck.push_back(parchamDar);
+    }
+
+    for (int i = 1; i <= 6; ++i)
+    {
+        std::shared_ptr<TablZan> tablZan = std::make_shared<TablZan>();
+        mainDeck.push_back(tablZan);
+    }
+
+    for (int i = 1; i <= 3; ++i)
+    {
+        std::shared_ptr<Spring> spring = std::make_shared<Spring>();
+        mainDeck.push_back(spring);
+    }
+
+    for (int i = 1; i <= 3; ++i)
+    {
+        std::shared_ptr<Winter> winter = std::make_shared<Winter>();
+        mainDeck.push_back(winter);
+    }
+
+    for (int i = 1; i <= 12; ++i)
+    {
+        std::shared_ptr<ShirZan> shirzan = std::make_shared<ShirZan>();
+        mainDeck.push_back(shirzan);
+    }
+
+    for (int i = 1; i <= 3; ++i)
+    {
+        std::shared_ptr<ShirDokht> shirdokht = std::make_shared<ShirDokht>();
+        mainDeck.push_back(shirdokht);
     }
 
     std::cout << "Main Deck initialized with " << mainDeck.size() << " cards!" << std::endl;

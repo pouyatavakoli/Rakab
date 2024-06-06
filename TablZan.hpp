@@ -1,8 +1,8 @@
-#include "PurpleCard.hpp"
-#include "Player.hpp"
-
 #ifndef TABLZAN_HPP
 #define TABLZAN_HPP
+
+#include "PurpleCard.hpp"
+#include "Player.hpp"
 
 class TablZan : public PurpleCard
 {

@@ -1,6 +1,6 @@
 #include "ParchamDar.hpp"
 
-bool ParchamDar::ParchamAndBadkhahet() {}
+// bool ParchamDar::ParchamAndBadkhahet() {}
 
 ParchamDar::ParchamDar() : PurpleCard(0, "ParchamDar") {}
 
