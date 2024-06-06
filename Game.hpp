@@ -11,6 +11,7 @@ public:
     Game();
     void run();
     void fillMainDeck();
+    void shuffleDeck();
     void setPlayersCount(int);
     void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
     int getHighestYellowCardInGame(std::vector<Player> &);

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <ctime>
 
 #include "Game.hpp"
 #include "Interface.hpp"
@@ -132,6 +133,8 @@ void Game::fillMainDeck()
     }
 
     std::cout << "Main Deck initialized with " << mainDeck.size() << " cards!" << std::endl;
+    shuffleDeck();
+    std::cout << "Main Deck got shuffled. " << std::endl;
 }
 
 void Game::run()
@@ -185,9 +188,14 @@ void Game::run()
     // show players hands
     for (Player &player : players)
     {
-        std::cout << player.getName() << " yellow cards : ";
+        std::cout << player.getName() << " cards : ";
         auto yellowHand = player.getYellowHand();
         for (auto card : yellowHand)
+        {
+            std::cout << card->getName() << " ";
+        }
+        auto purpleHand = player.getPurpleHand();
+        for (auto card : purpleHand)
         {
             std::cout << card->getName() << " ";
         }
@@ -275,4 +283,15 @@ void Game::addPlayer(Player player)
 int Game::getPlayersCount() const
 {
     return playerCount;
+}
+
+void Game::shuffleDeck()
+{
+    std::srand(std::time(nullptr)); // Seed the random number generator with current time
+
+    for (int i = mainDeck.size() - 1; i > 0; --i)
+    {
+        int j = std::rand() % (i + 1); // Generate a random index in the range [0, i]
+        std::swap(mainDeck[i], mainDeck[j]);
+    }
 }
