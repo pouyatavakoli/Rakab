@@ -7,7 +7,8 @@
 class TablZan : public PurpleCard
 {
 public:
-    void effect(Player);
+    TablZan();
+    void effect(Player &);
 private:
 };
 #endif

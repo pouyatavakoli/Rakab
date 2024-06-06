@@ -1,4 +1,5 @@
 #include "Player.hpp"
+#include <algorithm>
 
 // constructor
 Player::Player(){};
@@ -11,7 +12,7 @@ void Player::setAge(int ageVal)
 }
 void Player::setName(std::string nameVal)
 {
-    name = nameVal ;
+    name = nameVal;
 }
 void Player::setScore(int scoreVal)
 {
@@ -41,6 +42,23 @@ void Player::addCardToPurpleOnTable(std::shared_ptr<Card> card)
 void Player::addCardToPurpleHand(std::shared_ptr<Card> card)
 {
     purpleHand.push_back(card);
+}
+
+std::shared_ptr<Card> Player::removeCardFromYellowOnTable(const std::string &cardName)
+{
+    auto it = std::find_if(yellowOnTable.begin(), yellowOnTable.end(), [&cardName](const std::shared_ptr<Card> &card)
+                           { return card->getName() == cardName; });
+
+    if (it != yellowOnTable.end())
+    {
+        std::shared_ptr<Card> targetCard = *it;
+        yellowOnTable.erase(it);
+        return targetCard;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 // getters
