@@ -2,12 +2,6 @@
 
 ShirDokht::ShirDokht() : PurpleCard(10, "ShirDokht") {}
 
-std::string ShirDokht::getName() const
-{
-    return Card::getName();
-}
+void ShirDokht::startEffect() {}
 
-std::string ShirDokht::getType() const
-{
-    return Card::getType();
-}
+void ShirDokht::endEffect() {}

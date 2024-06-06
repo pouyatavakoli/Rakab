@@ -6,12 +6,7 @@ Card::Card(int numberOnTheCardVal, std::string typeVal, std::string nameVal)
 {
     points = numberOnTheCard;
 }
-void Card::play()
-{
-    // update player score
-    // apply effect ( can be moved to only be in purple cards)
-    // remove card from player deck add to played cards deck
-}
+
 void Card::setPoints(int score)
 {
     this->points = score;

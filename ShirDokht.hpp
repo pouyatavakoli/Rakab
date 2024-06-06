@@ -7,8 +7,8 @@ class ShirDokht : public PurpleCard
 {
 public:
     ShirDokht();
-    virtual std::string getName() const;
-    virtual std::string getType() const;
+    virtual void startEffect() override;
+    virtual void endEffect() override;
 
 private:
 };

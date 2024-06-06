@@ -8,8 +8,9 @@ class ParchamDar : public PurpleCard
 public:
     ParchamDar();
     // bool ParchamAndBadkhahet(); // It ends the game so inout should br Game type(probably!!!)
-    virtual std::string getName() const;
-    virtual std::string getType() const;
+
+    virtual void startEffect() override;
+    virtual void endEffect() override;
 
 private:
 };

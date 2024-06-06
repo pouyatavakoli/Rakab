@@ -8,7 +8,8 @@ class Matarsak : public PurpleCard
 {
 public:
     Matarsak();
-    void effect(Player &);
+    virtual void startEffect(Player &) override;
+    virtual void endEffect(Player &) override;
 
 private:
 };

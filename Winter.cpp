@@ -2,7 +2,7 @@
 
 Winter::Winter() : Season(0, "Winter") {}
 
-void Winter::start(std::vector<Player> &player)
+void Winter::startEffect(std::vector<Player> &player)
 {
     for (auto &changePlayer : player)
     {
@@ -16,7 +16,7 @@ void Winter::start(std::vector<Player> &player)
     }
 }
 
-void Winter::end(std::vector<Player> &player)
+void Winter::endEffect(std::vector<Player> &player)
 {
     for (auto &changePlayer : player)
     {
@@ -30,7 +30,8 @@ void Winter::end(std::vector<Player> &player)
     }
 }
 
-std::string Winter::getType() const
+void Winter::refresh(std::vector<Player> &player)
 {
-    return Card::getType();
+    endEffect(player);
+    startEffect(player);
 }

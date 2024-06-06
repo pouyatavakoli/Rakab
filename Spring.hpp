@@ -8,10 +8,9 @@ class Spring : public Season
 {
 public:
     Spring();
-    void start(Game &);
-    void end(Game &);
-    virtual std::string getType() const;
-    void refresh(Game &);
+    virtual void startEffect(Game &) override;
+    virtual void endEffect(Game &) override;
+    virtual void refresh(Game &) override;
 
 private:
 };

@@ -8,7 +8,8 @@ class TablZan : public PurpleCard
 {
 public:
     TablZan();
-    void effect(Player &);
+    virtual void startEffect(Player &) override;
+    virtual void endEffect(Player &) override;
 private:
 };
 #endif

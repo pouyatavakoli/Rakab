@@ -2,7 +2,7 @@
 
 TablZan::TablZan() : PurpleCard(0, "TablZan") {}
 
-void TablZan::effect(Player &player)
+void TablZan::startEffect(Player &player)
 {
     std::vector<std::shared_ptr<Card>> deck = player.getYellowOnTable();
     for (auto &card : deck)
@@ -15,3 +15,4 @@ void TablZan::effect(Player &player)
         }
     }
 }
+

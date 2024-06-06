@@ -216,7 +216,7 @@ void Game::run()
 
                 if (it != purpleHand.end())
                 {
-                    (*it)->play();
+                    //  (*it)->play();
                 }
                 else
                 {
@@ -243,7 +243,7 @@ void Game::run()
                         if (it != yellowHand.end())
                         {
                             // Play the specific yellow card
-                            (*it)->play();
+                            // (*it)->play();
                         }
                         else
                         {

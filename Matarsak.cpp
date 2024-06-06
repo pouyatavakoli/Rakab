@@ -3,7 +3,7 @@
 
 Matarsak::Matarsak() : PurpleCard(0, "Matarsak") {}
 
-void Matarsak::effect(Player &player)
+void Matarsak::startEffect(Player &player)
 {
     std::cout << "What card do you want to take? (Yellow1, Yellow2, ..., Yellow10): ";
     std::string cardName;

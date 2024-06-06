@@ -2,12 +2,6 @@
 
 ShirZan::ShirZan() : PurpleCard(1, "ShirZan") {}
 
-std::string ShirZan::getName() const
-{
-    return Card::getName();
-}
+void ShirZan::startEffect() {}
 
-std::string ShirZan::getType() const
-{
-    return Card::getType();
-}
+void ShirZan::endEffect() {}
