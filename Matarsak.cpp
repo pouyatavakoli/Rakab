@@ -21,3 +21,5 @@ void Matarsak::startEffect(Player &player)
         std::cout << "Card " << cardName << " not found on the table." << std::endl;
     }
 }
+
+void Matarsak::endEffect(Player &) {}

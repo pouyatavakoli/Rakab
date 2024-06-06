@@ -16,3 +16,4 @@ void TablZan::startEffect(Player &player)
     }
 }
 
+void TablZan::endEffect(Player &) {}

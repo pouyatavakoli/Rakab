@@ -7,7 +7,6 @@ class Winter : public Season
 {
 public:
     Winter();
-    virtual std::string getType() const;
     virtual void startEffect(std::vector<Player> &) override;
     virtual void endEffect(std::vector<Player> &) override;
     virtual void refresh(std::vector<Player> &) override;
