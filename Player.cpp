@@ -101,3 +101,35 @@ int Player::getPoints() const
 {
     return totalScore;
 }
+
+bool Player::playPurpleCard(const std::string &cardName)
+{
+    auto it = std::find_if(purpleHand.begin(), purpleHand.end(), [&cardName](const std::shared_ptr<Card> &card)
+                           { return card->getName() == cardName; });
+
+    if (it != purpleHand.end())
+    {
+        std::shared_ptr<Card> playedCard = *it; // Store the card to be played
+        purpleOnTable.push_back(playedCard);    // Add the card to the on-table vector
+        purpleHand.erase(it);                   // Remove the card from the hand after playing
+        purpleHand.shrink_to_fit();
+        return true;
+    }
+    return false;
+}
+
+bool Player::playYellowCard(const std::string &cardName)
+{
+    auto it = std::find_if(yellowHand.begin(), yellowHand.end(), [&cardName](const std::shared_ptr<Card> &card)
+                           { return card->getName() == cardName; });
+
+    if (it != yellowHand.end())
+    {
+        std::shared_ptr<Card> playedCard = *it; // Store the card to be played
+        yellowOnTable.push_back(playedCard);    // Add the card to the on-table vector
+        yellowHand.erase(it);                   // Remove the card from the hand after playing
+        yellowHand.shrink_to_fit();
+        return true;
+    }
+    return false;
+}

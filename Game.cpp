@@ -207,51 +207,33 @@ void Game::run()
         for (Player &player : players)
         {
             std::string userChoice = interface.askUserToPickACard(player);
-            if (userChoice == "Winter")
-            {
-                // Check if winter exists in player deck
-                std::vector<std::shared_ptr<Card>> purpleHand = player.getPurpleHand();
-                auto it = std::find_if(purpleHand.begin(), purpleHand.end(), [](const std::shared_ptr<Card> &card)
-                                       { return card->getName() == "Winter"; });
 
-                if (it != purpleHand.end())
+            // Check if the user choice matches any card name
+            bool cardFound = false;
+            for (int i = 1; i <= 10; ++i)
+            {
+                if (i == 7 || i == 8 || i == 9)
                 {
-                    //  (*it)->play();
+                    continue;
                 }
-                else
+                std::string cardName = "Yellow" + std::to_string(i);
+                if (userChoice == cardName)
                 {
-                    std::cout << "winter not found in player's deck. Try another card." << std::endl;
+                    cardFound = true;
+                    if (!player.playYellowCard(cardName))
+                    {
+                        std::cout << cardName << " not found in player's deck. Try another card." << std::endl;
+                    }
+                    break;
                 }
             }
 
-            else
+            // If the user choice is not a Yellow card, try to play a Purple card
+            if (!cardFound)
             {
-                for (int i = 1; i <= 10; ++i)
+                if (!player.playPurpleCard(userChoice))
                 {
-                    if (i == 7 || i == 8 || i == 9)
-                    {
-                        continue;
-                    }
-                    else if (userChoice == "Yellow" + std::to_string(i))
-                    {
-                        // Check if specific yellow card exists in player deck
-                        std::vector<std::shared_ptr<Card>> yellowHand = player.getYellowHand();
-
-                        auto it = std::find_if(yellowHand.begin(), yellowHand.end(), [i](const std::shared_ptr<Card> &card)
-                                               { return card->getName() == "Yellow" + std::to_string(i); });
-
-                        if (it != yellowHand.end())
-                        {
-                            // Play the specific yellow card
-                            // (*it)->play();
-                        }
-                        else
-                        {
-                            std::cout << "Yellow" << i << " not found in player's deck. Try another card." << std::endl;
-                        }
-
-                        break; // exit the loop
-                    }
+                    std::cout << userChoice << " not found in player's deck. Try another card." << std::endl;
                 }
             }
         }

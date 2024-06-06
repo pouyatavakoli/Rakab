@@ -36,6 +36,9 @@ public:
     std::vector<std::shared_ptr<Card>> getPurpleOnTable() const;
     std::vector<std::shared_ptr<Card>> getPurpleHand() const;
 
+    bool playPurpleCard(const std::string&);
+    bool playYellowCard(const std::string&);
+
 private:
     int age;
     std::string name;
