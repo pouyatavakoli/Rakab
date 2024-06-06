@@ -14,7 +14,7 @@ public:
     virtual int getNumerOnTheCard() const;
     virtual int getPoints() const;
     // setters
-    virtual void setPoints(int points);
+    virtual void setPoints(int);
 
 private:
     // exact name of the card

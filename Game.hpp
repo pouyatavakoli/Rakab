@@ -12,7 +12,7 @@ public:
     void run();
     void fillMainDeck();
     void setPlayersCount(int);
-    void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &deckOfCards);
+    void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
     int getHighestYellowCardInGame(std::vector<Player> &);
     std::vector<Player> getGamePlayers() const;
     int getPlayersCount() const;

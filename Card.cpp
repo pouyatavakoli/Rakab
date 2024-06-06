@@ -2,7 +2,7 @@
 #include "Card.hpp"
 
 Card::Card(int numberOnTheCardVal, std::string typeVal, std::string nameVal)
-    : numberOnTheCard(numberOnTheCardVal), type(typeVal), name(nameVal)
+    : name(nameVal), type(typeVal), numberOnTheCard(numberOnTheCardVal)
 {
     points = numberOnTheCard;
 }

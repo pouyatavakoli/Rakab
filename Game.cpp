@@ -139,7 +139,7 @@ void Game::run()
     // show players hands
     for (Player &player : players)
     {
-        std::cout << player.getName()<< " yellow cards : ";
+        std::cout << player.getName() << " yellow cards : ";
         auto yellowHand = player.getYellowHand();
         for (auto card : yellowHand)
         {
