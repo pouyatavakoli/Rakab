@@ -10,6 +10,7 @@ public:
     std::string getPlayersNameFromUser(int);
     int getPlayerAgeFromUser(int);
     std::string askUserToPickACard(Player);
+    std::string askUserToPickAColor(int);
 };
 
 #endif

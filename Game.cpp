@@ -153,14 +153,14 @@ void Game::run()
         {
             player.setName(interface.getPlayersNameFromUser(i));
             player.setAge(interface.getPlayerAgeFromUser(i));
+            player.setColor(interface.askUserToPickAColor(i));
             ++i;
-            // TODO: get color
+            // FIXME: change pick color to user pick from list if needed
         }
     }
     fillMainDeck();
 
     // give 10 cards to each player
-    // TODO: implement shuffle
     for (int i = 0; i < 10; i++)
     {
         for (Player &player : players)

@@ -17,6 +17,7 @@ public:
     void setAge(int age);
     void setName(std::string name);
     void setScore(int score);
+    void setColor(std::string color);
     void addOwnedProvinces(const std::string &);
     void addCardToYellowOnTable(std::shared_ptr<Card>);
     void addCardToYellowHand(std::shared_ptr<Card>);
@@ -30,6 +31,7 @@ public:
     int getAge() const;
     std::string getName() const;
     int getPoints() const;
+    std::string getColor();
     std::vector<std::string> getOwnedProvinces() const;
     std::vector<std::shared_ptr<Card>> getYellowOnTable() const;
     std::vector<std::shared_ptr<Card>> getYellowHand() const;
@@ -42,6 +44,7 @@ public:
 private:
     int age;
     std::string name;
+    std::string color;
     int totalScore;
     std::vector<std::string> dominatedAreas;
     std::vector<std::shared_ptr<Card>> yellowOnTable;

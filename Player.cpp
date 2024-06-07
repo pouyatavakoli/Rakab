@@ -18,6 +18,10 @@ void Player::setScore(int scoreVal)
 {
     totalScore = scoreVal;
 }
+void Player::setColor(std::string colorVal)
+{
+    color = colorVal;
+}
 
 void Player::addOwnedProvinces(const std::string &newProvince)
 {
@@ -70,6 +74,10 @@ int Player::getAge() const
 std::string Player::getName() const
 {
     return name;
+}
+std::string Player::getColor()
+{
+    return color;
 }
 
 std::vector<std::string> Player::getOwnedProvinces() const

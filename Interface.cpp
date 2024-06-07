@@ -42,3 +42,10 @@ std::string Interface::askUserToPickACard(Player player)
     std::cin >> cardsName;
     return cardsName ;
 }
+std::string Interface::askUserToPickAColor(int i)
+{
+    std::string color ;
+    std::cout << "enter player " << i + 1 << " color : ";
+    std::cin >> color ;
+    return color ;
+}
