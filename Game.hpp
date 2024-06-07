@@ -24,6 +24,7 @@ private:
     std::vector<Player> players;
     std::vector<std::shared_ptr<Card>> mainDeck;
     bool winnerIsPicked;
+    bool anyPlayerCanPlay;
 };
 
 #endif

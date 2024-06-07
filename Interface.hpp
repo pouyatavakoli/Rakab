@@ -4,12 +4,13 @@
 #include <iostream>
 #include "Game.hpp"
 
-class Interface {
+class Interface
+{
 public:
     int getPlayersCountFromUser();
     std::string getPlayersNameFromUser(int);
     int getPlayerAgeFromUser(int);
-    std::string askUserToPickACard(Player);
+    std::string askUserToPickACardOrPass(Player);
     std::string askUserToPickAColor(int);
 };
 

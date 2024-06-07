@@ -34,18 +34,18 @@ int Interface::getPlayerAgeFromUser(int i)
     std::cin >> age;
     return age;
 }
-std::string Interface::askUserToPickACard(Player player)
+std::string Interface::askUserToPickACardOrPass(Player player)
 {
     std::cout << player.getName();
-    std::cout << " enter card you want to play : ";
+    std::cout << " enter card you want to play or enter pass if you want to pass : ";
     std::string cardsName;
     std::cin >> cardsName;
-    return cardsName ;
+    return cardsName;
 }
 std::string Interface::askUserToPickAColor(int i)
 {
-    std::string color ;
+    std::string color;
     std::cout << "enter player " << i + 1 << " color : ";
-    std::cin >> color ;
-    return color ;
+    std::cin >> color;
+    return color;
 }

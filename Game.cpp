@@ -204,38 +204,58 @@ void Game::run()
     // the game starts form here
     while (!winnerIsPicked)
     {
+        anyPlayerCanPlay = false;
         for (Player &player : players)
         {
-            std::string userChoice = interface.askUserToPickACard(player);
-
-            // Check if the user choice matches any card name
-            bool cardFound = false;
-            for (int i = 1; i <= 10; ++i)
+            if (player.canPlay())
             {
-                if (i == 7 || i == 8 || i == 9)
+                anyPlayerCanPlay = true;
+                std::string userChoice = interface.askUserToPickACardOrPass(player);
+                if (userChoice == "pass")
                 {
-                    continue;
+                    player.updatePlayerEligibility(false);
                 }
-                std::string cardName = "Yellow" + std::to_string(i);
-                if (userChoice == cardName)
+                else
                 {
-                    cardFound = true;
-                    if (!player.playYellowCard(cardName))
+                    // Check if the user choice matches any card name
+                    bool cardFound = false;
+                    for (int i = 1; i <= 10; ++i)
                     {
-                        std::cout << cardName << " not found in player's deck. Try another card." << std::endl;
+                        if (i == 7 || i == 8 || i == 9)
+                        {
+                            continue;
+                        }
+                        std::string cardName = "Yellow" + std::to_string(i);
+                        if (userChoice == cardName)
+                        {
+                            cardFound = true;
+                            if (!player.playYellowCard(cardName))
+                            {
+                                std::cout << cardName << " not found in player's deck. Try another card." << std::endl;
+                            }
+                            break;
+                        }
                     }
-                    break;
-                }
-            }
 
-            // If the user choice is not a Yellow card, try to play a Purple card
-            if (!cardFound)
-            {
-                if (!player.playPurpleCard(userChoice))
-                {
-                    std::cout << userChoice << " not found in player's deck. Try another card." << std::endl;
+                    // If the user choice is not a Yellow card, try to play a Purple card
+                    if (!cardFound)
+                    {
+                        if (!player.playPurpleCard(userChoice))
+                        {
+                            std::cout << userChoice << " not found in player's deck. Try another card." << std::endl;
+                        }
+                    }
                 }
             }
+            else
+            {
+                std::cout << player.getName() << " cannot play going to next player..." << std::endl;
+            }
+        }
+        if (!anyPlayerCanPlay)
+        {
+            std::cout << "No one can play. The game has ended." << std::endl;
+            break;
         }
     }
 }

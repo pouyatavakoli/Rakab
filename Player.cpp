@@ -3,7 +3,7 @@
 
 // constructor
 Player::Player(){};
-Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), totalScore(0) {}
+Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), totalScore(0), isAbleToPlay(true) {}
 
 // setters
 void Player::setAge(int ageVal)
@@ -21,6 +21,10 @@ void Player::setScore(int scoreVal)
 void Player::setColor(std::string colorVal)
 {
     color = colorVal;
+}
+void Player::updatePlayerEligibility(bool canPlayVal)
+{
+    isAbleToPlay = canPlayVal;
 }
 
 void Player::addOwnedProvinces(const std::string &newProvince)
@@ -79,7 +83,10 @@ std::string Player::getColor()
 {
     return color;
 }
-
+bool Player::canPlay()
+{
+    return isAbleToPlay;
+}
 std::vector<std::string> Player::getOwnedProvinces() const
 {
     return dominatedAreas;
@@ -109,6 +116,10 @@ int Player::getPoints() const
 {
     return totalScore;
 }
+void Player::passAndDontPlay()
+{
+    isAbleToPlay = false ;
+}
 
 bool Player::playPurpleCard(const std::string &cardName)
 {
@@ -118,7 +129,7 @@ bool Player::playPurpleCard(const std::string &cardName)
     if (it != purpleHand.end())
     {
         std::shared_ptr<Card> playedCard = *it; // Store the card to be played
-        std::cout << "played " << playedCard->getName() << " for " << name <<std::endl;
+        std::cout << "played " << playedCard->getName() << " for " << name << std::endl;
         purpleOnTable.push_back(playedCard); // Add the card to the on-table vector
         purpleHand.erase(it);                // Remove the card from the hand after playing
         purpleHand.shrink_to_fit();
