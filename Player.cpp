@@ -118,8 +118,9 @@ bool Player::playPurpleCard(const std::string &cardName)
     if (it != purpleHand.end())
     {
         std::shared_ptr<Card> playedCard = *it; // Store the card to be played
-        purpleOnTable.push_back(playedCard);    // Add the card to the on-table vector
-        purpleHand.erase(it);                   // Remove the card from the hand after playing
+        std::cout << "played " << playedCard->getName() << " for " << name <<std::endl;
+        purpleOnTable.push_back(playedCard); // Add the card to the on-table vector
+        purpleHand.erase(it);                // Remove the card from the hand after playing
         purpleHand.shrink_to_fit();
         return true;
     }
@@ -134,8 +135,9 @@ bool Player::playYellowCard(const std::string &cardName)
     if (it != yellowHand.end())
     {
         std::shared_ptr<Card> playedCard = *it; // Store the card to be played
-        yellowOnTable.push_back(playedCard);    // Add the card to the on-table vector
-        yellowHand.erase(it);                   // Remove the card from the hand after playing
+        std::cout << "played " << playedCard->getName() << " for " << name << std::endl;
+        yellowOnTable.push_back(playedCard); // Add the card to the on-table vector
+        yellowHand.erase(it);                // Remove the card from the hand after playing
         yellowHand.shrink_to_fit();
         return true;
     }
