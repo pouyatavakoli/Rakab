@@ -92,7 +92,7 @@ bool Player::canPlay()
 }
 bool Player::getWinStatus()
 {
-    return winStatus ;
+    return winStatus;
 }
 std::vector<std::string> Player::getOwnedProvinces() const
 {
@@ -157,8 +157,8 @@ bool Player::playYellowCard(const std::string &cardName)
         yellowOnTable.push_back(playedCard); // Add the card to the on-table vector
         yellowHand.erase(it);                // Remove the card from the hand after playing
         yellowHand.shrink_to_fit();
-        setScore(getPoints() + playedCard->getPoints());
         return true;
     }
     return false;
 }
+

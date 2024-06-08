@@ -162,31 +162,9 @@ void Game::run()
     fillMainDeck();
 
     // give 10 cards to each player
-    for (int i = 0; i < 10; i++)
-    {
-        for (Player &player : players)
-        {
-            if (!mainDeck.empty())
-            {
-                std::shared_ptr<Card> card = mainDeck.back(); // Get the top card from the main deck
-                removeCardFromDeck(card, mainDeck);           // Remove the card from the main deck
-                // Add the card to the player's deck
-                if (card->getType() == "Purple")
-                {
-                    player.addCardToPurpleHand(card);
-                }
-                else if (card->getType() == "Yellow")
-                {
-                    player.addCardToYellowHand(card);
-                }
-            }
-            else
-            {
-                std::cout << "main deck is empty cant give cards to players";
-            }
-        }
-    }
+    handCardsToPLayers();
     // show players hands
+    // TODO: get player name show his hand
     for (Player &player : players)
     {
         std::cout << player.getName() << " cards : ";
@@ -202,6 +180,11 @@ void Game::run()
         }
         std::cout << std::endl;
     }
+    // TODO: ask smallest player to pick battle province
+    interface.askSmallestPlayerToPickBattleProvince(findSmallestPlayer());
+
+    // TODO: function to start battle on given province
+
     // the game starts form here
     while (!winnerIsPicked)
     {
@@ -256,7 +239,7 @@ void Game::run()
         if (!anyPlayerCanPlay)
         {
             std::cout << "No one can play. The game has ended." << std::endl;
-            checkWinner();
+            checkThisBattleWinner();
             break;
         }
     }
@@ -300,17 +283,93 @@ void Game::shuffleDeck()
     }
 }
 
-void Game::checkWinner()
+void Game::checkThisBattleWinner()
 {
     int max{0};
     Player *winner = nullptr;
     for (auto &player : players)
     {
-        if (player.getPoints() > max)
+        if (player.getPoints() >= max)
         {
+            if (winner->getPoints() == player.getPoints())
+            {
+                std::cout << "game has no winner";
+                // TODO: implement tie logic
+            }
             max = player.getPoints();
             winner = &player;
+            // TODO: add province to dominated area
         }
     }
-    winner->setWinStatus(true);
+}
+void Game::updateTotalScore()
+{
+    for (auto player : players)
+    {
+        int totalOnTable = 0;
+
+        for (auto card : player.getYellowOnTable())
+        {
+            totalOnTable += card->getPoints();
+        }
+        for (auto card : player.getPurpleOnTable())
+        {
+            totalOnTable += card->getPoints();
+        }
+        player.setScore(totalOnTable);
+    }
+}
+
+void Game::handCardsToPLayers()
+{
+    for (int i = 0; i < 10; i++)
+    {
+        for (Player &player : players)
+        {
+            if (!mainDeck.empty())
+            {
+                std::shared_ptr<Card> card = mainDeck.back(); // Get the top card from the main deck
+                removeCardFromDeck(card, mainDeck);           // Remove the card from the main deck
+                // Add the card to the player's deck
+                if (card->getType() == "Purple")
+                {
+                    player.addCardToPurpleHand(card);
+                }
+                else if (card->getType() == "Yellow")
+                {
+                    player.addCardToYellowHand(card);
+                }
+            }
+            else
+            {
+                std::cout << "main deck is empty cant give cards to players";
+            }
+        }
+    }
+}
+
+const Player &Game::findSmallestPlayer()
+{
+    int minAge{0};
+    std::string province;
+
+    for (const auto &player : players)
+    {
+        if (player.getAge() < minAge)
+        {
+            minAge = player.getAge();
+        }
+    }
+    for (const auto &player : players)
+    {
+        if (player.getAge() == minAge)
+        {
+            return player;
+        }
+    }
+}
+void Game::setBattleStarter(const Player &player) // UNDONE
+{
+    // for (int i = 0; i < playerCount; i++)
+
 }

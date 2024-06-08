@@ -18,7 +18,11 @@ public:
     std::vector<Player> getGamePlayers() const;
     int getPlayersCount() const;
     void addPlayer(Player);
-    void checkWinner();
+    void updateTotalScore();
+    void checkThisBattleWinner();
+    void handCardsToPLayers();
+    const Player& findSmallestPlayer();
+    void setBattleStarter(const Player&);
 
 private:
     int playerCount;
