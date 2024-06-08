@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <ctime>
+#include <iomanip>
 
 #include "Game.hpp"
 #include "Interface.hpp"
@@ -192,12 +193,12 @@ void Game::run()
         auto yellowHand = player.getYellowHand();
         for (auto card : yellowHand)
         {
-            std::cout << card->getName() << " ";
+            std::cout << std::setw(10) << card->getName() << " ";
         }
         auto purpleHand = player.getPurpleHand();
         for (auto card : purpleHand)
         {
-            std::cout << card->getName() << " ";
+            std::cout << std::setw(10) << card->getName() << " ";
         }
         std::cout << std::endl;
     }
@@ -255,6 +256,7 @@ void Game::run()
         if (!anyPlayerCanPlay)
         {
             std::cout << "No one can play. The game has ended." << std::endl;
+            checkWinner();
             break;
         }
     }
@@ -296,4 +298,19 @@ void Game::shuffleDeck()
         int j = std::rand() % (i + 1); // Generate a random index in the range [0, i]
         std::swap(mainDeck[i], mainDeck[j]);
     }
+}
+
+void Game::checkWinner()
+{
+    int max{0};
+    Player *winner = nullptr;
+    for (auto &player : players)
+    {
+        if (player.getPoints() > max)
+        {
+            max = player.getPoints();
+            winner = &player;
+        }
+    }
+    winner->setWinStatus(true);
 }

@@ -26,7 +26,10 @@ void Player::updatePlayerEligibility(bool canPlayVal)
 {
     isAbleToPlay = canPlayVal;
 }
-
+void Player::setWinStatus(bool statusVal)
+{
+    winStatus = statusVal;
+}
 void Player::addOwnedProvinces(const std::string &newProvince)
 {
     dominatedAreas.push_back(newProvince);
@@ -87,6 +90,10 @@ bool Player::canPlay()
 {
     return isAbleToPlay;
 }
+bool Player::getWinStatus()
+{
+    return winStatus ;
+}
 std::vector<std::string> Player::getOwnedProvinces() const
 {
     return dominatedAreas;
@@ -118,7 +125,7 @@ int Player::getPoints() const
 }
 void Player::passAndDontPlay()
 {
-    isAbleToPlay = false ;
+    isAbleToPlay = false;
 }
 
 bool Player::playPurpleCard(const std::string &cardName)
@@ -150,6 +157,7 @@ bool Player::playYellowCard(const std::string &cardName)
         yellowOnTable.push_back(playedCard); // Add the card to the on-table vector
         yellowHand.erase(it);                // Remove the card from the hand after playing
         yellowHand.shrink_to_fit();
+        setScore(getPoints() + playedCard->getPoints());
         return true;
     }
     return false;

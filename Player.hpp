@@ -19,6 +19,7 @@ public:
     void setScore(int score);
     void setColor(std::string color);
     void updatePlayerEligibility(bool);
+    void setWinStatus(bool status);
     void addOwnedProvinces(const std::string &);
     void addCardToYellowOnTable(std::shared_ptr<Card>);
     void addCardToYellowHand(std::shared_ptr<Card>);
@@ -34,6 +35,7 @@ public:
     int getPoints() const;
     std::string getColor();
     bool canPlay();
+    bool getWinStatus();
     std::vector<std::string> getOwnedProvinces() const;
     std::vector<std::shared_ptr<Card>> getYellowOnTable() const;
     std::vector<std::shared_ptr<Card>> getYellowHand() const;
@@ -49,6 +51,7 @@ private:
     std::string color;
     int totalScore;
     bool isAbleToPlay;
+    bool winStatus ;
     std::vector<std::string> dominatedAreas;
     std::vector<std::shared_ptr<Card>> yellowOnTable;
     std::vector<std::shared_ptr<Card>> purpleOnTable;

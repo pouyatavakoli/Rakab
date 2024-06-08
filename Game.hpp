@@ -18,6 +18,7 @@ public:
     std::vector<Player> getGamePlayers() const;
     int getPlayersCount() const;
     void addPlayer(Player);
+    void checkWinner();
 
 private:
     int playerCount;
