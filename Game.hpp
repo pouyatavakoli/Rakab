@@ -2,8 +2,11 @@
 #define GAME_HPP
 
 #include <vector>
+#include <memory>
+#include <string> 
 
 #include "Player.hpp"
+#include "Interface.hpp" 
 
 class Game
 {
@@ -14,7 +17,7 @@ public:
     void shuffleDeck();
     void setPlayersCount(int);
     void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
-    void startBattle(const std::string &, Interface &);
+    void startBattle(const std::string &, Interface &); // Correct function declaration
     void checkThisBattleWinner(const std::string &);
     int getHighestYellowCardInGame(std::vector<Player> &);
     std::vector<Player> getGamePlayers() const;
@@ -33,4 +36,4 @@ private:
     bool anyPlayerCanPlay;
 };
 
-#endif
+#endif // GAME_HPP
