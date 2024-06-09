@@ -181,12 +181,25 @@ void Game::run()
         std::cout << std::endl;
     }
 
-    setBattleStarter(findSmallestPlayer()); // ask smallest player to pick battle province
-    interface.askSmallestPlayerToPickBattleProvince(findSmallestPlayer());
+    int count{0};
+    while (true)
+    {
+        if (count == 0)
+        {
+            setBattleStarter(findSmallestPlayer()); // ask smallest player to pick battle province
+            startBattle(interface.askSmallestPlayerToPickBattleProvince(findSmallestPlayer()), interface);
+        }
+        else
+        {
+            // setBattleStarter(); //the winner of previous game should start
+        }
+        count++;
+    }
+}
 
-    // TODO: function to start battle on given province
-
-    // the game starts form here
+void Game::startBattle(const std::string &province, Interface &interface)
+{
+    std::cout << "Battle started on province: " << province << std::endl;
     while (!winnerIsPicked)
     {
         anyPlayerCanPlay = false;
@@ -240,11 +253,38 @@ void Game::run()
         if (!anyPlayerCanPlay)
         {
             std::cout << "No one can play. The game has ended." << std::endl;
-            checkThisBattleWinner();
+            checkThisBattleWinner(province); // not sure about the rules
             break;
         }
     }
 }
+void Game::checkThisBattleWinner(const std::string &province)
+{
+    int max{0};
+    Player *winner = nullptr;
+    for (auto &player : players)
+    {
+        if (player.getPoints() > max)
+        {
+            max = player.getPoints();
+            winner = &player;
+        }
+        else if (player.getPoints() == max)
+        {
+            std::cout << "The game has no winner, it's a tie." << std::endl;
+        }
+    }
+    if (winner != nullptr)
+    {
+        std::cout << "The winner is " << winner->getName() << " with " << winner->getPoints() << " points." << std::endl;
+        winner->addOwnedProvinces(province);
+    }
+    else
+    {
+        std::cout << "No winner could be determined." << std::endl;
+    }
+}
+
 int Game::getHighestYellowCardInGame(std::vector<Player> &players)
 {
     int max = 1;
@@ -260,6 +300,7 @@ int Game::getHighestYellowCardInGame(std::vector<Player> &players)
     }
     return max;
 }
+
 std::vector<Player> Game::getGamePlayers() const
 {
     return players;
@@ -281,26 +322,6 @@ void Game::shuffleDeck()
     {
         int j = std::rand() % (i + 1); // Generate a random index in the range [0, i]
         std::swap(mainDeck[i], mainDeck[j]);
-    }
-}
-
-void Game::checkThisBattleWinner()
-{
-    int max{0};
-    Player *winner = nullptr;
-    for (auto &player : players)
-    {
-        if (player.getPoints() >= max)
-        {
-            if (winner->getPoints() == player.getPoints())
-            {
-                std::cout << "game has no winner";
-                // TODO: implement tie logic
-            }
-            max = player.getPoints();
-            winner = &player;
-            // TODO: add province to dominated area
-        }
     }
 }
 void Game::updateTotalScore()
@@ -401,7 +422,7 @@ void Game::setBattleStarter(const Player &player1)
             newOrder.push_back(players[i]);
         }
 
-        // Update the order 
+        // Update the order
         for (int i = 0; i < playerCount; i++)
         {
             players[i] = newOrder[i];

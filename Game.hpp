@@ -14,15 +14,16 @@ public:
     void shuffleDeck();
     void setPlayersCount(int);
     void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
+    void startBattle(const std::string &, Interface &);
+    void checkThisBattleWinner(const std::string &);
     int getHighestYellowCardInGame(std::vector<Player> &);
     std::vector<Player> getGamePlayers() const;
     int getPlayersCount() const;
     void addPlayer(Player);
     void updateTotalScore();
-    void checkThisBattleWinner();
     void handCardsToPLayers();
-    const Player& findSmallestPlayer();
-    void setBattleStarter(const Player&);
+    const Player &findSmallestPlayer();
+    void setBattleStarter(const Player &);
 
 private:
     int playerCount;
