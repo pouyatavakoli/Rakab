@@ -3,6 +3,27 @@
 
 Matarsak::Matarsak() : PurpleCard(0, "Matarsak") {}
 
+std::string Matarsak::getName() const
+{
+    return name;
+}
+std::string Matarsak::getType() const
+{
+    return type;
+}
+int Matarsak::getNumerOnTheCard() const
+{
+    return numberOnTheCard;
+}
+int Matarsak::getPoints() const
+{
+    return points;
+}
+void Matarsak::setPoints(int pointsVal)
+{
+    points = pointsVal ;
+}
+
 void Matarsak::startEffect(Player &player)
 {
     std::cout << "What card do you want to take? (Yellow1, Yellow2, ..., Yellow10): ";

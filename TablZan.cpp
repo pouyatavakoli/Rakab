@@ -17,3 +17,23 @@ void TablZan::startEffect(Player &player)
 }
 
 void TablZan::endEffect(Player &) {}
+std::string TablZan::getName() const
+{
+    return name;
+}
+std::string TablZan::getType() const
+{
+    return type;
+}
+int TablZan::getNumerOnTheCard() const
+{
+    return numberOnTheCard;
+}
+int TablZan::getPoints() const
+{
+    return points;
+}
+void TablZan::setPoints(int pointsVal)
+{
+    points = pointsVal;
+}
