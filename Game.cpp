@@ -180,7 +180,8 @@ void Game::run()
         }
         std::cout << std::endl;
     }
-    // TODO: ask smallest player to pick battle province
+
+    setBattleStarter(findSmallestPlayer()); // ask smallest player to pick battle province
     interface.askSmallestPlayerToPickBattleProvince(findSmallestPlayer());
 
     // TODO: function to start battle on given province
@@ -368,8 +369,13 @@ const Player &Game::findSmallestPlayer()
         }
     }
 }
-void Game::setBattleStarter(const Player &player) // UNDONE
+void Game::setBattleStarter(const Player &player1)
 {
-    // for (int i = 0; i < playerCount; i++)
-
+    for (int i = 0; i < playerCount; i++)
+    {
+        if (players[i].getName() == player1.getName())
+        {
+            std::swap(players[0], players[i]);
+        }
+    }
 }
