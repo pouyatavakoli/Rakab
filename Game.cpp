@@ -371,11 +371,40 @@ const Player &Game::findSmallestPlayer()
 }
 void Game::setBattleStarter(const Player &player1)
 {
+    int playerIndex = -1;
+
+    // Find the player
     for (int i = 0; i < playerCount; i++)
     {
         if (players[i].getName() == player1.getName())
         {
-            std::swap(players[0], players[i]);
+            playerIndex = i;
+            break;
+        }
+    }
+
+    if (playerIndex != -1) /*If player is found,
+                           rotate array so that playerIndex is at the start*/
+
+    {
+        std::vector<Player> newOrder;
+
+        // Add players from playerIndex to the end
+        for (int i = playerIndex; i < playerCount; i++)
+        {
+            newOrder.push_back(players[i]);
+        }
+
+        // Add players from the start to playerIndex-1
+        for (int i = 0; i < playerIndex; i++)
+        {
+            newOrder.push_back(players[i]);
+        }
+
+        // Update the order 
+        for (int i = 0; i < playerCount; i++)
+        {
+            players[i] = newOrder[i];
         }
     }
 }
