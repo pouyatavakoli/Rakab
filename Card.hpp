@@ -8,14 +8,14 @@ public:
     Card(int numberOnTheCard, std::string type, std::string name);
 
     // getters
-    virtual std::string getName() const;
-    virtual std::string getType() const;
-    virtual int getNumerOnTheCard() const;
-    virtual int getPoints() const;
+    virtual std::string getName() const = 0;
+    virtual std::string getType() const = 0;
+    virtual int getNumerOnTheCard() const = 0;
+    virtual int getPoints() const = 0;
     // setters
-    virtual void setPoints(int);
+    virtual void setPoints(int) = 0;
 
-private:
+protected:
     // exact name of the card
     const std::string name;
     // purple or yellow
