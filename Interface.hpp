@@ -2,7 +2,8 @@
 #define INTERFACE_HPP
 
 #include <iostream>
-#include "Game.hpp"
+
+#include "Player.hpp"
 
 class Interface
 {

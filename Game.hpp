@@ -5,7 +5,6 @@
 #include <memory>
 #include <string>
 
-#include "Player.hpp"
 #include "Interface.hpp"
 #include "Map.hpp"
 

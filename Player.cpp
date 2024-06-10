@@ -1,9 +1,10 @@
 #include "Player.hpp"
 #include <algorithm>
+#include <iostream>
 
-// constructor
-Player::Player(){};
-Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), totalScore(0), isAbleToPlay(true) {}
+// constructors
+Player::Player() : age(0), totalScore(0), isAbleToPlay(true), winStatus(false) {}
+Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), totalScore(0), isAbleToPlay(true), winStatus(false) {}
 
 // setters
 void Player::setAge(int ageVal)
@@ -34,32 +35,26 @@ void Player::addOwnedProvinces(const std::string &newProvince)
 {
     dominatedAreas.push_back(newProvince);
 }
-
 void Player::addCardToYellowOnTable(std::shared_ptr<Card> card)
 {
     yellowOnTable.push_back(card);
 }
-
 void Player::addCardToYellowHand(std::shared_ptr<Card> card)
 {
     yellowHand.push_back(card);
 }
-
 void Player::addCardToPurpleOnTable(std::shared_ptr<Card> card)
 {
     purpleOnTable.push_back(card);
 }
-
 void Player::addCardToPurpleHand(std::shared_ptr<Card> card)
 {
     purpleHand.push_back(card);
 }
-
 std::shared_ptr<Card> Player::removeCardFromYellowOnTable(const std::string &cardName)
 {
     auto it = std::find_if(yellowOnTable.begin(), yellowOnTable.end(), [&cardName](const std::shared_ptr<Card> &card)
                            { return card->getName() == cardName; });
-
     if (it != yellowOnTable.end())
     {
         std::shared_ptr<Card> targetCard = *it;
@@ -77,11 +72,12 @@ int Player::getAge() const
 {
     return age;
 }
-
-std::string Player::getName() const
+std::string Player::getName()
+    const
 {
     return name;
 }
+
 std::string Player::getColor()
 {
     return color;
@@ -98,27 +94,22 @@ std::vector<std::string> Player::getOwnedProvinces() const
 {
     return dominatedAreas;
 }
-
 std::vector<std::shared_ptr<Card>> Player::getYellowOnTable() const
 {
     return yellowOnTable;
 }
-
 std::vector<std::shared_ptr<Card>> Player::getYellowHand() const
 {
     return yellowHand;
 }
-
 std::vector<std::shared_ptr<Card>> Player::getPurpleOnTable() const
 {
     return purpleOnTable;
 }
-
 std::vector<std::shared_ptr<Card>> Player::getPurpleHand() const
 {
     return purpleHand;
 }
-
 int Player::getPoints() const
 {
     return totalScore;
@@ -127,12 +118,10 @@ void Player::passAndDontPlay()
 {
     isAbleToPlay = false;
 }
-
 bool Player::playPurpleCard(const std::string &cardName)
 {
     auto it = std::find_if(purpleHand.begin(), purpleHand.end(), [&cardName](const std::shared_ptr<Card> &card)
                            { return card->getName() == cardName; });
-
     if (it != purpleHand.end())
     {
         std::shared_ptr<Card> playedCard = *it; // Store the card to be played
@@ -144,12 +133,10 @@ bool Player::playPurpleCard(const std::string &cardName)
     }
     return false;
 }
-
 bool Player::playYellowCard(const std::string &cardName)
 {
     auto it = std::find_if(yellowHand.begin(), yellowHand.end(), [&cardName](const std::shared_ptr<Card> &card)
                            { return card->getName() == cardName; });
-
     if (it != yellowHand.end())
     {
         std::shared_ptr<Card> playedCard = *it; // Store the card to be played
@@ -166,4 +153,3 @@ int Player::getNumberOfOwnedProvinces()
 {
     return dominatedAreas.size();
 }
-

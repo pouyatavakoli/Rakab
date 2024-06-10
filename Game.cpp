@@ -3,7 +3,6 @@
 #include <iomanip>
 
 #include "Game.hpp"
-#include "Interface.hpp"
 #include "Card.hpp"
 #include "Matarsak.hpp"
 #include "ShirZan.hpp"
@@ -372,24 +371,27 @@ void Game::handCardsToPLayers()
 
 const Player &Game::findSmallestPlayer()
 {
-    int minAge{0};
-    std::string province;
+    if (players.empty())
+    {
+        static Player defaultPlayer; // Return a default player if no players are found
+        return defaultPlayer;
+    }
+
+    const Player* smallestPlayer = &players[0];
+    int minAge = players[0].getAge();
 
     for (const auto &player : players)
     {
         if (player.getAge() < minAge)
         {
             minAge = player.getAge();
+            smallestPlayer = &player;
         }
     }
-    for (const auto &player : players)
-    {
-        if (player.getAge() == minAge)
-        {
-            return player;
-        }
-    }
+
+    return *smallestPlayer;
 }
+
 void Game::setBattleStarter(const Player &player1)
 {
     int playerIndex = -1;
