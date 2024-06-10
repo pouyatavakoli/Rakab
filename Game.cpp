@@ -229,7 +229,7 @@ void Game::startBattle(const std::string &province, Interface &interface)
 }
 void Game::checkThisBattleWinner(const std::string &province)
 {
-    // FIXME: cannot find winner for unkown reason
+
 
     int max{0};
     Player *winner = nullptr;

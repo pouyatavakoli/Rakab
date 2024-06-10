@@ -120,6 +120,8 @@ void Player::passAndDontPlay()
 }
 bool Player::playPurpleCard(const std::string &cardName)
 {
+
+    // TODO: add if else for each purple card name
     auto it = std::find_if(purpleHand.begin(), purpleHand.end(), [&cardName](const std::shared_ptr<Card> &card)
                            { return card->getName() == cardName; });
     if (it != purpleHand.end())
