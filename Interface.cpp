@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+
 #include "Interface.hpp"
 
 int Interface::getPlayersCountFromUser()
@@ -37,7 +39,17 @@ int Interface::getPlayerAgeFromUser(int i)
 std::string Interface::askUserToPickACardOrPass(Player player)
 {
     std::cout << player.getName();
-    std::cout << " enter card you want to play or enter pass if you want to pass : ";
+    std::cout << " you have these cards in hand : " << std::endl;
+    for (auto card : player.getYellowHand())
+    {
+        std::cout << std::setw(10) << card->getName();
+    }
+    for (auto card : player.getPurpleHand())
+    {
+        std::cout << std::setw(10) << card->getName();
+    }
+    std::cout << std::endl;
+    std::cout << "pick one card from list above or enter pass : ";
     std::string cardsName;
     std::cin >> cardsName;
     return cardsName;
@@ -49,10 +61,10 @@ std::string Interface::askUserToPickAColor(int i)
     std::cin >> color;
     return color;
 }
-std::string Interface::askSmallestPlayerToPickBattleProvince(const Player& player)
+std::string Interface::askSmallestPlayerToPickBattleProvince(const Player &player)
 {
     std::string provinceName;
     std::cout << player.getName() << " enter starting battle province: ";
-    std::cin >> provinceName ;
-    return provinceName ;
+    std::cin >> provinceName;
+    return provinceName;
 }
