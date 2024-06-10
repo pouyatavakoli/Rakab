@@ -162,10 +162,11 @@ void Game::run()
 
     // give 10 cards to each player
     handCardsToPLayers();
-    // show players hands
-    // TODO: get player name show his hand
+    
+    // show all players hands (may be removed in future)
     for (Player &player : players)
     {
+        std::cout << "all hands summary :" << std::endl ;
         std::cout << player.getName() << " cards : ";
         auto yellowHand = player.getYellowHand();
         for (auto card : yellowHand)
@@ -229,6 +230,7 @@ void Game::startBattle(const std::string &province, Interface &interface)
                             if (!player.playYellowCard(cardName))
                             {
                                 std::cout << cardName << " not found in player's deck. Try another card." << std::endl;
+                                // FIXME: ask user to pick another card instead of going to next player
                             }
                             break;
                         }
@@ -261,19 +263,30 @@ void Game::checkThisBattleWinner(const std::string &province)
 {
     int max{0};
     Player *winner = nullptr;
+    // find max score
     for (auto &player : players)
     {
-        if (player.getPoints() > max)
+        if (player.getPoints() >= max)
         {
             max = player.getPoints();
             winner = &player;
         }
-        else if (player.getPoints() == max)
+    }
+    int tieCounter{0};
+    // count players with max score
+    for (auto &player : players)
+    {
+        if (player.getPoints() == max)
         {
-            std::cout << "The game has no winner, it's a tie." << std::endl;
+            tieCounter++;
         }
     }
-    if (winner != nullptr)
+    // if there are more than 1 max, its a tie
+    if (tieCounter > 1)
+    {
+        std::cout << "The game has no winner, it's a tie." << std::endl;
+    }
+    else if (winner != nullptr)
     {
         std::cout << "The winner is " << winner->getName() << " with " << winner->getPoints() << " points." << std::endl;
         winner->addOwnedProvinces(province);
@@ -377,7 +390,7 @@ const Player &Game::findSmallestPlayer()
         return defaultPlayer;
     }
 
-    const Player* smallestPlayer = &players[0];
+    const Player *smallestPlayer = &players[0];
     int minAge = players[0].getAge();
 
     for (const auto &player : players)
