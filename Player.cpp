@@ -153,3 +153,42 @@ int Player::getNumberOfOwnedProvinces()
 {
     return dominatedAreas.size();
 }
+void Player::PlayThisCard(const std::string userChoice)
+{
+    if (userChoice == "pass")
+    {
+        updatePlayerEligibility(false);
+    }
+    else
+    {
+        // Check if the user choice matches any card name
+        bool cardFound = false;
+        for (int i = 1; i <= 10; ++i)
+        {
+            if (i == 7 || i == 8 || i == 9)
+            {
+                continue;
+            }
+            std::string cardName = "Yellow" + std::to_string(i);
+            if (userChoice == cardName)
+            {
+                cardFound = true;
+                if (!playYellowCard(cardName))
+                {
+                    std::cout << cardName << " not found in player's deck. Try another card." << std::endl;
+                    // FIXME: ask user to pick another card instead of going to next player
+                }
+                break;
+            }
+        }
+
+        // If the user choice is not a Yellow card, try to play a Purple card
+        if (!cardFound)
+        {
+            if (!playPurpleCard(userChoice))
+            {
+                std::cout << userChoice << " not found in player's deck. Try another card." << std::endl;
+            }
+        }
+    }
+}

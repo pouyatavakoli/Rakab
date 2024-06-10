@@ -45,6 +45,7 @@ public:
     void passAndDontPlay();
     bool playPurpleCard(const std::string &);
     bool playYellowCard(const std::string &);
+    void PlayThisCard(const std::string);
 
 private:
     int age;

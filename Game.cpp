@@ -137,6 +137,7 @@ void Game::fillMainDeck()
     std::cout << "Main Deck got shuffled. " << std::endl;
 }
 
+// starts the whole game
 void Game::run()
 {
     Interface interface;                                  // create interface for the game
@@ -162,11 +163,11 @@ void Game::run()
 
     // give 10 cards to each player
     handCardsToPLayers();
-    
+
     // show all players hands (may be removed in future)
+    std::cout << "all hands summary :" << std::endl;
     for (Player &player : players)
     {
-        std::cout << "all hands summary :" << std::endl ;
         std::cout << player.getName() << " cards : ";
         auto yellowHand = player.getYellowHand();
         for (auto card : yellowHand)
@@ -209,46 +210,13 @@ void Game::startBattle(const std::string &province, Interface &interface)
             {
                 anyPlayerCanPlay = true;
                 std::string userChoice = interface.askUserToPickACardOrPass(player);
-                if (userChoice == "pass")
-                {
-                    player.updatePlayerEligibility(false);
-                }
-                else
-                {
-                    // Check if the user choice matches any card name
-                    bool cardFound = false;
-                    for (int i = 1; i <= 10; ++i)
-                    {
-                        if (i == 7 || i == 8 || i == 9)
-                        {
-                            continue;
-                        }
-                        std::string cardName = "Yellow" + std::to_string(i);
-                        if (userChoice == cardName)
-                        {
-                            cardFound = true;
-                            if (!player.playYellowCard(cardName))
-                            {
-                                std::cout << cardName << " not found in player's deck. Try another card." << std::endl;
-                                // FIXME: ask user to pick another card instead of going to next player
-                            }
-                            break;
-                        }
-                    }
-
-                    // If the user choice is not a Yellow card, try to play a Purple card
-                    if (!cardFound)
-                    {
-                        if (!player.playPurpleCard(userChoice))
-                        {
-                            std::cout << userChoice << " not found in player's deck. Try another card." << std::endl;
-                        }
-                    }
-                }
+                player.PlayThisCard(userChoice);
+                updateTotalScore();
             }
             else
             {
                 std::cout << player.getName() << " cannot play going to next player..." << std::endl;
+                // FIXME: show this massage once for each player
             }
         }
         if (!anyPlayerCanPlay)
@@ -261,6 +229,8 @@ void Game::startBattle(const std::string &province, Interface &interface)
 }
 void Game::checkThisBattleWinner(const std::string &province)
 {
+    // FIXME: cannot find winner for unkown reason
+
     int max{0};
     Player *winner = nullptr;
     // find max score
@@ -288,7 +258,7 @@ void Game::checkThisBattleWinner(const std::string &province)
     }
     else if (winner != nullptr)
     {
-        std::cout << "The winner is " << winner->getName() << " with " << winner->getPoints() << " points." << std::endl;
+        std::cout << winner->getName() << " captured " << province << " with " << winner->getPoints() << " points." << std::endl;
         winner->addOwnedProvinces(province);
     }
     else
@@ -338,7 +308,7 @@ void Game::shuffleDeck()
 }
 void Game::updateTotalScore()
 {
-    for (auto player : players)
+    for (auto &player : players)
     {
         int totalOnTable = 0;
 
