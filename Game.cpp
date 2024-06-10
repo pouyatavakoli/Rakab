@@ -206,11 +206,25 @@ void Game::startBattle(const std::string &province, Interface &interface)
         anyPlayerCanPlay = false;
         for (Player &player : players)
         {
+            int situation{0};
             if (player.canPlay())
             {
                 anyPlayerCanPlay = true;
                 std::string userChoice = interface.askUserToPickACardOrPass(player);
-                player.PlayThisCard(userChoice);
+                situation = player.PlayThisCard(userChoice);
+                if (situation == 2)
+                {
+                    startSeason(userChoice);
+                }
+                else if (situation == -1)
+                {
+                    std::cout << player.getName() << " has passed" << std::endl;
+                }
+                else if (situation == 0)
+                {
+                    std::cout << userChoice << " was not found " << std::endl;
+                }
+
                 updateTotalScore();
             }
             else
@@ -229,7 +243,6 @@ void Game::startBattle(const std::string &province, Interface &interface)
 }
 void Game::checkThisBattleWinner(const std::string &province)
 {
-
 
     int max{0};
     Player *winner = nullptr;
@@ -267,7 +280,7 @@ void Game::checkThisBattleWinner(const std::string &province)
     }
 }
 
-int Game::getHighestYellowCardInGame(std::vector<Player> &players)
+int Game::getHighestYellowCardInGame()
 {
     int max = 1;
     for (auto player : players)
@@ -283,14 +296,12 @@ int Game::getHighestYellowCardInGame(std::vector<Player> &players)
     return max;
 }
 
-std::vector<Player> Game::getGamePlayers() const
-{
-    return players;
-}
+
 void Game::addPlayer(Player player)
 {
     players.push_back(player);
 }
+
 int Game::getPlayersCount() const
 {
     return playerCount;
@@ -458,6 +469,68 @@ void Game::findWinner()
         {
             std::cout << player.getName() << "is the winner of Game" << std::endl;
             break;
+        }
+    }
+}
+
+void Game::startSeason(const std::string userChoice)
+{
+    if (userChoice == "Winter")
+    {
+        endSeason("Spring");
+        std::cout<< "Winter has started." << std::endl;
+        for (auto &changePlayer : players)
+        {
+            for (auto &yellowcards : changePlayer.getYellowHand())
+            {
+                if (yellowcards->getPoints() != 1)
+                {
+                    yellowcards->setPoints(1);
+                }
+            }
+        }
+    }
+    else if (userChoice == "Spring")
+    {
+        endSeason("Winter");
+        std::cout<< "Spring has started." << std::endl;
+        int max = getHighestYellowCardInGame();
+        for (auto &player : players)
+        {
+            for (auto &yellowCard : player.getYellowOnTable())
+            {
+                if (yellowCard->getPoints() == max)
+                {
+                    yellowCard->setPoints(max + 3);
+                }
+            }
+        }
+    }
+}
+
+void Game::endSeason(const std::string userChoice)
+{
+    if (userChoice == "Winter")
+    {
+        for (auto &changePlayer : players)
+        {
+            for (auto &yellowcards : changePlayer.getYellowHand())
+            {
+                if (yellowcards->getType() != "Yellow1")
+                {
+                    yellowcards->setPoints(yellowcards->getNumerOnTheCard());
+                }
+            }
+        }
+    }
+    else if (userChoice == "Spring")
+    {
+        for (auto &player : players)
+        {
+            for (auto &yellowCard : player.getYellowOnTable())
+            {
+                yellowCard->setPoints(yellowCard->getNumerOnTheCard());
+            }
         }
     }
 }

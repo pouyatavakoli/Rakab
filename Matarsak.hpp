@@ -15,8 +15,8 @@ public:
     virtual int getPoints() const override;
     virtual void setPoints(int) override ;
 
-    virtual void startEffect(Player &) override;
-    virtual void endEffect(Player &) override;
+    virtual void startEffect(Player &) ;
+    virtual void endEffect(Player &) ;
 
 private:
 };

@@ -1,7 +1,7 @@
 #include "Player.hpp"
 #include <algorithm>
 #include <iostream>
-
+#include "PurpleCard.hpp"
 // constructors
 Player::Player() : age(0), totalScore(0), isAbleToPlay(true), winStatus(false) {}
 Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), totalScore(0), isAbleToPlay(true), winStatus(false) {}
@@ -118,7 +118,8 @@ void Player::passAndDontPlay()
 {
     isAbleToPlay = false;
 }
-bool Player::playPurpleCard(const std::string &cardName)
+
+int Player::playPurpleCard(const std::string &cardName)
 {
 
     // TODO: add if else for each purple card name
@@ -128,12 +129,36 @@ bool Player::playPurpleCard(const std::string &cardName)
     {
         std::shared_ptr<Card> playedCard = *it; // Store the card to be played
         std::cout << "played " << playedCard->getName() << " for " << name << std::endl;
-        purpleOnTable.push_back(playedCard); // Add the card to the on-table vector
-        purpleHand.erase(it);                // Remove the card from the hand after playing
-        purpleHand.shrink_to_fit();
-        return true;
+        std::shared_ptr<PurpleCard> purpleCard = std::dynamic_pointer_cast<PurpleCard>(playedCard);
+        if (purpleCard)
+        {
+            if (playedCard->getName() == "Matarsak" || playedCard->getName() == "TablZan")
+            {
+                purpleCard->startEffect(*this);
+                purpleOnTable.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 1; // we found Matarsak or TablZan
+            }
+            else if (playedCard->getName() == "Winter" || playedCard->getName() == "Spring")
+            {
+                purpleOnTable.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 2; // we found Winter or Spring
+            }
+            else if (playedCard->getName() == "ShirDokht" || playedCard->getName() == "ShirZan" ||
+                     playedCard->getName() == "ParchamDar")
+            {
+                purpleCard->startEffect();
+                purpleOnTable.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 3; // we found other cards
+            }
+        }
     }
-    return false;
+    return 0;
 }
 bool Player::playYellowCard(const std::string &cardName)
 {
@@ -151,19 +176,17 @@ bool Player::playYellowCard(const std::string &cardName)
     return false;
 }
 
-int Player::getNumberOfOwnedProvinces()
-{
-    return dominatedAreas.size();
-}
-void Player::PlayThisCard(const std::string userChoice)
+int Player::PlayThisCard(const std::string userChoice)
 {
     if (userChoice == "pass")
     {
         updatePlayerEligibility(false);
+        return -1;
     }
     else
     {
         // Check if the user choice matches any card name
+        int situation{0};
         bool cardFound = false;
         for (int i = 1; i <= 10; ++i)
         {
@@ -175,22 +198,35 @@ void Player::PlayThisCard(const std::string userChoice)
             if (userChoice == cardName)
             {
                 cardFound = true;
-                if (!playYellowCard(cardName))
+                if (playYellowCard(cardName))
                 {
-                    std::cout << cardName << " not found in player's deck. Try another card." << std::endl;
-                    // FIXME: ask user to pick another card instead of going to next player
+                    return 1; // card card has been played
                 }
-                break;
             }
         }
 
         // If the user choice is not a Yellow card, try to play a Purple card
         if (!cardFound)
         {
-            if (!playPurpleCard(userChoice))
+            situation = playPurpleCard(userChoice);
+            if (situation == 0)
             {
-                std::cout << userChoice << " not found in player's deck. Try another card." << std::endl;
+                return 0; //nothing founded
+            }
+            else if(situation == 1 || situation == 3)
+            {
+                return 1; //card has been played
+            }
+            else if(situation == 2)
+            {
+                return 2; //Winter or spring should be played
             }
         }
+        return 0;
     }
+}
+
+int Player::getNumberOfOwnedProvinces()
+{
+    return dominatedAreas.size();
 }

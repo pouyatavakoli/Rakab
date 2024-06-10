@@ -9,8 +9,8 @@ public:
     ParchamDar();
     // bool ParchamAndBadkhahet(); // It ends the game so inout should br Game type(probably!!!)
 
-    virtual void startEffect() override;
-    virtual void endEffect() override;
+    virtual void startEffect() ;
+    virtual void endEffect() ;
     virtual std::string getName() const override;
     virtual std::string getType() const override;
     virtual int getNumerOnTheCard() const override;

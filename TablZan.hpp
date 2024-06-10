@@ -8,8 +8,8 @@ class TablZan : public PurpleCard
 {
 public:
     TablZan();
-    virtual void startEffect(Player &) override;
-    virtual void endEffect(Player &) override;
+    virtual void startEffect(Player &) ;
+    virtual void endEffect(Player &) ;
     virtual std::string getName() const override;
     virtual std::string getType() const override;
     virtual int getNumerOnTheCard() const override;

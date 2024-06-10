@@ -7,8 +7,8 @@ class ShirZan : public PurpleCard
 {
 public:
     ShirZan();
-    virtual void startEffect() override;
-    virtual void endEffect() override;
+    virtual void startEffect() ;
+    virtual void endEffect() ;
     virtual std::string getName() const override;
     virtual std::string getType() const override;
     virtual int getNumerOnTheCard() const override;

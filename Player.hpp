@@ -43,9 +43,9 @@ public:
     int getNumberOfOwnedProvinces();
 
     void passAndDontPlay();
-    bool playPurpleCard(const std::string &);
+    int playPurpleCard(const std::string &);
     bool playYellowCard(const std::string &);
-    void PlayThisCard(const std::string);
+    int PlayThisCard(const std::string);
 
 private:
     int age;

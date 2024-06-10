@@ -18,7 +18,7 @@ public:
     void setPlayersCount(int);
     void startBattle(const std::string &, Interface &); // Correct function declaration
     void checkThisBattleWinner(const std::string &);
-    int getHighestYellowCardInGame(std::vector<Player> &);
+    int getHighestYellowCardInGame();
     void updateTotalScore();
     void handCardsToPLayers();
     void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
@@ -28,7 +28,10 @@ public:
     const Player &findSmallestPlayer();
     void setBattleStarter(const Player &);
 
-    void winGame1(Player & , Map &);
+    void startSeason(const std::string);
+    void endSeason(const std::string);
+
+    void winGame1(Player &, Map &);
     void winGame2();
     void findWinner();
 
