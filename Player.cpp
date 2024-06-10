@@ -162,3 +162,8 @@ bool Player::playYellowCard(const std::string &cardName)
     return false;
 }
 
+int Player::getNumberOfOwnedProvinces()
+{
+    return dominatedAreas.size();
+}
+

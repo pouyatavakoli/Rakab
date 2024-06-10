@@ -3,10 +3,11 @@
 
 #include <vector>
 #include <memory>
-#include <string> 
+#include <string>
 
 #include "Player.hpp"
-#include "Interface.hpp" 
+#include "Interface.hpp"
+#include "Map.hpp"
 
 class Game
 {
@@ -16,17 +17,21 @@ public:
     void fillMainDeck();
     void shuffleDeck();
     void setPlayersCount(int);
-    void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
     void startBattle(const std::string &, Interface &); // Correct function declaration
     void checkThisBattleWinner(const std::string &);
     int getHighestYellowCardInGame(std::vector<Player> &);
+    void updateTotalScore();
+    void handCardsToPLayers();
+    void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
     std::vector<Player> getGamePlayers() const;
     int getPlayersCount() const;
     void addPlayer(Player);
-    void updateTotalScore();
-    void handCardsToPLayers();
     const Player &findSmallestPlayer();
     void setBattleStarter(const Player &);
+
+    void winGame1(Player & , Map &);
+    void winGame2();
+    void findWinner();
 
 private:
     int playerCount;

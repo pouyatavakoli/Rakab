@@ -45,6 +45,7 @@ public:
     bool playPurpleCard(const std::string &);
     bool playYellowCard(const std::string &);
     void increaseScore(int);
+    int getNumberOfOwnedProvinces();
 private:
     int age;
     std::string name;

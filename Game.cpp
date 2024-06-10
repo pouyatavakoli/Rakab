@@ -429,3 +429,50 @@ void Game::setBattleStarter(const Player &player1)
         }
     }
 }
+void Game::winGame1(Player &player, Map &map)
+{
+    const auto &ownedProvinces = player.getOwnedProvinces();
+
+    for (const auto &province : ownedProvinces)
+    {
+        const auto &adjacentProvinces = map.get_adjacent_provinces(province);
+        int adjacentCount = 0;
+
+        for (const auto &adjacentProvince : adjacentProvinces)
+        {
+            if (province == adjacentProvince)
+            {
+                adjacentCount++;
+            }
+            if (adjacentCount >= 2)
+            {
+                player.setWinStatus(true);
+                break;
+            }
+        }
+    }
+}
+
+void Game::winGame2()
+{
+    for (auto &player : players)
+    {
+        if (player.getNumberOfOwnedProvinces() >= 5)
+        {
+            player.setWinStatus(true);
+            break;
+        }
+    }
+}
+
+void Game::findWinner()
+{
+    for (auto player : players)
+    {
+        if (player.getWinStatus())
+        {
+            std::cout << player.getName() << "is the winner of Game" << std::endl;
+            break;
+        }
+    }
+}
