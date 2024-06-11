@@ -7,24 +7,24 @@ Card::Card(int numberOnTheCardVal, std::string typeVal, std::string nameVal)
     points = numberOnTheCard;
 }
 
-void Card::setPoints(int score)
-{
-    this->points = score;
-}
-int Card::getPoints() const
-{
-    return points;
-}
-std::string Card::getType() const
-{
-    return type;
-}
-int Card::getNumerOnTheCard() const
-{
-    return numberOnTheCard;
-}
+// void Card::setPoints(int pointVal)
+// {
+//     points = pointVal;
+// }
+// int Card::getPoints() const
+// {
+//     return points;
+// }
+// std::string Card::getType() const
+// {
+//     return type;
+// }
+// int Card::getNumerOnTheCard() const
+// {
+//     return numberOnTheCard;
+// }
 
-std::string Card::getName() const
-{
-    return name;
-}
+// std::string Card::getName() const
+// {
+//     return name;
+// }
