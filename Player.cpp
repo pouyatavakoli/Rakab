@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
 
 #include "Player.hpp"
 #include "PurpleCard.hpp"
@@ -134,14 +135,28 @@ int Player::playPurpleCard(const std::string &cardName)
         std::shared_ptr<PurpleCard> purpleCard = std::dynamic_pointer_cast<PurpleCard>(playedCard);
         if (purpleCard)
         {
-            if (playedCard->getName() == "Matarsak" || playedCard->getName() == "TablZan")
+            if (playedCard->getName() == "Matarsak")
+            {
+                std::cout << " pick one card to take from list bellow : " << std::endl;
+                for (auto card : yellowOnTable)
+                {
+                    std::cout << std::setw(10) << card->getName() << " ";
+                }
+                purpleCard->startEffect(*this);
+                purpleOnTable.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 1; // we found Matarsak
+            }
+            if (playedCard->getName() == "TablZan")
             {
                 purpleCard->startEffect(*this);
                 purpleOnTable.push_back(playedCard);
                 purpleHand.erase(it);
                 purpleHand.shrink_to_fit();
-                return 1; // we found Matarsak or TablZan
+                return 1; // we found TablZan
             }
+
             else if (playedCard->getName() == "Winter" || playedCard->getName() == "Spring")
             {
                 purpleOnTable.push_back(playedCard);
@@ -236,11 +251,10 @@ int Player::getNumberOfOwnedProvinces()
 void Player::flushTable()
 {
     std::cout << "Flushing table..." << std::endl;
-    
+
     burntCards.insert(burntCards.end(), purpleOnTable.rbegin(), purpleOnTable.rend());
     burntCards.insert(burntCards.end(), yellowOnTable.rbegin(), yellowOnTable.rend());
-    
+
     purpleOnTable.clear();
     yellowOnTable.clear();
 }
-
