@@ -28,6 +28,9 @@ public:
     const Player &findSmallestPlayer();
     void setBattleStarter(const Player &);
 
+    void setLastWinner(Player);
+    Player getLastWinner();
+
     void startSeason(const std::string);
     void endSeason(const std::string);
     void refreshSeason(const std::string);
@@ -43,6 +46,7 @@ private:
     bool winnerIsPicked;
     bool anyPlayerCanPlay;
     std::string seasonSituation ;
+    Player lastWinner;  
 };
 
 #endif // GAME_HPP

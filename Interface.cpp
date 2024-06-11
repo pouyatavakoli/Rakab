@@ -63,7 +63,7 @@ std::string Interface::askUserToPickAColor(int i)
     std::cin >> color;
     return color;
 }
-std::string Interface::askSmallestPlayerToPickBattleProvince(const Player &player)
+std::string Interface::askPlayerToPickBattleProvince(const Player &player)
 {
     std::string provinceName;
     std::cout << player.getName() << " enter starting battle province: ";

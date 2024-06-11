@@ -13,7 +13,7 @@ public:
     int getPlayerAgeFromUser(int);
     std::string askUserToPickACardOrPass(Player);
     std::string askUserToPickAColor(int);
-    std::string askSmallestPlayerToPickBattleProvince(const Player&);
+    std::string askPlayerToPickBattleProvince(const Player &);
 };
 
 #endif

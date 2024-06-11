@@ -183,24 +183,30 @@ void Game::run()
         std::cout << std::endl;
     }
 
-    int count{0};
+    // int count{0};
+    bool firstRound = true;
     while (true)
     {
-        if (count == 0)
+        if (firstRound)
         {
+            // count++;
+            firstRound = false;
             setBattleStarter(findSmallestPlayer()); // ask smallest player to pick battle province
-            startBattle(interface.askSmallestPlayerToPickBattleProvince(findSmallestPlayer()), interface);
+            startBattle(interface.askPlayerToPickBattleProvince(findSmallestPlayer()), interface);
         }
         else
         {
-            // setBattleStarter(); //the winner of previous game should start
+            // the winner of previous game should start next battle
+            // FIXME: if some players played ShirZan the rule changes 
+            setBattleStarter(getLastWinner());
+            startBattle(interface.askPlayerToPickBattleProvince(getLastWinner()), interface);
         }
-        count++;
     }
 }
 
 void Game::startBattle(const std::string &province, Interface &interface)
 {
+    // FIXME: reset player eligibility each time this function is called for next battle 
     std::cout << "Battle started on province: " << province << std::endl;
     while (!winnerIsPicked)
     {
@@ -282,6 +288,7 @@ void Game::checkThisBattleWinner(const std::string &province)
     {
         std::cout << winner->getName() << " captured " << province << " with " << winner->getPoints() << " points." << std::endl;
         winner->addOwnedProvinces(province);
+        setLastWinner(*winner);
     }
     else
     {
@@ -548,4 +555,13 @@ void Game::refreshSeason(const std::string userChoice)
 {
     endSeason(userChoice);
     startSeason(userChoice);
+}
+
+Player Game::getLastWinner()
+{
+    return lastWinner;
+}
+void Game::setLastWinner(Player winnerVal)
+{
+    lastWinner = winnerVal;
 }
