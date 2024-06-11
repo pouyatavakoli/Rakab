@@ -39,6 +39,8 @@ int Interface::getPlayerAgeFromUser(int i)
 std::string Interface::askUserToPickACardOrPass(Player player)
 {
     std::cout << player.getName();
+    std::cout << " total points : " << player.getPoints() << std::endl;
+    std::cout << player.getName();
     std::cout << " you have these cards in hand : " << std::endl;
     for (auto card : player.getYellowHand())
     {

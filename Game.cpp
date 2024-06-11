@@ -212,14 +212,17 @@ void Game::startBattle(const std::string &province, Interface &interface)
                 anyPlayerCanPlay = true;
                 std::string userChoice = interface.askUserToPickACardOrPass(player);
                 situation = player.PlayThisCard(userChoice);
+                // start season
                 if (situation == 2)
                 {
                     startSeason(userChoice);
                 }
+                // pass
                 else if (situation == -1)
                 {
                     std::cout << player.getName() << " has passed" << std::endl;
                 }
+                // notfound
                 else if (situation == 0)
                 {
                     std::cout << userChoice << " was not found " << std::endl;
@@ -481,7 +484,7 @@ void Game::startSeason(const std::string userChoice)
         std::cout<< "Winter has started." << std::endl;
         for (auto &changePlayer : players)
         {
-            for (auto &yellowcards : changePlayer.getYellowHand())
+            for (auto &yellowcards : changePlayer.getYellowOnTable())
             {
                 if (yellowcards->getPoints() != 1)
                 {
