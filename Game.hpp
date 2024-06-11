@@ -45,8 +45,8 @@ private:
     std::vector<std::shared_ptr<Card>> mainDeck;
     bool winnerIsPicked;
     bool anyPlayerCanPlay;
-    std::string seasonSituation ;
-    Player lastWinner;  
+    std::string seasonSituation;
+    Player lastWinner;
 };
 
 #endif // GAME_HPP

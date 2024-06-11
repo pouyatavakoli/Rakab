@@ -209,11 +209,11 @@ void Game::startBattle(const std::string &province, Interface &interface)
     // reset player eligibility each time this function is called for next battle
     for (Player &player : players)
     {
-        player.updatePlayerEligibility(true);
-        /*TODO: add this function player.flushCards();
-        the functions flushes all cards on table to burnt cards deck
-        burnt card is a vector in game
-        */
+        //FIXME: player should not update its own eligibility (maybe)
+        player.updatePlayerEligibility(true); 
+        // move cards form table to burnt cards
+        player.flushTable(); 
+        updateTotalScore();
     }
 
     std::cout << "Battle started on province: " << province << std::endl;

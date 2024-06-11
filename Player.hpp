@@ -46,6 +46,7 @@ public:
     int playPurpleCard(const std::string &);
     bool playYellowCard(const std::string &);
     int PlayThisCard(const std::string);
+    void flushTable();
 
 private:
     int age;
@@ -59,6 +60,7 @@ private:
     std::vector<std::shared_ptr<Card>> purpleOnTable;
     std::vector<std::shared_ptr<Card>> yellowHand;
     std::vector<std::shared_ptr<Card>> purpleHand;
+    std::vector<std::shared_ptr<Card>> burntCards;
 };
 
 #endif

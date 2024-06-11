@@ -44,11 +44,11 @@ std::string Interface::askUserToPickACardOrPass(Player player)
     std::cout << " you have these cards in hand : " << std::endl;
     for (auto card : player.getYellowHand())
     {
-        std::cout << std::setw(10) << card->getName();
+        std::cout << std::setw(10) << card->getName() << " ";
     }
     for (auto card : player.getPurpleHand())
     {
-        std::cout << std::setw(10) << card->getName();
+        std::cout << std::setw(10) << card->getName() << " ";
     }
     std::cout << std::endl;
     std::cout << "pick one card from list above or enter pass : ";

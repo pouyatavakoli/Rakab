@@ -1,7 +1,9 @@
-#include "Player.hpp"
 #include <algorithm>
 #include <iostream>
+
+#include "Player.hpp"
 #include "PurpleCard.hpp"
+#include <vector>
 // constructors
 Player::Player() : age(0), totalScore(0), isAbleToPlay(true), winStatus(false) {}
 Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), totalScore(0), isAbleToPlay(true), winStatus(false) {}
@@ -211,15 +213,15 @@ int Player::PlayThisCard(const std::string userChoice)
             situation = playPurpleCard(userChoice);
             if (situation == 0)
             {
-                return 0; //nothing founded
+                return 0; // nothing founded
             }
-            else if(situation == 1 || situation == 3)
+            else if (situation == 1 || situation == 3)
             {
-                return 1; //card has been played
+                return 1; // card has been played
             }
-            else if(situation == 2)
+            else if (situation == 2)
             {
-                return 2; //Winter or spring should be played
+                return 2; // Winter or spring should be played
             }
         }
         return 0;
@@ -230,3 +232,15 @@ int Player::getNumberOfOwnedProvinces()
 {
     return dominatedAreas.size();
 }
+
+void Player::flushTable()
+{
+    std::cout << "Flushing table..." << std::endl;
+    
+    burntCards.insert(burntCards.end(), purpleOnTable.rbegin(), purpleOnTable.rend());
+    burntCards.insert(burntCards.end(), yellowOnTable.rbegin(), yellowOnTable.rend());
+    
+    purpleOnTable.clear();
+    yellowOnTable.clear();
+}
+
