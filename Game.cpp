@@ -197,7 +197,7 @@ void Game::run()
         else
         {
             // the winner of previous game should start next battle
-            // FIXME: if some players played ShirZan the rule changes 
+            // FIXME: if some players played ShirZan the rule changes
             setBattleStarter(getLastWinner());
             startBattle(interface.askPlayerToPickBattleProvince(getLastWinner()), interface);
         }
@@ -206,7 +206,16 @@ void Game::run()
 
 void Game::startBattle(const std::string &province, Interface &interface)
 {
-    // FIXME: reset player eligibility each time this function is called for next battle 
+    // reset player eligibility each time this function is called for next battle
+    for (Player &player : players)
+    {
+        player.updatePlayerEligibility(true);
+        /*TODO: add this function player.flushCards();
+        the functions flushes all cards on table to burnt cards deck
+        burnt card is a vector in game
+        */
+    }
+
     std::cout << "Battle started on province: " << province << std::endl;
     while (!winnerIsPicked)
     {
