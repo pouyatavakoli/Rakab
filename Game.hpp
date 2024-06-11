@@ -30,6 +30,7 @@ public:
 
     void startSeason(const std::string);
     void endSeason(const std::string);
+    void refreshSeason(const std::string);
 
     void winGame1(Player &, Map &);
     void winGame2();
@@ -41,6 +42,7 @@ private:
     std::vector<std::shared_ptr<Card>> mainDeck;
     bool winnerIsPicked;
     bool anyPlayerCanPlay;
+    std::string seasonSituation ;
 };
 
 #endif // GAME_HPP

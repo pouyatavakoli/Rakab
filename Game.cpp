@@ -25,6 +25,7 @@
 Game::Game() : playerCount(0)
 {
     winnerIsPicked = false;
+    seasonSituation = "normal";
 }
 
 void Game::setPlayersCount(int PlayerCountVal)
@@ -216,6 +217,7 @@ void Game::startBattle(const std::string &province, Interface &interface)
                 if (situation == 2)
                 {
                     startSeason(userChoice);
+                    seasonSituation = userChoice;
                 }
                 // pass
                 else if (situation == -1)
@@ -229,6 +231,10 @@ void Game::startBattle(const std::string &province, Interface &interface)
                 }
 
                 updateTotalScore();
+                if (seasonSituation != "normal")
+                {
+                    refreshSeason(seasonSituation);
+                }
             }
             else
             {
@@ -298,7 +304,6 @@ int Game::getHighestYellowCardInGame()
     }
     return max;
 }
-
 
 void Game::addPlayer(Player player)
 {
@@ -481,7 +486,7 @@ void Game::startSeason(const std::string userChoice)
     if (userChoice == "Winter")
     {
         endSeason("Spring");
-        std::cout<< "Winter has started." << std::endl;
+        std::cout << "Winter has started." << std::endl;
         for (auto &changePlayer : players)
         {
             for (auto &yellowcards : changePlayer.getYellowOnTable())
@@ -496,7 +501,7 @@ void Game::startSeason(const std::string userChoice)
     else if (userChoice == "Spring")
     {
         endSeason("Winter");
-        std::cout<< "Spring has started." << std::endl;
+        std::cout << "Spring has started." << std::endl;
         int max = getHighestYellowCardInGame();
         for (auto &player : players)
         {
@@ -509,6 +514,7 @@ void Game::startSeason(const std::string userChoice)
             }
         }
     }
+    updateTotalScore();
 }
 
 void Game::endSeason(const std::string userChoice)
@@ -536,4 +542,10 @@ void Game::endSeason(const std::string userChoice)
             }
         }
     }
+    updateTotalScore();
+}
+void Game::refreshSeason(const std::string userChoice)
+{
+    endSeason(userChoice);
+    startSeason(userChoice);
 }
