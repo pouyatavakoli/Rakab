@@ -50,6 +50,14 @@ void Player::addCardToPurpleOnTable(std::shared_ptr<Card> card)
 {
     purpleOnTable.push_back(card);
 }
+void Player::setPurpleOnTable(std::vector<std::shared_ptr<Card>> cards)
+{
+    purpleOnTable.clear();
+    for (auto card : cards)
+    {
+        purpleOnTable.push_back(card);
+    }
+}
 void Player::addCardToPurpleHand(std::shared_ptr<Card> card)
 {
     purpleHand.push_back(card);
@@ -152,11 +160,16 @@ int Player::playPurpleCard(const std::string &cardName)
             }
             else if (playedCard->getName() == "TablZan")
             {
-                purpleCard->startEffect(*this);
-                purpleOnTable.push_back(playedCard);
-                purpleHand.erase(it);
-                purpleHand.shrink_to_fit();
-                return 1; // we found TablZan
+                if (!usedTablZan)
+                {
+                    purpleCard->startEffect(*this);
+                    purpleOnTable.push_back(playedCard);
+                    purpleHand.erase(it);
+                    purpleHand.shrink_to_fit();
+                    usedTablZan = true;
+                    return 1; // we found TablZan
+                }
+                return 4; // The card can not be played
             }
 
             else if (playedCard->getName() == "Winter" || playedCard->getName() == "Spring")
@@ -168,7 +181,7 @@ int Player::playPurpleCard(const std::string &cardName)
             }
             else if (playedCard->getName() == "ShirDokht")
             {
-                //purpleCard->startEffect();
+                // purpleCard->startEffect();
                 purpleOnTable.push_back(playedCard);
                 purpleHand.erase(it);
                 purpleHand.shrink_to_fit();
@@ -239,6 +252,10 @@ int Player::PlayThisCard(const std::string userChoice)
             {
                 return 2; // Winter or spring should be played
             }
+            else if (situation == 4)
+            {
+                return 4; // the card can not be used
+            }
         }
         return 0;
     }
@@ -258,4 +275,13 @@ void Player::flushTable()
 
     purpleOnTable.clear();
     yellowOnTable.clear();
+}
+
+void Player::removeSeasonOnTheTable(const std::string userChoice)
+{
+    auto it = std::find_if(purpleOnTable.begin(), purpleOnTable.end(), [&userChoice](const std::shared_ptr<Card> &card)
+                           { return card->getName() == userChoice; });
+
+    purpleOnTable.erase(it);
+    purpleOnTable.shrink_to_fit();
 }

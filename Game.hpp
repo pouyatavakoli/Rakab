@@ -19,7 +19,13 @@ public:
     void startBattle(const std::string &, Interface &); // Correct function declaration
     void checkThisBattleWinner(const std::string &);
     int getHighestYellowCardInGame();
+
     void updateTotalScore();
+    void reorderPurpleOnTable();
+    void endEffects();
+    void startEffects();
+    void refreshEffects();
+
     void handCardsToPLayers();
     void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
     std::vector<Player> getGamePlayers() const;
@@ -34,6 +40,8 @@ public:
     void startSeason(const std::string);
     void endSeason(const std::string);
     void refreshSeason(const std::string);
+    bool canStartSeason(const std::string) const;
+    void removeGameSeason(const std::string);
 
     bool winGame1();
     bool winGame2();

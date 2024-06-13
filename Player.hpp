@@ -25,6 +25,7 @@ public:
     void addCardToYellowOnTable(std::shared_ptr<Card>);
     void addCardToYellowHand(std::shared_ptr<Card>);
     void addCardToPurpleOnTable(std::shared_ptr<Card>);
+    void setPurpleOnTable(std::vector<std::shared_ptr<Card>>);
     void addCardToPurpleHand(std::shared_ptr<Card>);
     std::shared_ptr<Card> removeCardFromYellowOnTable(const std::string &cardName);
 
@@ -42,11 +43,14 @@ public:
     int getPoints() const;
     int getNumberOfOwnedProvinces();
 
+    void removeSeasonOnTheTable(const std::string);
+
     void passAndDontPlay();
     int playPurpleCard(const std::string &);
     bool playYellowCard(const std::string &);
     int PlayThisCard(const std::string);
     void flushTable();
+
 
 private:
     int age;
@@ -55,6 +59,7 @@ private:
     int totalScore;
     bool isAbleToPlay;
     bool winStatus;
+    bool usedTablZan;
     std::vector<std::string> dominatedAreas;
     std::vector<std::shared_ptr<Card>> yellowOnTable;
     std::vector<std::shared_ptr<Card>> purpleOnTable;

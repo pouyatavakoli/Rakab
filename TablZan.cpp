@@ -12,7 +12,16 @@ void TablZan::startEffect(Player &player)
     }
 }
 
-void TablZan::endEffect(Player &) {}
+void TablZan::endEffect(Player &player)
+{
+    std::vector<std::shared_ptr<Card>> deck = player.getYellowOnTable();
+    for (auto &card : deck)
+    {
+        /* card is now worth 2 times number written on it */
+        card->setPoints(card->getNumerOnTheCard() / 2);
+    }
+}
+
 std::string TablZan::getName() const
 {
     return name;

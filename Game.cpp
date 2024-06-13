@@ -268,22 +268,35 @@ void Game::startBattle(const std::string &province, Interface &interface)
                     {
                         std::cout << player.getName() << " has passed" << std::endl;
                         lastPlayerWhoPassed = &player; // Update the last player who passed
-                        break; // Exit the while loop to go to the next player
+                        break;                         // Exit the while loop to go to the next player
                     }
                     else if (situation == 0) // Card not found
                     {
                         std::cout << userChoice << " was not found. Please pick a card or pass." << std::endl;
                         continue; // Continue prompting the same player
                     }
-                    else if (situation == 2) // It is a season
+                    else if (situation == 0) // Successfully played a card
                     {
-                        startSeason(userChoice);
-                        seasonSituation = userChoice;
                         break; // Exit the while loop to go to the next player
                     }
-                    else // Successfully played a card
+                    else if (situation == 2) // It is a season
                     {
-                        break; // Exit the while loop to go to the next player
+                        if (canStartSeason(userChoice))
+                        {
+                            startSeason(userChoice);
+                            seasonSituation = userChoice;
+                            break; // Exit the while loop to go to the next player
+                        }
+                        else
+                        {
+                            std::cout << userChoice << " Can not be Played. Please pick a card or pass." << std::endl;
+                            continue;
+                        }
+                    }
+                    else if (situation == 2)
+                    {
+                        std::cout << userChoice << " Can not be Played. Please pick a card or pass." << std::endl;
+                        continue;
                     }
                 }
                 else
@@ -403,11 +416,53 @@ void Game::updateTotalScore()
     }
 }
 
+void Game::reorderPurpleOnTable()
+{
+    // Define the order for the card types
+    std::unordered_map<std::string, int> orderMap = {
+        {"Winter", 1},
+        {"TablZan", 2},
+        {"Spring", 3},
+        {"ShirDokht", 4}};
+
+    for (auto &player : players)
+    {
+        std::vector<std::shared_ptr<Card>> purplesOnTable = player.getPurpleOnTable();
+
+        // comparison function
+        auto compareCards = [&orderMap](const std::shared_ptr<Card> &a, const std::shared_ptr<Card> &b)
+        {
+            return orderMap[a->getType()] < orderMap[b->getType()];
+        };
+
+        // Sort the cards
+        std::sort(purplesOnTable.begin(), purplesOnTable.end(), compareCards);
+
+        //  set the sorted cards back to the player
+        player.setPurpleOnTable(purplesOnTable);
+    }
+}
+
+void Game::endEffects()
+{
+    //TODO:
+}
+
+void Game::startEffects() //undone
+{
+
+}
+
+void Game::refreshEffects() //undone
+{
+
+}
+
 void Game::handCardsToPLayers()
 {
-    for (int i = 0; i < 10; i++)
+    for (Player &player : players)
     {
-        for (Player &player : players)
+        for (int i = 0; i < 10 + player.getNumberOfOwnedProvinces(); i++)
         {
             if (!mainDeck.empty())
             {
@@ -551,6 +606,7 @@ void Game::startSeason(const std::string userChoice)
     if (userChoice == "Winter")
     {
         endSeason("Spring");
+        removeGameSeason("Spring");
         std::cout << "Winter has started." << std::endl;
         for (auto &changePlayer : players)
         {
@@ -566,6 +622,7 @@ void Game::startSeason(const std::string userChoice)
     else if (userChoice == "Spring")
     {
         endSeason("Winter");
+        removeGameSeason("Winter");
         std::cout << "Spring has started." << std::endl;
         int max = getHighestYellowCardInGame();
         for (auto &player : players)
@@ -615,9 +672,29 @@ void Game::refreshSeason(const std::string userChoice)
     startSeason(userChoice);
 }
 
+bool Game::canStartSeason(const std::string season) const
+{
+    if (seasonSituation == season)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+void Game::removeGameSeason(const std::string userChoice)
+{
+    for (auto &player : players)
+    {
+        player.removeSeasonOnTheTable(userChoice);
+    }
+}
+
 Player Game::getPlayerWhoShouldStart()
 {
-    if(lastWinner.getName().empty())
+    if (lastWinner.getName().empty())
     {
         return *lastPlayerWhoPassed;
     }
