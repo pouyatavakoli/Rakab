@@ -142,13 +142,15 @@ int Player::playPurpleCard(const std::string &cardName)
                 {
                     std::cout << std::setw(10) << card->getName() << " ";
                 }
-                purpleCard->startEffect(*this);
-                purpleOnTable.push_back(playedCard);
-                purpleHand.erase(it);
-                purpleHand.shrink_to_fit();
-                return 1; // we found Matarsak
+                {
+                    purpleCard->startEffect(*this);
+                    purpleOnTable.push_back(playedCard);
+                    purpleHand.erase(it);
+                    purpleHand.shrink_to_fit();
+                    return 1; // we found Matarsak
+                }
             }
-            if (playedCard->getName() == "TablZan")
+            else if (playedCard->getName() == "TablZan")
             {
                 purpleCard->startEffect(*this);
                 purpleOnTable.push_back(playedCard);
@@ -164,14 +166,13 @@ int Player::playPurpleCard(const std::string &cardName)
                 purpleHand.shrink_to_fit();
                 return 2; // we found Winter or Spring
             }
-            else if (playedCard->getName() == "ShirDokht" || playedCard->getName() == "ShirZan" ||
-                     playedCard->getName() == "ParchamDar")
+            else if (playedCard->getName() == "ShirDokht")
             {
-                purpleCard->startEffect();
+                //purpleCard->startEffect();
                 purpleOnTable.push_back(playedCard);
                 purpleHand.erase(it);
                 purpleHand.shrink_to_fit();
-                return 3; // we found other cards
+                return 3; // we found ShirDokht
             }
         }
     }
@@ -232,7 +233,7 @@ int Player::PlayThisCard(const std::string userChoice)
             }
             else if (situation == 1 || situation == 3)
             {
-                return 1; // card has been played
+                return 1; // Matarsak or TablZan or ShirDokht has been played
             }
             else if (situation == 2)
             {

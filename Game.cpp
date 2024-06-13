@@ -9,8 +9,8 @@
 #include "Winter.hpp"
 #include "Spring.hpp"
 #include "TablZan.hpp"
-//#include "ParchamDar.hpp"
-//#include "ShirZan.hpp"
+// #include "ParchamDar.hpp"
+// #include "ShirZan.hpp"
 #include "Yellow1.hpp"
 #include "Yellow2.hpp"
 #include "Yellow3.hpp"
@@ -208,10 +208,10 @@ void Game::run()
         else
         {
             // the winner of previous game should start next battle
-            setBattleStarter(getLastWinner());
+            setBattleStarter(getPlayerWhoShouldStart());
             while (true)
             {
-                std::string targetProvince = interface.askPlayerToPickBattleProvince(getLastWinner());
+                std::string targetProvince = interface.askPlayerToPickBattleProvince(getPlayerWhoShouldStart());
                 if (map.findProvince(targetProvince))
                 {
                     startBattle(targetProvince, interface);
@@ -223,12 +223,12 @@ void Game::run()
                 }
             }
         }
-        if (winGame1()) //if a player has three adjacent provinces , wins
+        if (winGame1()) // if a player has three adjacent provinces , wins
         {
             findWinner();
             break;
         }
-        if (winGame2()) //if a player has five provinces , wins
+        if (winGame2()) // if a player has five provinces , wins
         {
             findWinner();
             break;
@@ -238,12 +238,12 @@ void Game::run()
 
 void Game::startBattle(const std::string &province, Interface &interface)
 {
-    // reset player eligibility each time this function is called for next battle
+    // Reset player eligibility each time this function is called for the next battle
     for (Player &player : players)
     {
         // FIXME: player should not update its own eligibility (maybe)
         player.updatePlayerEligibility(true);
-        // move cards form table to burnt cards
+        // Move cards from table to burnt cards
         player.flushTable();
         updateTotalScore();
     }
@@ -254,49 +254,61 @@ void Game::startBattle(const std::string &province, Interface &interface)
         anyPlayerCanPlay = false;
         for (Player &player : players)
         {
-            int situation{0};
-            if (player.canPlay())
+            while (true)
             {
-                anyPlayerCanPlay = true;
-                std::string userChoice = interface.askUserToPickACardOrPass(player);
-                situation = player.PlayThisCard(userChoice);
-                // start season
-                if (situation == 2)
+                int situation{0};
+                if (player.canPlay())
                 {
-                    startSeason(userChoice);
-                    seasonSituation = userChoice;
-                }
-                // pass
-                else if (situation == -1)
-                {
-                    std::cout << player.getName() << " has passed" << std::endl;
-                }
-                // notfound
-                else if (situation == 0)
-                {
-                    std::cout << userChoice << " was not found " << std::endl;
-                }
+                    anyPlayerCanPlay = true;
+                    std::string userChoice = interface.askUserToPickACardOrPass(player);
+                    situation = player.PlayThisCard(userChoice);
 
-                updateTotalScore();
-                if (seasonSituation != "normal")
+                    // Check the situation after trying to play a card
+                    if (situation == -1) // Pass
+                    {
+                        std::cout << player.getName() << " has passed" << std::endl;
+                        lastPlayerWhoPassed = &player; // Update the last player who passed
+                        break; // Exit the while loop to go to the next player
+                    }
+                    else if (situation == 0) // Card not found
+                    {
+                        std::cout << userChoice << " was not found. Please pick a card or pass." << std::endl;
+                        continue; // Continue prompting the same player
+                    }
+                    else if (situation == 2) // It is a season
+                    {
+                        startSeason(userChoice);
+                        seasonSituation = userChoice;
+                        break; // Exit the while loop to go to the next player
+                    }
+                    else // Successfully played a card
+                    {
+                        break; // Exit the while loop to go to the next player
+                    }
+                }
+                else
                 {
-                    refreshSeason(seasonSituation);
+                    std::cout << player.getName() << " cannot play. Going to next player..." << std::endl;
+                    break; // Exit the while loop to go to the next player
                 }
             }
-            else
+
+            updateTotalScore();
+            if (seasonSituation != "normal")
             {
-                std::cout << player.getName() << " cannot play going to next player..." << std::endl;
-                // FIXME: show this massage once for each player
+                refreshSeason(seasonSituation);
             }
         }
+
         if (!anyPlayerCanPlay)
         {
             std::cout << "No one can play. The game has ended." << std::endl;
-            checkThisBattleWinner(province); // not sure about the rules
+            checkThisBattleWinner(province); // Not sure about the rules
             break;
         }
     }
 }
+
 void Game::checkThisBattleWinner(const std::string &province)
 {
 
@@ -603,9 +615,16 @@ void Game::refreshSeason(const std::string userChoice)
     startSeason(userChoice);
 }
 
-Player Game::getLastWinner()
+Player Game::getPlayerWhoShouldStart()
 {
-    return lastWinner;
+    if(lastWinner.getName().empty())
+    {
+        return *lastPlayerWhoPassed;
+    }
+    else
+    {
+        return lastWinner;
+    }
 }
 void Game::setLastWinner(Player winnerVal)
 {

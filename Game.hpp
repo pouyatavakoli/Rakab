@@ -29,7 +29,7 @@ public:
     void setBattleStarter(const Player &);
 
     void setLastWinner(Player);
-    Player getLastWinner();
+    Player getPlayerWhoShouldStart();
 
     void startSeason(const std::string);
     void endSeason(const std::string);
@@ -48,6 +48,7 @@ private:
     bool anyPlayerCanPlay;
     std::string seasonSituation;
     Player lastWinner;
+    Player* lastPlayerWhoPassed;
 };
 
 #endif // GAME_HPP
