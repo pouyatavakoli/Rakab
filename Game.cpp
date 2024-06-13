@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <ctime>
 #include <iomanip>
+#include <map>
 
 #include "Game.hpp"
 #include "Card.hpp"
@@ -26,6 +27,33 @@ Game::Game() : playerCount(0)
 {
     winnerIsPicked = false;
     seasonSituation = "normal";
+}
+
+void Game::help()
+{
+    std::map<std::string, std::string> helpMap =
+        {
+            {"help", "List of helps you can get : game , matarsak , winter , bahar , ... "}, // TODO: complete
+            {"help game", "Help text for game"},
+            {"help matarsak", "get one yellow card off table back to hand"},
+            {"help TablZan", "doubles yellow cards"},
+            {"help bahar", "ends winter adds 3 to biggest yellow"}};
+    std::string command;
+    std::cout << "Enter a command , enter q to exit : ";
+    std::getline(std::cin, command);
+    if (command == "q")
+    {
+        return;
+    }
+
+    if (helpMap.find(command) != helpMap.end())
+    {
+        std::cout << helpMap[command] << std::endl;
+    }
+    else
+    {
+        std::cout << "Command not found. Type 'help' for the list of available commands." << std::endl;
+    }
 }
 
 void Game::setPlayersCount(int PlayerCountVal)
@@ -270,6 +298,10 @@ void Game::startBattle(const std::string &province, Interface &interface)
                         lastPlayerWhoPassed = &player; // Update the last player who passed
                         break;                         // Exit the while loop to go to the next player
                     }
+                    else if (situation == -10) // show help
+                    {
+                        help(); //TODO: make it work better
+                    }
                     else if (situation == 0) // Card not found
                     {
                         std::cout << userChoice << " was not found. Please pick a card or pass." << std::endl;
@@ -445,17 +477,15 @@ void Game::reorderPurpleOnTable()
 
 void Game::endEffects()
 {
-    //TODO:
+    // TODO:
 }
 
-void Game::startEffects() //undone
+void Game::startEffects() // undone
 {
-
 }
 
-void Game::refreshEffects() //undone
+void Game::refreshEffects() // undone
 {
-
 }
 
 void Game::handCardsToPLayers()

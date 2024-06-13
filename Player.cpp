@@ -214,6 +214,15 @@ int Player::PlayThisCard(const std::string userChoice)
         updatePlayerEligibility(false);
         return -1;
     }
+
+    // if (userChoice.substr(4) == "help")
+    // {
+    //     return -10 ; // show help
+    // }
+    if (userChoice == "help")
+    {
+        return -10 ; // show help
+    }
     else
     {
         // Check if the user choice matches any card name
@@ -285,3 +294,30 @@ void Player::removeSeasonOnTheTable(const std::string userChoice)
     purpleOnTable.erase(it);
     purpleOnTable.shrink_to_fit();
 }
+
+/*
+void Player::applyEffect(std::string cardName)
+{
+    auto it = std::find_if(purpleOnTable.begin(), purpleOnTable.end(), [cardName](const std::shared_ptr<Card> &card)
+                           { return card->getName() == cardName; });
+
+    if (it != purpleOnTable.end())
+    {
+        std::shared_ptr<Card> playedCard = *it;
+        std::cout << "Played " << playedCard->getName() << " for " << name << std::endl;
+
+        std::shared_ptr<PurpleCard> purpleCard = std::dynamic_pointer_cast<PurpleCard>(playedCard);
+        if (purpleCard)
+        {
+            if (cardName == "TablZan")
+            {
+                purpleCard->startEffect(*this);
+            }
+            else if (cardName == "ShirDokht")
+            {
+                purpleCard->startEffect(*this);
+            }
+        }
+    }
+}
+*/

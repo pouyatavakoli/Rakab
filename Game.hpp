@@ -12,6 +12,7 @@ class Game
 {
 public:
     Game();
+    void help();
     void run();
     void fillMainDeck();
     void shuffleDeck();

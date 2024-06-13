@@ -52,9 +52,10 @@ std::string Interface::askUserToPickACardOrPass(Player player)
     }
     std::cout << std::endl;
     std::cout << "pick one card from list above or enter pass : ";
-    std::string cardsName;
-    std::cin >> cardsName;
-    return cardsName;
+    std::string command;
+    std::cin >> command;
+    // std::getline(std::cin, command);
+    return command;
 }
 std::string Interface::askUserToPickAColor(int i)
 {

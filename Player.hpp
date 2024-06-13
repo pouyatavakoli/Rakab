@@ -50,6 +50,7 @@ public:
     bool playYellowCard(const std::string &);
     int PlayThisCard(const std::string);
     void flushTable();
+    //void applyEffect(std::string cardName);
 
 
 private:
