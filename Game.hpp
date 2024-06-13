@@ -35,12 +35,13 @@ public:
     void endSeason(const std::string);
     void refreshSeason(const std::string);
 
-    void winGame1(Player &, Map &);
+    void winGame1(Player &);
     void winGame2();
     void findWinner();
 
 private:
     int playerCount;
+    Map map;
     std::vector<Player> players;
     std::vector<std::shared_ptr<Card>> mainDeck;
     bool winnerIsPicked;

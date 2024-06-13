@@ -183,23 +183,45 @@ void Game::run()
         std::cout << std::endl;
     }
 
-    // int count{0};
     bool firstRound = true;
     while (true)
     {
         if (firstRound)
         {
-            // count++;
+
             firstRound = false;
             setBattleStarter(findSmallestPlayer()); // ask smallest player to pick battle province
-            startBattle(interface.askPlayerToPickBattleProvince(findSmallestPlayer()), interface);
+            while (true)
+            {
+                std::string targetProvince = interface.askPlayerToPickBattleProvince(findSmallestPlayer());
+                if (map.findProvince(targetProvince))
+                {
+                    startBattle(targetProvince, interface);
+                    break;
+                }
+                else
+                {
+                    std::cout << "Such province doesn't exist, try another one." << std::endl;
+                }
+            }
         }
         else
         {
             // the winner of previous game should start next battle
-            // FIXME: if some players played ShirZan the rule changes
             setBattleStarter(getLastWinner());
-            startBattle(interface.askPlayerToPickBattleProvince(getLastWinner()), interface);
+            while (true)
+            {
+                std::string targetProvince = interface.askPlayerToPickBattleProvince(getLastWinner());
+                if (map.findProvince(targetProvince))
+                {
+                    startBattle(targetProvince, interface);
+                    break;
+                }
+                else
+                {
+                    std::cout << "Such province doesn't exist, try another one." << std::endl;
+                }
+            }
         }
     }
 }
@@ -209,10 +231,10 @@ void Game::startBattle(const std::string &province, Interface &interface)
     // reset player eligibility each time this function is called for next battle
     for (Player &player : players)
     {
-        //FIXME: player should not update its own eligibility (maybe)
-        player.updatePlayerEligibility(true); 
+        // FIXME: player should not update its own eligibility (maybe)
+        player.updatePlayerEligibility(true);
         // move cards form table to burnt cards
-        player.flushTable(); 
+        player.flushTable();
         updateTotalScore();
     }
 
@@ -449,7 +471,7 @@ void Game::setBattleStarter(const Player &player1)
         }
     }
 }
-void Game::winGame1(Player &player, Map &map)
+void Game::winGame1(Player &player)
 {
     const auto &ownedProvinces = player.getOwnedProvinces();
 

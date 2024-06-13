@@ -2,19 +2,34 @@
 
 Map::Map()
 {
-    map["BELLA"] = {"PLADACI", "CALINE" , "BORGE"};
-    map["CALINE"] = {"ENNA", "ATELA", "BORGE" , "PALADACI"};
+    provinces.push_back("BELLA");
+    provinces.push_back("CALINE");
+    provinces.push_back("ENNA");
+    provinces.push_back("ATELA");
+    provinces.push_back("BORGE");
+    provinces.push_back("PALADACI");
+    provinces.push_back("DISMASE");
+    provinces.push_back("MORINA");
+    provinces.push_back("OLIVADI");
+    provinces.push_back("ROLLO");
+    provinces.push_back("TALMONE");
+    provinces.push_back("ELINIA");
+    provinces.push_back("ARMENTO");
+    provinces.push_back("LIA");
+
+    map["BELLA"] = {"PLADACI", "CALINE", "BORGE"};
+    map["CALINE"] = {"ENNA", "ATELA", "BORGE", "PALADACI"};
     map["ENNA"] = {"BORGE", "CALINE", "DIMASE", "ATELA"};
     map["ATELA"] = {"CALINE", "ENNA", "DISAME"};
-    map["BORGE"] = {"ENNA", "CALINE", "DIMASE", "PALADACI", "MORINA", "OLIVADI" , "BELLA"};
-    map["PALADACI"] = {"BELLA", "BORGE", "MORINA", "ROLLO" , "CALINE"};
+    map["BORGE"] = {"ENNA", "CALINE", "DIMASE", "PALADACI", "MORINA", "OLIVADI", "BELLA"};
+    map["PALADACI"] = {"BELLA", "BORGE", "MORINA", "ROLLO", "CALINE"};
     map["DISMASE"] = {"ATELA", "ENNA", "BORGE", "OLIVADI"};
     map["MORINA"] = {"PALADACI", "BORGE", "ROLLO", "TALMONE", "OLIVADI", "ARMENTO"};
     map["OLIVADI"] = {"DIMASE", "MORINA", "ARMENTO", "LIA"};
     map["ROLLO"] = {"PLADACI", "TALMONE", "MORINA", "ELINIA"};
-    map["TALMONE"] = {"MORINA", "ROLLO", "ELINIA" ,"ARMENTO"};
+    map["TALMONE"] = {"MORINA", "ROLLO", "ELINIA", "ARMENTO"};
     map["ELINIA"] = {"ROLLO", "TALMONE"};
-    map["ARMENTO"] = {"LIA", "OLIVADI", "MORINA" , "TALMONE"};
+    map["ARMENTO"] = {"LIA", "OLIVADI", "MORINA", "TALMONE"};
     map["LIA"] = {"OLIVADI", "ARMENTO"};
 }
 
@@ -27,4 +42,17 @@ const std::vector<std::string> &Map::get_adjacent_provinces(const std::string &k
         return it->second;
     }
     return empty;
+}
+
+bool Map::findProvince(const std::string provinceName) const
+{
+    for (auto province : provinces)
+    {
+        if (province == provinceName)
+        {
+            return true;
+        }
+    }
+
+    return 0;
 }
