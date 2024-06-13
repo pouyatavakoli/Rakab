@@ -35,8 +35,8 @@ public:
     void endSeason(const std::string);
     void refreshSeason(const std::string);
 
-    void winGame1(Player &);
-    void winGame2();
+    bool winGame1();
+    bool winGame2();
     void findWinner();
 
 private:

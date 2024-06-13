@@ -5,12 +5,12 @@
 #include "Game.hpp"
 #include "Card.hpp"
 #include "Matarsak.hpp"
-#include "ShirZan.hpp"
 #include "ShirDokht.hpp"
-#include "ParchamDar.hpp"
 #include "Winter.hpp"
 #include "Spring.hpp"
 #include "TablZan.hpp"
+//#include "ParchamDar.hpp"
+//#include "ShirZan.hpp"
 #include "Yellow1.hpp"
 #include "Yellow2.hpp"
 #include "Yellow3.hpp"
@@ -97,11 +97,11 @@ void Game::fillMainDeck()
         mainDeck.push_back(matarsak);
     }
 
-    for (int i = 1; i <= 3; ++i)
+    /*for (int i = 1; i <= 3; ++i)
     {
         std::shared_ptr<ParchamDar> parchamDar = std::make_shared<ParchamDar>();
         mainDeck.push_back(parchamDar);
-    }
+    }*/
 
     for (int i = 1; i <= 6; ++i)
     {
@@ -121,11 +121,11 @@ void Game::fillMainDeck()
         mainDeck.push_back(winter);
     }
 
-    for (int i = 1; i <= 12; ++i)
+    /*for (int i = 1; i <= 12; ++i)
     {
         std::shared_ptr<ShirZan> shirzan = std::make_shared<ShirZan>();
         mainDeck.push_back(shirzan);
-    }
+    }*/
 
     for (int i = 1; i <= 3; ++i)
     {
@@ -222,6 +222,16 @@ void Game::run()
                     std::cout << "Such province doesn't exist, try another one." << std::endl;
                 }
             }
+        }
+        if (winGame1()) //if a player has three adjacent provinces , wins
+        {
+            findWinner();
+            break;
+        }
+        if (winGame2()) //if a player has five provinces , wins
+        {
+            findWinner();
+            break;
         }
     }
 }
@@ -471,40 +481,45 @@ void Game::setBattleStarter(const Player &player1)
         }
     }
 }
-void Game::winGame1(Player &player)
+bool Game::winGame1()
 {
-    const auto &ownedProvinces = player.getOwnedProvinces();
-
-    for (const auto &province : ownedProvinces)
+    for (auto &player : players)
     {
-        const auto &adjacentProvinces = map.get_adjacent_provinces(province);
-        int adjacentCount = 0;
+        const auto &ownedProvinces = player.getOwnedProvinces();
 
-        for (const auto &adjacentProvince : adjacentProvinces)
+        for (const auto &province : ownedProvinces)
         {
-            if (province == adjacentProvince)
+            const auto &adjacentProvinces = map.get_adjacent_provinces(province);
+            int adjacentCount = 0;
+
+            for (const auto &adjacentProvince : adjacentProvinces)
             {
-                adjacentCount++;
-            }
-            if (adjacentCount >= 2)
-            {
-                player.setWinStatus(true);
-                break;
+                if (province == adjacentProvince)
+                {
+                    adjacentCount++;
+                }
+                if (adjacentCount >= 2)
+                {
+                    player.setWinStatus(true);
+                    return true;
+                }
             }
         }
     }
+    return false;
 }
 
-void Game::winGame2()
+bool Game::winGame2()
 {
     for (auto &player : players)
     {
         if (player.getNumberOfOwnedProvinces() >= 5)
         {
             player.setWinStatus(true);
-            break;
+            return true;
         }
     }
+    return false;
 }
 
 void Game::findWinner()
