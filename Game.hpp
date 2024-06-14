@@ -23,8 +23,8 @@ public:
 
     void updateTotalScore();
     void reorderPurpleOnTable();
-    void endEffects();
-    void startEffects();
+    void endAllEffects();
+    void startAllEffects();
     void refreshEffects();
 
     void handCardsToPLayers();
@@ -57,7 +57,7 @@ private:
     bool anyPlayerCanPlay;
     std::string seasonSituation;
     Player lastWinner;
-    Player* lastPlayerWhoPassed;
+    Player *lastPlayerWhoPassed;
 };
 
 #endif // GAME_HPP

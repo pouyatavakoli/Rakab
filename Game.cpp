@@ -38,9 +38,11 @@ void Game::help()
             {"help matarsak", "get one yellow card off table back to hand"},
             {"help TablZan", "doubles yellow cards"},
             {"help bahar", "ends winter adds 3 to biggest yellow"}};
+
     std::string command;
     std::cout << "Enter a command , enter q to exit : ";
     std::getline(std::cin, command);
+
     if (command == "q")
     {
         return;
@@ -300,7 +302,7 @@ void Game::startBattle(const std::string &province, Interface &interface)
                     }
                     else if (situation == -10) // show help
                     {
-                        help(); //TODO: make it work better
+                        help(); // TODO: wait for user respond , dont burn user turn
                     }
                     else if (situation == 0) // Card not found
                     {
@@ -475,17 +477,48 @@ void Game::reorderPurpleOnTable()
     }
 }
 
-void Game::endEffects()
+void Game::endAllEffects()
 {
-    // TODO:
+    for (auto &player : players)
+    {
+        player.cancelEffects();
+    }
 }
 
-void Game::startEffects() // undone
+void Game::startAllEffects() // undone
 {
+    if (seasonSituation == "normal")
+    {
+        for (auto &player : players)
+        {
+            for (auto &card : player.getPurpleOnTable())
+                player.applyEffect(card->getName());
+        }
+    }
+    else if (seasonSituation == "Winter")
+    {
+        startSeason("Winter");
+        for (auto &player : players)
+        {
+            for (auto &card : player.getPurpleOnTable())
+                player.applyEffect(card->getName());
+        }
+    }
+    else if (seasonSituation == "Spring")
+    {
+        startSeason("spring");
+        for (auto &player : players)
+        {
+            for (auto &card : player.getPurpleOnTable())
+                player.applyEffect(card->getName());
+        }
+    }
 }
 
 void Game::refreshEffects() // undone
 {
+    endAllEffects();
+    startAllEffects();
 }
 
 void Game::handCardsToPLayers()

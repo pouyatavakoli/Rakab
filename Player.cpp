@@ -221,7 +221,7 @@ int Player::PlayThisCard(const std::string userChoice)
     // }
     if (userChoice == "help")
     {
-        return -10 ; // show help
+        return -10; // show help
     }
     else
     {
@@ -295,7 +295,6 @@ void Player::removeSeasonOnTheTable(const std::string userChoice)
     purpleOnTable.shrink_to_fit();
 }
 
-/*
 void Player::applyEffect(std::string cardName)
 {
     auto it = std::find_if(purpleOnTable.begin(), purpleOnTable.end(), [cardName](const std::shared_ptr<Card> &card)
@@ -320,4 +319,11 @@ void Player::applyEffect(std::string cardName)
         }
     }
 }
-*/
+
+void Player::cancelEffects()
+{
+    for (auto &card : yellowOnTable)
+    {
+        card->setPoints(card->getNumerOnTheCard());
+    }
+}
