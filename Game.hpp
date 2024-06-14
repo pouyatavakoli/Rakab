@@ -43,6 +43,7 @@ public:
     void refreshSeason(const std::string);
     bool canStartSeason(const std::string) const;
     void removeGameSeason(const std::string);
+    void updateCardHoldersCount();
 
     bool winGame1();
     bool winGame2();
@@ -58,6 +59,7 @@ private:
     std::string seasonSituation;
     Player lastWinner;
     Player *lastPlayerWhoPassed;
+    int cardHoldersCount ;
 };
 
 #endif // GAME_HPP

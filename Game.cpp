@@ -27,6 +27,7 @@ Game::Game() : playerCount(0)
 {
     winnerIsPicked = false;
     seasonSituation = "normal";
+    cardHoldersCount = 0;
 }
 
 void Game::help()
@@ -276,6 +277,7 @@ void Game::startBattle(const std::string &province, Interface &interface)
         // Move cards from table to burnt cards
         player.flushTable();
         updateTotalScore();
+        updateCardHoldersCount();
     }
 
     std::cout << "Battle started on province: " << province << std::endl;
@@ -284,13 +286,15 @@ void Game::startBattle(const std::string &province, Interface &interface)
         anyPlayerCanPlay = false;
         for (Player &player : players)
         {
-            while (true)
+            while (cardHoldersCount > 1)
             {
                 int situation{0};
+
                 if (player.canPlay())
                 {
                     anyPlayerCanPlay = true;
                     std::string userChoice = interface.askUserToPickACardOrPass(player);
+                    updateCardHoldersCount();
                     if (userChoice == "Winter" || userChoice == "Spring")
                     {
                         if (canStartSeason(userChoice))
@@ -346,8 +350,18 @@ void Game::startBattle(const std::string &province, Interface &interface)
                     break; // Exit the while loop to go to the next player
                 }
             }
-
             updateTotalScore();
+            if (cardHoldersCount <= 1)
+            {
+                std::cout << "there are not enough card holders in this game handing the cards again..." << std::endl;
+                for (auto &player : players)
+                {
+                    std::cout << "burning hands ..." << std::endl;
+                    player.burnHand();
+                }
+                handCardsToPLayers();
+                updateCardHoldersCount();
+            }
             if (seasonSituation != "normal")
             {
                 // refreshSeason(seasonSituation);
@@ -539,6 +553,7 @@ void Game::refreshEffects() // undone
 
 void Game::handCardsToPLayers()
 {
+    std::cout<<"handing cards to players..." << std::endl ;
     for (Player &player : players)
     {
         for (int i = 0; i < 10 + player.getNumberOfOwnedProvinces(); i++)
@@ -804,4 +819,15 @@ Player Game::getPlayerWhoShouldStart()
 void Game::setLastWinner(Player winnerVal)
 {
     lastWinner = winnerVal;
+}
+
+void Game::updateCardHoldersCount()
+{
+    for (auto &player : players)
+    {
+        if (player.getYellowHand().size() > 0 || player.getPurpleHand().size() > 0)
+        {
+            ++cardHoldersCount;
+        }
+    }
 }
