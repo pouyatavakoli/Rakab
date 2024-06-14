@@ -39,7 +39,7 @@ public:
     Player getPlayerWhoShouldStart();
 
     void startSeason(const std::string);
-    void endSeason(const std::string);
+    void endSeason(const std::string&);
     void refreshSeason(const std::string);
     bool canStartSeason(const std::string) const;
     void removeGameSeason(const std::string);

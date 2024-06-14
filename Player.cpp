@@ -151,7 +151,7 @@ int Player::playPurpleCard(const std::string &cardName)
                     std::cout << std::setw(10) << card->getName() << " ";
                 }
                 {
-                    // purpleCard->startEffect(*this);
+                    purpleCard->startEffect(*this);
                     purpleOnTable.push_back(playedCard);
                     purpleHand.erase(it);
                     purpleHand.shrink_to_fit();
@@ -291,40 +291,36 @@ void Player::removeSeasonOnTheTable(const std::string userChoice)
     auto it = std::find_if(purpleOnTable.begin(), purpleOnTable.end(), [&userChoice](const std::shared_ptr<Card> &card)
                            { return card->getName() == userChoice; });
 
-    purpleOnTable.erase(it);
-    purpleOnTable.shrink_to_fit();
-}
-
-void Player::applyEffect(std::string cardName)
-{
-    if (cardName == "Winter" || cardName == "Spring")
+    if (it != purpleOnTable.end()) // Check if the card was found
     {
-        std::cout << "its a season card. Skipping applying effect." << std::endl;
-        return;
-    }
-
-    auto it = std::find_if(purpleOnTable.begin(), purpleOnTable.end(), [cardName](const std::shared_ptr<Card>& card)
-                           { return card->getName() == cardName; });
-
-    if (it != purpleOnTable.end())
-    {
-        std::shared_ptr<Card> playedCard = *it;
-        std::cout << "applied effect" << std::endl;
-
-        std::shared_ptr<PurpleCard> purpleCard = std::dynamic_pointer_cast<PurpleCard>(playedCard);
-        if (purpleCard)
-        {
-            std::cout << "applying " << cardName << " effect" << std::endl;
-            purpleCard->startEffect(*this);
-        }
-        else
-        {
-            std::cout << "Card is not a PurpleCard" << std::endl;
-        }
+        purpleOnTable.erase(it);
     }
     else
     {
-        std::cout << "Card not found on the table" << std::endl;
+    }
+}
+
+void Player::applyEffect()
+{
+    for (auto &card : purpleOnTable)
+    {
+        if (card->getName() == "Winter" || card->getName() == "Spring" || card->getName() == "ShirDokht")
+        {
+            std::cout << "Card is Winter, Spring, or ShirDokht, no effect to apply." << std::endl;
+        }
+        else if (card->getName() == "TablZan")
+        {
+            std::shared_ptr<PurpleCard> TablZan = std::dynamic_pointer_cast<PurpleCard>(card);
+            if (TablZan)
+            {
+                std::cout << "Applying effect of TablZan." << std::endl;
+                TablZan->startEffect(*this);
+            }
+            else
+            {
+                std::cerr << "Error: dynamic_pointer_cast failed for TablZan." << std::endl;
+            }
+        }
     }
 }
 
