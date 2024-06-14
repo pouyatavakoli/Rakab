@@ -225,7 +225,7 @@ void Game::run()
             while (true)
             {
                 std::string targetProvince = interface.askPlayerToPickBattleProvince(findSmallestPlayer());
-                if (map.findProvince(targetProvince))
+                if (map.findProvince(targetProvince)) // TODO : duplicated province
                 {
                     startBattle(targetProvince, interface);
                     break;
@@ -242,8 +242,26 @@ void Game::run()
             setBattleStarter(getPlayerWhoShouldStart());
             while (true)
             {
+                bool canPlayThisProvince = true;
                 std::string targetProvince = interface.askPlayerToPickBattleProvince(getPlayerWhoShouldStart());
                 if (map.findProvince(targetProvince))
+                {
+                    for (auto &player : players)
+                        for (auto &province : player.getOwnedProvinces())
+                        {
+                            if (province == targetProvince)
+                            {
+                                canPlayThisProvince = false;
+                                std::cout << "this province is already owned ,try another one" << std::endl;
+                                continue;
+                            }
+                        }
+                }
+                else
+                {
+                    canPlayThisProvince = false;
+                }
+                if (canPlayThisProvince)
                 {
                     startBattle(targetProvince, interface);
                     break;
