@@ -573,7 +573,7 @@ const Player &Game::findSmallestPlayer()
         return defaultPlayer;
     }
 
-    const Player *smallestPlayer = &players[0];
+    std::vector<const Player *> smallestPlayers;
     int minAge = players[0].getAge();
 
     for (const auto &player : players)
@@ -581,11 +581,22 @@ const Player &Game::findSmallestPlayer()
         if (player.getAge() < minAge)
         {
             minAge = player.getAge();
-            smallestPlayer = &player;
+            smallestPlayers.clear();
+            smallestPlayers.push_back(&player);
+        }
+        else if (player.getAge() == minAge)
+        {
+            smallestPlayers.push_back(&player);
         }
     }
 
-    return *smallestPlayer;
+    // Seed the random number generator
+    std::srand(std::time(0));
+
+    // Randomly select one of the youngest players
+    int randomIndex = std::rand() % smallestPlayers.size();
+
+    return *(smallestPlayers[randomIndex]);
 }
 
 void Game::setBattleStarter(const Player &player1)
