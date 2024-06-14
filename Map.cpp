@@ -7,7 +7,7 @@ Map::Map()
     provinces.push_back("ENNA");
     provinces.push_back("ATELA");
     provinces.push_back("BORGE");
-    provinces.push_back("PALADACI");
+    provinces.push_back("PLADACI");
     provinces.push_back("DISMASE");
     provinces.push_back("MORINA");
     provinces.push_back("OLIVADI");
@@ -18,13 +18,13 @@ Map::Map()
     provinces.push_back("LIA");
 
     map["BELLA"] = {"PLADACI", "CALINE", "BORGE"};
-    map["CALINE"] = {"ENNA", "ATELA", "BORGE", "PALADACI"};
+    map["CALINE"] = {"ENNA", "ATELA", "BORGE", "PLADACI"};
     map["ENNA"] = {"BORGE", "CALINE", "DIMASE", "ATELA"};
     map["ATELA"] = {"CALINE", "ENNA", "DISAME"};
-    map["BORGE"] = {"ENNA", "CALINE", "DIMASE", "PALADACI", "MORINA", "OLIVADI", "BELLA"};
-    map["PALADACI"] = {"BELLA", "BORGE", "MORINA", "ROLLO", "CALINE"};
+    map["BORGE"] = {"ENNA", "CALINE", "DIMASE", "PLADACI", "MORINA", "OLIVADI", "BELLA"};
+    map["PLADACI"] = {"BELLA", "BORGE", "MORINA", "ROLLO", "CALINE"};
     map["DISMASE"] = {"ATELA", "ENNA", "BORGE", "OLIVADI"};
-    map["MORINA"] = {"PALADACI", "BORGE", "ROLLO", "TALMONE", "OLIVADI", "ARMENTO"};
+    map["MORINA"] = {"PLADACI", "BORGE", "ROLLO", "TALMONE", "OLIVADI", "ARMENTO"};
     map["OLIVADI"] = {"DIMASE", "MORINA", "ARMENTO", "LIA"};
     map["ROLLO"] = {"PLADACI", "TALMONE", "MORINA", "ELINIA"};
     map["TALMONE"] = {"MORINA", "ROLLO", "ELINIA", "ARMENTO"};
