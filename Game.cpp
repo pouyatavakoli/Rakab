@@ -42,6 +42,7 @@ void Game::help()
 
     std::string command;
     std::cout << "Enter a command , enter q to exit : ";
+    std::cin.ignore();
     std::getline(std::cin, command);
 
     if (command == "q")
@@ -350,10 +351,11 @@ void Game::startBattle(const std::string &province, Interface &interface)
                         lastPlayerWhoPassed = &player; // Update the last player who passed
                         break;                         // Exit the while loop to go to the next player
                     }
-                    // else if (situation == -10) // show help
-                    // {
-                    //     help(); // TODO: wait for user respond , dont burn user turn
-                    // }
+                    else if (situation == -10) // show help
+                    {
+                        help(); 
+                        continue;
+                    }
                     else if (situation == 0) // Card not found
                     {
                         std::cout << userChoice << " was not found. Please pick a card or pass." << std::endl;
