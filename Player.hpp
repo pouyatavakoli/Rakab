@@ -52,6 +52,7 @@ public:
     void flushTable();
     void applyEffect();
     void cancelEffects();
+    void burnHand();
 
 
 private:

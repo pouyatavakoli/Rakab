@@ -324,11 +324,20 @@ void Player::applyEffect()
     }
 }
 
-
 void Player::cancelEffects()
 {
     for (auto &card : yellowOnTable)
     {
         card->setPoints(card->getNumerOnTheCard());
     }
+}
+void Player::burnHand()
+{
+    std::cout << "burning hand..." << std::endl;
+
+    burntCards.insert(burntCards.end(), purpleHand.rbegin(), purpleHand.rend());
+    burntCards.insert(burntCards.end(), yellowHand.rbegin(), yellowHand.rend());
+
+    purpleHand.clear();
+    yellowHand.clear();
 }
