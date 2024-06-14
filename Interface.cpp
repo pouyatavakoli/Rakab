@@ -51,7 +51,7 @@ std::string Interface::askUserToPickACardOrPass(Player player)
         std::cout << std::setw(10) << card->getName() << " ";
     }
     std::cout << std::endl;
-    std::cout << "pick one card from list above or enter pass : ";
+    std::cout << "pick one card from list above or enter pass or burn : \n (burning hand works ony if you have no yellow cards in hand)";
     std::string command;
     std::cin >> command;
     // std::getline(std::cin, command);
