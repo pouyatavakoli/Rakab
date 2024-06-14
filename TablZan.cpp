@@ -8,7 +8,7 @@ void TablZan::startEffect(Player &player)
     for (auto &card : deck)
     {
         /* card is now worth 2 times number written on it */
-        card->setPoints(card->getNumerOnTheCard() * 2);
+        card->setPoints(card->getPoints() * 2);
     }
 }
 
@@ -18,7 +18,7 @@ void TablZan::endEffect(Player &player)
     for (auto &card : deck)
     {
         /* card is now worth 2 times number written on it */
-        card->setPoints(card->getNumerOnTheCard() / 2);
+        card->setPoints(card->getPoints()/ 2);
     }
 }
 

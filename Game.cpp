@@ -300,10 +300,12 @@ void Game::startBattle(const std::string &province, Interface &interface)
                         else
                         {
                             std::cout << userChoice << " Can not be Played. Please pick a card or pass." << std::endl;
-                            continue;
                         }
                     }
-                    situation = player.PlayThisCard(userChoice);
+                    else
+                    {
+                        situation = player.PlayThisCard(userChoice);
+                    }
                     // updateTotalScore();
 
                     // Check the situation after trying to play a card
@@ -512,12 +514,12 @@ void Game::startAllEffects() // undone
     }
     else if (seasonSituation == "Spring")
     {
-        startSeason("Spring");
-        std::cout << "spring started in game func" << std::endl;
         for (auto &player : players)
         {
             player.applyEffect();
         }
+        std::cout << "spring started in game func" << std::endl;
+        startSeason("Spring");
     }
     else
     {
