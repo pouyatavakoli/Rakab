@@ -292,6 +292,7 @@ void Game::startBattle(const std::string &province, Interface &interface)
                     anyPlayerCanPlay = true;
                     std::string userChoice = interface.askUserToPickACardOrPass(player);
                     situation = player.PlayThisCard(userChoice);
+                    updateTotalScore();
 
                     // Check the situation after trying to play a card
                     if (situation == -1) // Pass
@@ -300,16 +301,16 @@ void Game::startBattle(const std::string &province, Interface &interface)
                         lastPlayerWhoPassed = &player; // Update the last player who passed
                         break;                         // Exit the while loop to go to the next player
                     }
-                    else if (situation == -10) // show help
-                    {
-                        help(); // TODO: wait for user respond , dont burn user turn
-                    }
+                    // else if (situation == -10) // show help
+                    // {
+                    //     help(); // TODO: wait for user respond , dont burn user turn
+                    // }
                     else if (situation == 0) // Card not found
                     {
                         std::cout << userChoice << " was not found. Please pick a card or pass." << std::endl;
                         continue; // Continue prompting the same player
                     }
-                    else if (situation == 0) // Successfully played a card
+                    else if (situation == 1) // Successfully played a card
                     {
                         break; // Exit the while loop to go to the next player
                     }
@@ -317,8 +318,10 @@ void Game::startBattle(const std::string &province, Interface &interface)
                     {
                         if (canStartSeason(userChoice))
                         {
-                            startSeason(userChoice);
+                            // startSeason(userChoice);
                             seasonSituation = userChoice;
+                            std::cout << "user choice is " << userChoice << std::endl;
+                            startAllEffects();
                             break; // Exit the while loop to go to the next player
                         }
                         else
@@ -698,6 +701,10 @@ void Game::startSeason(const std::string userChoice)
                 }
             }
         }
+    }
+    else
+    {
+        std::cout << "season does not exist";
     }
     updateTotalScore();
 }

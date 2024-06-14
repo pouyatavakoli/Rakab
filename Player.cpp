@@ -151,7 +151,7 @@ int Player::playPurpleCard(const std::string &cardName)
                     std::cout << std::setw(10) << card->getName() << " ";
                 }
                 {
-                    purpleCard->startEffect(*this);
+                    // purpleCard->startEffect(*this);
                     purpleOnTable.push_back(playedCard);
                     purpleHand.erase(it);
                     purpleHand.shrink_to_fit();
@@ -162,7 +162,7 @@ int Player::playPurpleCard(const std::string &cardName)
             {
                 if (!usedTablZan)
                 {
-                    purpleCard->startEffect(*this);
+                    // purpleCard->startEffect(*this);
                     purpleOnTable.push_back(playedCard);
                     purpleHand.erase(it);
                     purpleHand.shrink_to_fit();
@@ -297,28 +297,37 @@ void Player::removeSeasonOnTheTable(const std::string userChoice)
 
 void Player::applyEffect(std::string cardName)
 {
-    auto it = std::find_if(purpleOnTable.begin(), purpleOnTable.end(), [cardName](const std::shared_ptr<Card> &card)
+    if (cardName == "Winter" || cardName == "Spring")
+    {
+        std::cout << "its a season card. Skipping applying effect." << std::endl;
+        return;
+    }
+
+    auto it = std::find_if(purpleOnTable.begin(), purpleOnTable.end(), [cardName](const std::shared_ptr<Card>& card)
                            { return card->getName() == cardName; });
 
     if (it != purpleOnTable.end())
     {
         std::shared_ptr<Card> playedCard = *it;
-        std::cout << "Played " << playedCard->getName() << " for " << name << std::endl;
+        std::cout << "applied effect" << std::endl;
 
         std::shared_ptr<PurpleCard> purpleCard = std::dynamic_pointer_cast<PurpleCard>(playedCard);
         if (purpleCard)
         {
-            if (cardName == "TablZan")
-            {
-                purpleCard->startEffect(*this);
-            }
-            else if (cardName == "ShirDokht")
-            {
-                purpleCard->startEffect(*this);
-            }
+            std::cout << "applying " << cardName << " effect" << std::endl;
+            purpleCard->startEffect(*this);
+        }
+        else
+        {
+            std::cout << "Card is not a PurpleCard" << std::endl;
         }
     }
+    else
+    {
+        std::cout << "Card not found on the table" << std::endl;
+    }
 }
+
 
 void Player::cancelEffects()
 {
