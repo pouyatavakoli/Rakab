@@ -29,6 +29,10 @@
 // #include "Yellow9.hpp"
 #include "Yellow10.hpp"
 
+#define RESET_TEXT "\033[0m"
+#define YELLOW_TEXT "\u001b[33m"
+#define PURPLE_TEXT "\u001b[35m"
+
 Game::Game() : playerCount(0)
 {
     winnerIsPicked = false;
@@ -214,12 +218,12 @@ void Game::run()
         auto yellowHand = player.getYellowHand();
         for (auto card : yellowHand)
         {
-            std::cout << std::setw(10) << card->getName() << " ";
+            std::cout << YELLOW_TEXT << std::setw(10) << card->getName() << " " << RESET_TEXT;
         }
         auto purpleHand = player.getPurpleHand();
         for (auto card : purpleHand)
         {
-            std::cout << std::setw(10) << card->getName() << " ";
+            std::cout << PURPLE_TEXT << std::setw(10) << card->getName() << " " << RESET_TEXT;
         }
         std::cout << std::endl;
     }

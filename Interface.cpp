@@ -1,6 +1,10 @@
 #include <iostream>
 #include <iomanip>
 
+#define RESET_TEXT "\033[0m"
+#define YELLOW_TEXT "\u001b[33m"
+#define PURPLE_TEXT "\u001b[35m"
+
 #include "Interface.hpp"
 
 int Interface::getPlayersCountFromUser()
@@ -44,11 +48,11 @@ std::string Interface::askUserToPickACardOrPass(Player player)
     std::cout << " you have these cards in hand : " << std::endl;
     for (auto card : player.getYellowHand())
     {
-        std::cout << std::setw(10) << card->getName() << " ";
+        std::cout << YELLOW_TEXT << std::setw(10) << card->getName() << " " << RESET_TEXT;
     }
     for (auto card : player.getPurpleHand())
     {
-        std::cout << std::setw(10) << card->getName() << " ";
+        std::cout << PURPLE_TEXT << std::setw(10) << card->getName() << " " << RESET_TEXT;
     }
     std::cout << std::endl;
     std::cout << "pick one card from list above or enter pass or burn : \n (burning hand works ony if you have no yellow cards in hand)";
