@@ -353,7 +353,7 @@ void Game::startBattle(const std::string &province, Interface &interface)
                     }
                     else if (situation == -10) // show help
                     {
-                        help(); 
+                        help();
                         continue;
                     }
                     else if (situation == 0) // Card not found
@@ -367,7 +367,6 @@ void Game::startBattle(const std::string &province, Interface &interface)
                     }
                     else if (situation == 2) // It is a season
                     {
-                        // startSeason(userChoice);
                         seasonSituation = userChoice;
                         break; // Exit the while loop to go to the next player
                     }
@@ -394,10 +393,6 @@ void Game::startBattle(const std::string &province, Interface &interface)
                 }
                 handCardsToPLayers();
                 updateCardHoldersCount();
-            }
-            if (seasonSituation != "normal")
-            {
-                // refreshSeason(seasonSituation);
             }
         }
 
@@ -530,14 +525,14 @@ void Game::reorderPurpleOnTable()
         //  set the sorted cards back to the player
         player.setPurpleOnTable(purplesOnTable);
     }
-    for (auto player : players) /////
+    /*for (auto player : players)  //Just to if the order is right or not
     {
         for (auto cards : player.getPurpleOnTable())
         {
             std::cout << cards->getName() << " is  ";
         }
         std::cout << std::endl;
-    }
+    }*/
 }
 
 void Game::endAllEffects()
@@ -548,7 +543,7 @@ void Game::endAllEffects()
     }
 }
 
-void Game::startAllEffects() // undone
+void Game::startAllEffects()
 {
     if (seasonSituation == "Winter")
     {
@@ -577,7 +572,7 @@ void Game::startAllEffects() // undone
     }
 }
 
-void Game::refreshEffects() // undone
+void Game::refreshEffects()
 {
     endAllEffects();
     reorderPurpleOnTable();
@@ -741,13 +736,10 @@ void Game::findWinner()
 
 void Game::startSeason(const std::string userChoice)
 {
-    std::cout << "Season has started." << std::endl;
     if (userChoice == "Winter")
     {
-        std::cout << "before removing." << std::endl;
         removeGameSeason("Spring");
         seasonSituation = "Winter";
-        std::cout << "Winter has started." << std::endl;
         for (auto &changePlayer : players)
         {
             for (auto &yellowcards : changePlayer.getYellowOnTable())
@@ -755,17 +747,16 @@ void Game::startSeason(const std::string userChoice)
                 if (yellowcards->getPoints() != 1)
                 {
                     yellowcards->setPoints(1);
-                    std::cout << "Card " << yellowcards->getName() << " points set to 1." << std::endl;
                 }
             }
         }
     }
     else if (userChoice == "Spring")
     {
-        std::cout << "before removing." << std::endl;
+
         removeGameSeason("Winter");
         seasonSituation = "Spring";
-        std::cout << "Spring has started." << std::endl;
+
         int max = getHighestYellowCardInGame();
         for (auto &player : players)
         {
@@ -774,7 +765,6 @@ void Game::startSeason(const std::string userChoice)
                 if (yellowCard->getPoints() == max)
                 {
                     yellowCard->setPoints(max + 3);
-                    std::cout << "Card " << yellowCard->getName() << " points set to " << max + 3 << "." << std::endl;
                 }
             }
         }
@@ -794,7 +784,6 @@ void Game::endSeason(const std::string &userChoice)
             for (auto &yellowCard : player.getYellowOnTable())
             {
                 yellowCard->setPoints(yellowCard->getNumerOnTheCard());
-                std::cout << "Card " << yellowCard->getName() << " points reset to " << yellowCard->getNumerOnTheCard() << "." << std::endl;
             }
         }
     }
@@ -805,17 +794,16 @@ void Game::endSeason(const std::string &userChoice)
             for (auto &yellowCard : player.getYellowOnTable())
             {
                 yellowCard->setPoints(yellowCard->getNumerOnTheCard());
-                std::cout << "Card " << yellowCard->getName() << " points reset to " << yellowCard->getNumerOnTheCard() << "." << std::endl;
             }
         }
     }
 }
 
-// void Game::refreshSeason(const std::string userChoice)
-// {
-//     endSeason(userChoice);
-//     startSeason(userChoice);
-// }
+/*void Game::refreshSeason(const std::string userChoice) //In new last update it isn't needed
+{
+    endSeason(userChoice);
+    startSeason(userChoice);
+}*/
 
 bool Game::canStartSeason(const std::string season) const
 {
@@ -833,7 +821,6 @@ void Game::removeGameSeason(const std::string userChoice)
 {
     for (auto &player : players)
     {
-        std::cout << "The removing started\n";
         player.removeSeasonOnTheTable(userChoice);
     }
 }

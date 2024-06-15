@@ -12,39 +12,43 @@ class Game
 {
 public:
     Game();
-    void help();
     void run();
-    void fillMainDeck();
-    void shuffleDeck();
-    void setPlayersCount(int);
-    void startBattle(const std::string &, Interface &); // Correct function declaration
-    void checkThisBattleWinner(const std::string &);
-    int getHighestYellowCardInGame();
 
+private:
+    // Help function
+    void help();
+    // Functions for Players
+    void setPlayersCount(int);
+    int getPlayersCount() const;
+    void addPlayer(Player);
+    void handCardsToPLayers();
+    Player getPlayerWhoShouldStart();
+    const Player &findSmallestPlayer();
+    std::vector<Player> getGamePlayers() const;
+    // Functions for Battle
+    void startBattle(const std::string &, Interface &);
+    void checkThisBattleWinner(const std::string &);
+    void setBattleStarter(const Player &);
+    void setLastWinner(Player);
+    // Functions for Season
+    void startSeason(const std::string);
+    void endSeason(const std::string &);
+    void refreshSeason(const std::string);
+    bool canStartSeason(const std::string) const;
+    void removeGameSeason(const std::string);
+    // Functions for scoring system
     void updateTotalScore();
     void reorderPurpleOnTable();
     void endAllEffects();
     void startAllEffects();
     void refreshEffects();
-
-    void handCardsToPLayers();
-    void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
-    std::vector<Player> getGamePlayers() const;
-    int getPlayersCount() const;
-    void addPlayer(Player);
-    const Player &findSmallestPlayer();
-    void setBattleStarter(const Player &);
-
-    void setLastWinner(Player);
-    Player getPlayerWhoShouldStart();
-
-    void startSeason(const std::string);
-    void endSeason(const std::string&);
-    void refreshSeason(const std::string);
-    bool canStartSeason(const std::string) const;
-    void removeGameSeason(const std::string);
+    // Functions for handling cards
+    void fillMainDeck();
+    void shuffleDeck();
+    int getHighestYellowCardInGame();
     void updateCardHoldersCount();
-
+    void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
+    // Functions for game winner
     bool winGame1();
     bool winGame2();
     void findWinner();
@@ -59,7 +63,7 @@ private:
     std::string seasonSituation;
     Player lastWinner;
     Player *lastPlayerWhoPassed;
-    int cardHoldersCount ;
+    int cardHoldersCount;
 };
 
 #endif // GAME_HPP

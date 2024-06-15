@@ -145,17 +145,26 @@ int Player::playPurpleCard(const std::string &cardName)
         {
             if (playedCard->getName() == "Matarsak")
             {
-                std::cout << " pick one card to take from list bellow : " << std::endl;
-                for (auto card : yellowOnTable)
+                if (!yellowOnTable.empty())
                 {
-                    std::cout << std::setw(10) << card->getName() << " ";
+                    std::cout << " pick one card to take from list bellow : " << std::endl;
+                    for (auto card : yellowOnTable)
+                    {
+                        std::cout << std::setw(10) << card->getName() << " ";
+                    }
+                    std::cout << "\n --> ";
+                    {
+                        purpleCard->startEffect(*this);
+                        purpleOnTable.push_back(playedCard);
+                        purpleHand.erase(it);
+                        purpleHand.shrink_to_fit();
+                        return 1; // we found Matarsak
+                    }
                 }
+                else
                 {
-                    purpleCard->startEffect(*this);
-                    purpleOnTable.push_back(playedCard);
-                    purpleHand.erase(it);
-                    purpleHand.shrink_to_fit();
-                    return 1; // we found Matarsak
+                    std::cout << "You do not have any yellow card on table." << std::endl;
+                    return 4; // The card can not be played
                 }
             }
             else if (playedCard->getName() == "TablZan")
@@ -277,7 +286,6 @@ int Player::getNumberOfOwnedProvinces()
 
 void Player::flushTable()
 {
-    std::cout << "Flushing table..." << std::endl;
 
     burntCards.insert(burntCards.end(), purpleOnTable.rbegin(), purpleOnTable.rend());
     burntCards.insert(burntCards.end(), yellowOnTable.rbegin(), yellowOnTable.rend());
@@ -306,14 +314,13 @@ void Player::applyEffect()
     {
         if (card->getName() == "Winter" || card->getName() == "Spring" || card->getName() == "ShirDokht")
         {
-            std::cout << "Card is Winter, Spring, or ShirDokht, no effect to apply." << std::endl;
+            // card is Winter, Spring, or ShirDokht, no effect to apply here
         }
         else if (card->getName() == "TablZan")
         {
             std::shared_ptr<PurpleCard> TablZan = std::dynamic_pointer_cast<PurpleCard>(card);
             if (TablZan)
             {
-                std::cout << "Applying effect of TablZan." << std::endl;
                 TablZan->startEffect(*this);
             }
             else
@@ -333,7 +340,6 @@ void Player::cancelEffects()
 }
 void Player::burnHand()
 {
-    std::cout << "burning hand..." << std::endl;
 
     burntCards.insert(burntCards.end(), purpleHand.rbegin(), purpleHand.rend());
     burntCards.insert(burntCards.end(), yellowHand.rbegin(), yellowHand.rend());
