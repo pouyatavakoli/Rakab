@@ -799,7 +799,7 @@ void Game::endSeason(const std::string &userChoice)
     }
 }
 
-/*void Game::refreshSeason(const std::string userChoice) //In new last update it isn't needed
+/*void Game::refreshSeason(const std::string userChoice) //In new update it isn't needed
 {
     endSeason(userChoice);
     startSeason(userChoice);

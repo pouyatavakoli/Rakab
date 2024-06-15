@@ -33,7 +33,7 @@ private:
     // Functions for Season
     void startSeason(const std::string);
     void endSeason(const std::string &);
-    void refreshSeason(const std::string);
+    //void refreshSeason(const std::string); //In new update it isn't needed
     bool canStartSeason(const std::string) const;
     void removeGameSeason(const std::string);
     // Functions for scoring system
