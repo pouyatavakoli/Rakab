@@ -55,7 +55,8 @@ std::string Interface::askUserToPickACardOrPass(Player player)
         std::cout << PURPLE_TEXT << std::setw(10) << card->getName() << " " << RESET_TEXT;
     }
     std::cout << std::endl;
-    std::cout << "pick one card from list above or enter pass or burn : \n (burning hand works ony if you have no yellow cards in hand)";
+    std::cout << "pick one card from list above or enter pass or burn. \n(burning hand works ony if you have no yellow cards in hand)" << std::endl;
+    std::cout << "@ " << player.getName() << " : ";
     std::string command;
     std::cin >> command;
     // std::getline(std::cin, command);
@@ -71,7 +72,8 @@ std::string Interface::askUserToPickAColor(int i)
 std::string Interface::askPlayerToPickBattleProvince(const Player &player)
 {
     std::string provinceName;
-    std::cout << player.getName() << " enter starting battle province: ";
+    std::cout << player.getName() << " enter starting battle province: " << std::endl;
+    std::cout << "@ " << player.getName() << " : ";
     std::cin >> provinceName;
     return provinceName;
 }
