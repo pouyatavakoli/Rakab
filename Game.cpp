@@ -329,6 +329,11 @@ void Game::startBattle(const std::string &province, Interface &interface)
                 {
                     anyPlayerCanPlay = true;
                     std::string userChoice = interface.askUserToPickACardOrPass(player);
+                    std::string typo = interface.checkCommandTypos(userChoice);
+                    if (typo != "404")
+                    {
+                        userChoice = typo;
+                    }
                     updateCardHoldersCount();
                     if (userChoice == "burn")
                     {

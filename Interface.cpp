@@ -1,11 +1,28 @@
 #include <iostream>
 #include <iomanip>
+#include <map>
 
 #define RESET_TEXT "\033[0m"
 #define YELLOW_TEXT "\u001b[33m"
 #define PURPLE_TEXT "\u001b[35m"
 
 #include "Interface.hpp"
+
+std::map<std::string, std::string> commandTypos = {
+    {"hlep", "help"},
+    {"tblzn", "TablZan"},
+    {"wntr", "Winter"},
+    {"y1", "Yellow1"},
+    {"y2", "Yellow2"},
+    {"y3", "Yellow3"},
+    {"y4", "Yellow4"},
+    {"y5", "Yellow5"},
+    {"y6", "Yellow6"},
+    // {"y7", "Yellow7"},
+    // {"y8", "Yellow8"},
+    // {"y9", "Yellow9"},
+    {"y10", "Yellow10"}};
+// add more later
 
 int Interface::getPlayersCountFromUser()
 {
@@ -76,4 +93,19 @@ std::string Interface::askPlayerToPickBattleProvince(const Player &player)
     std::cout << "@ " << player.getName() << " : ";
     std::cin >> provinceName;
     return provinceName;
+}
+
+std::string Interface::checkCommandTypos(std::string input)
+{
+    if (commandTypos.find(input) != commandTypos.end())
+    {
+        std::cout << "Did you mean: " << commandTypos.at(input) << " instead of " << input << " ? (y/n)" << std::endl;
+        char response;
+        std::cin >> response;
+        if (response == 'y')
+        {
+            return commandTypos.at(input);
+        }
+    }
+    return "404";
 }

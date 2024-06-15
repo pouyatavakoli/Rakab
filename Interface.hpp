@@ -14,6 +14,7 @@ public:
     std::string askUserToPickACardOrPass(Player);
     std::string askUserToPickAColor(int);
     std::string askPlayerToPickBattleProvince(const Player &);
+    std::string checkCommandTypos(std::string input);
 };
 
 #endif
