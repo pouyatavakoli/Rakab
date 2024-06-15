@@ -3,6 +3,12 @@
 #include <iomanip>
 #include <map>
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <cstdlib>
+#endif
+
 #include "Game.hpp"
 #include "Card.hpp"
 #include "Matarsak.hpp"
@@ -175,6 +181,7 @@ void Game::run()
 {
     Interface interface;                                  // create interface for the game
     setPlayersCount(interface.getPlayersCountFromUser()); // how many players are gonna play
+    clearScreen();
     for (int i = 0; i < getPlayersCount(); i++)
     {
         Player player;
@@ -185,10 +192,12 @@ void Game::run()
         int i = 0;
         for (Player &player : players)
         {
+            std::cout << "***   PLAYER  " << i + 1 << "   ***" << std::endl;
             player.setName(interface.getPlayersNameFromUser(i));
             player.setAge(interface.getPlayerAgeFromUser(i));
             player.setColor(interface.askUserToPickAColor(i));
             ++i;
+            clearScreen();
             // FIXME: change pick color to user pick from list if needed
         }
     }
@@ -226,6 +235,7 @@ void Game::run()
             while (true)
             {
                 std::string targetProvince = interface.askPlayerToPickBattleProvince(findSmallestPlayer());
+                clearScreen();
                 if (map.findProvince(targetProvince)) // TODO : duplicated province
                 {
                     startBattle(targetProvince, interface);
@@ -264,6 +274,7 @@ void Game::run()
                 }
                 if (canPlayThisProvince)
                 {
+                    clearScreen();
                     startBattle(targetProvince, interface);
                     break;
                 }
@@ -394,6 +405,7 @@ void Game::startBattle(const std::string &province, Interface &interface)
                 handCardsToPLayers();
                 updateCardHoldersCount();
             }
+            clearScreen();
         }
 
         if (!anyPlayerCanPlay)
@@ -850,4 +862,13 @@ void Game::updateCardHoldersCount()
             ++cardHoldersCount;
         }
     }
+}
+
+void Game::clearScreen()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
 }

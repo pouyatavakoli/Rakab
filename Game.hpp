@@ -64,6 +64,7 @@ private:
     Player lastWinner;
     Player *lastPlayerWhoPassed;
     int cardHoldersCount;
+    void clearScreen();
 };
 
 #endif // GAME_HPP
