@@ -248,6 +248,7 @@ void Game::run()
                 else
                 {
                     std::cout << "Such province doesn't exist, try another one." << std::endl;
+                    continue;
                 }
             }
         }
