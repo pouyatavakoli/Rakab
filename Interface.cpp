@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <map>
+#include <algorithm>
 
 #define RESET_TEXT "\033[0m"
 #define YELLOW_TEXT "\u001b[33m"
@@ -81,9 +82,40 @@ std::string Interface::askUserToPickACardOrPass(Player player)
 }
 std::string Interface::askUserToPickAColor(int i)
 {
+    std::map<std::string, int> colors = {
+        {"green", 1},
+        {"red", 2},
+        {"blue", 3},
+        {"pink", 4},
+        {"black", 5},
+        {"white", 6}};
+
     std::string color;
-    std::cout << "enter player " << i + 1 << " color : ";
-    std::cin >> color;
+    bool isValid = false;
+
+    while (!isValid)
+    {
+        std::cout << "Choose one of these colors: green-red-blue-pink-black-white\n";
+        std::cout << "Enter player " << i + 1 << " color: ";
+        std::cin >> color;
+
+        if (colors.find(color) != colors.end())
+        {
+            int colorCode = colors[color];
+            if (std::find(chosenColors.begin(), chosenColors.end(), colorCode) == chosenColors.end())
+            {
+                isValid = true;
+            }
+            else
+            {
+                std::cout << "This color has already been chosen. Please pick a different color.\n";
+            }
+        }
+        else
+        {
+            std::cout << "Invalid color. Please choose a valid color.\n";
+        }
+    }
     return color;
 }
 std::string Interface::askPlayerToPickBattleProvince(const Player &player)

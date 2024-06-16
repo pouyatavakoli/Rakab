@@ -18,6 +18,9 @@ public:
 
     void printPlayerCards(const std::vector<Player> &);
     void printPlayerOwnedProvinces(const std::vector<Player> &);
+
+private:
+    std::vector<int> chosenColors;
 };
 
 #endif
