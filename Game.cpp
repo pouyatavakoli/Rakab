@@ -327,6 +327,10 @@ void Game::startBattle(const std::string &province, Interface &interface)
 
                 if (player.canPlay())
                 {
+                    interface.printPlayerCards(players);
+                    std::cout<<"---------------\n";
+                    interface.printPlayerOwnedProvinces(players);
+                    std::cout<<"---------------\n";
                     anyPlayerCanPlay = true;
                     std::string userChoice = interface.askUserToPickACardOrPass(player);
                     std::string typo = interface.checkCommandTypos(userChoice);
@@ -760,7 +764,7 @@ void Game::startSeason(const std::string userChoice)
 {
     if (userChoice == "Winter")
     {
-        removeGameSeason("Spring");
+        // removeGameSeason("Spring");
         seasonSituation = "Winter";
         for (auto &changePlayer : players)
         {
@@ -776,7 +780,7 @@ void Game::startSeason(const std::string userChoice)
     else if (userChoice == "Spring")
     {
 
-        removeGameSeason("Winter");
+        // removeGameSeason("Winter");
         seasonSituation = "Spring";
 
         int max = getHighestYellowCardInGame();
@@ -839,13 +843,13 @@ bool Game::canStartSeason(const std::string season) const
     }
 }
 
-void Game::removeGameSeason(const std::string userChoice)
+/*void Game::removeGameSeason(const std::string userChoice)
 {
     for (auto &player : players)
     {
         player.removeSeasonOnTheTable(userChoice);
     }
-}
+}*/
 
 Player Game::getPlayerWhoShouldStart()
 {

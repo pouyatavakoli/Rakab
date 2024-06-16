@@ -121,6 +121,10 @@ std::vector<std::shared_ptr<Card>> Player::getPurpleHand() const
 {
     return purpleHand;
 }
+std::vector<std::shared_ptr<Card>> Player::getPlayedCards() const
+{
+    return playedCards;
+}
 int Player::getPoints() const
 {
     return totalScore;
@@ -156,6 +160,7 @@ int Player::playPurpleCard(const std::string &cardName)
                     {
                         purpleCard->startEffect(*this);
                         purpleOnTable.push_back(playedCard);
+                        playedCards.push_back(playedCard);
                         purpleHand.erase(it);
                         purpleHand.shrink_to_fit();
                         return 1; // we found Matarsak
@@ -173,6 +178,7 @@ int Player::playPurpleCard(const std::string &cardName)
                 {
                     // purpleCard->startEffect(*this);
                     purpleOnTable.push_back(playedCard);
+                    playedCards.push_back(playedCard);
                     purpleHand.erase(it);
                     purpleHand.shrink_to_fit();
                     usedTablZan = true;
@@ -184,6 +190,7 @@ int Player::playPurpleCard(const std::string &cardName)
             else if (playedCard->getName() == "Winter" || playedCard->getName() == "Spring")
             {
                 purpleOnTable.push_back(playedCard);
+                playedCards.push_back(playedCard);
                 purpleHand.erase(it);
                 purpleHand.shrink_to_fit();
                 return 2; // we found Winter or Spring
@@ -192,6 +199,7 @@ int Player::playPurpleCard(const std::string &cardName)
             {
                 // purpleCard->startEffect();
                 purpleOnTable.push_back(playedCard);
+                playedCards.push_back(playedCard);
                 purpleHand.erase(it);
                 purpleHand.shrink_to_fit();
                 return 3; // we found ShirDokht
@@ -209,6 +217,7 @@ bool Player::playYellowCard(const std::string &cardName)
         std::shared_ptr<Card> playedCard = *it; // Store the card to be played
         std::cout << "played " << playedCard->getName() << " for " << name << std::endl;
         yellowOnTable.push_back(playedCard); // Add the card to the on-table vector
+        playedCards.push_back(playedCard);
         yellowHand.erase(it);                // Remove the card from the hand after playing
         yellowHand.shrink_to_fit();
         return true;

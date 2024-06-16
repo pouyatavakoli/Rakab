@@ -35,7 +35,7 @@ private:
     void endSeason(const std::string &);
     //void refreshSeason(const std::string); //In new update it isn't needed
     bool canStartSeason(const std::string) const;
-    void removeGameSeason(const std::string);
+    //void removeGameSeason(const std::string);
     // Functions for scoring system
     void updateTotalScore();
     void reorderPurpleOnTable();

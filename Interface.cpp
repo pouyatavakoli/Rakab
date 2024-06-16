@@ -72,7 +72,7 @@ std::string Interface::askUserToPickACardOrPass(Player player)
         std::cout << PURPLE_TEXT << std::setw(10) << card->getName() << " " << RESET_TEXT;
     }
     std::cout << std::endl;
-    std::cout << "pick one card from list above or enter pass or burn. \n(burning hand works ony if you have no yellow cards in hand)" << std::endl;
+    std::cout << "pick one card from list above or enter pass or burn. \n(burning hand works only if you have no yellow cards in hand)" << std::endl;
     std::cout << "@ " << player.getName() << " : ";
     std::string command;
     std::cin >> command;
@@ -108,4 +108,29 @@ std::string Interface::checkCommandTypos(std::string input)
         }
     }
     return "404";
+}
+
+void Interface::printPlayerCards(const std::vector<Player> &players)
+{
+    for (const auto &player : players)
+    {
+        std::cout << player.getName() << " cards: ";
+        for (const auto &card : player.getPlayedCards())
+        {
+            std::cout << card->getName() << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+void Interface::printPlayerOwnedProvinces(const std::vector<Player> &players)
+{
+    for (const auto &player : players)
+    {
+        std::cout << player.getName() << " provinces: ";
+        for (const auto &province : player.getOwnedProvinces())
+        {
+            std::cout << province << " ";
+        }
+        std::cout << std::endl;
+    }
 }

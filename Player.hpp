@@ -40,6 +40,8 @@ public:
     std::vector<std::shared_ptr<Card>> getYellowHand() const;
     std::vector<std::shared_ptr<Card>> getPurpleOnTable() const;
     std::vector<std::shared_ptr<Card>> getPurpleHand() const;
+    std::vector<std::shared_ptr<Card>> getPlayedCards() const;
+
     int getPoints() const;
     int getNumberOfOwnedProvinces();
 
@@ -68,6 +70,7 @@ private:
     std::vector<std::shared_ptr<Card>> yellowHand;
     std::vector<std::shared_ptr<Card>> purpleHand;
     std::vector<std::shared_ptr<Card>> burntCards;
+    std::vector<std::shared_ptr<Card>> playedCards;
 };
 
 #endif
