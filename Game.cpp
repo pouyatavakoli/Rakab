@@ -328,9 +328,9 @@ void Game::startBattle(const std::string &province, Interface &interface)
                 if (player.canPlay())
                 {
                     interface.printPlayerCards(players);
-                    std::cout<<"---------------\n";
+                    std::cout << "---------------\n";
                     interface.printPlayerOwnedProvinces(players);
-                    std::cout<<"---------------\n";
+                    std::cout << "---------------\n";
                     anyPlayerCanPlay = true;
                     std::string userChoice = interface.askUserToPickACardOrPass(player);
                     std::string typo = interface.checkCommandTypos(userChoice);
@@ -720,7 +720,7 @@ bool Game::winGame1()
 
             for (const auto &adjacentProvince : adjacentProvinces)
             {
-                if (province == adjacentProvince)
+                if (std::find(ownedProvinces.begin(), ownedProvinces.end(), adjacentProvince) != ownedProvinces.end())
                 {
                     adjacentCount++;
                 }
