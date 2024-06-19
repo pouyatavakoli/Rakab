@@ -15,6 +15,8 @@ public:
     std::string askUserToPickAColor(int);
     std::string askPlayerToPickBattleProvince(const Player &);
     std::string checkCommandTypos(std::string input);
+    int countMutualLetters(const std::string& input, const std::string& command);
+
 
     void printPlayerCards(const std::vector<Player> &);
     void printPlayerOwnedProvinces(const std::vector<Player> &);

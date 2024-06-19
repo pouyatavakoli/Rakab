@@ -9,7 +9,8 @@
 
 #include "Interface.hpp"
 
-std::map<std::string, std::string> commandTypos = {
+// this map is for storing shortcut commands
+std::map<std::string, std::string> shortcuts = {
     {"hlep", "help"},
     {"tblzn", "TablZan"},
     {"wntr", "Winter"},
@@ -24,6 +25,7 @@ std::map<std::string, std::string> commandTypos = {
     // {"y9", "Yellow9"},
     {"y10", "Yellow10"}};
 // add more later
+
 
 int Interface::getPlayersCountFromUser()
 {
@@ -127,19 +129,75 @@ std::string Interface::askPlayerToPickBattleProvince(const Player &player)
     return provinceName;
 }
 
+
+// keeps right format of  inputs
+std::vector<std::string> dictionary = {"Winter", "Spring", "help", "Matarsak" };
+
 std::string Interface::checkCommandTypos(std::string input)
 {
-    if (commandTypos.find(input) != commandTypos.end())
+    // check if its a shortcut 
+    if (shortcuts.find(input) != shortcuts.end())
     {
-        std::cout << "Did you mean: " << commandTypos.at(input) << " instead of " << input << " ? (y/n)" << std::endl;
+        std::cout << "Did you mean: " << shortcuts.at(input) << " instead of " << input << " ? (y/n)" << std::endl;
         char response;
         std::cin >> response;
         if (response == 'y')
         {
-            return commandTypos.at(input);
+            return shortcuts.at(input);
         }
     }
+    else
+    {
+        std::string bestMatch;
+        int maxMutualLetters = -1;
+
+        for (const auto& command : dictionary)
+        {
+            int mutualLetters = countMutualLetters(input, command);
+
+            if (mutualLetters > maxMutualLetters)
+            {
+                maxMutualLetters = mutualLetters;
+                bestMatch = command;
+            }
+        }
+
+        if (!bestMatch.empty() && maxMutualLetters >=3)
+        {
+            std::cout << "Did you mean: " << bestMatch << " instead of " << input << " ? (y/n)" << std::endl;
+            char response;
+            std::cin >> response;
+            if (response == 'y')
+            {
+                return bestMatch;
+            }
+        }
+    }
+
     return "404";
+}
+
+int Interface::countMutualLetters(const std::string& input, const std::string& command)
+{
+    int count = 0;
+    // we use freq array as a counter
+    int freq[128] = {0}; 
+
+    for (char c : input)
+    {
+        freq[c]++;
+    }
+
+    for (char c : command)
+    {
+        if (freq[c] > 0)
+        {
+            count++;
+            freq[c]--;
+        }
+    }
+
+    return count;
 }
 
 void Interface::printPlayerCards(const std::vector<Player> &players)

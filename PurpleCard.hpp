@@ -10,10 +10,7 @@ class PurpleCard : public Card
 public:
     PurpleCard(int, std::string);
 
-    // virtual std::string getName() const;
-    // virtual std::string getType() const;
-    // virtual int getNumerOnTheCard() const;
-    // virtual int getPoints() const;
+
     virtual std::string getName() const = 0;
     virtual std::string getType() const = 0;
     virtual int getNumerOnTheCard() const = 0;
