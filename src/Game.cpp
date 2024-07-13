@@ -853,18 +853,56 @@ bool Game::canStartSeason(const std::string season) const
 
 Player Game::getPlayerWhoShouldStart()
 {
-    if (lastWinner.getName().empty())
+    if (NeshaneJangOwner.getCanPutNeshaneJang())
     {
-        return *lastPlayerWhoPassed;
+        return NeshaneJangOwner;
     }
     else
     {
-        return lastWinner;
+        if (lastWinner.getName().empty())
+        {
+            return *lastPlayerWhoPassed;
+        }
+        else
+        {
+            return lastWinner;
+        }
     }
 }
 void Game::setLastWinner(Player winnerVal)
 {
     lastWinner = winnerVal;
+}
+
+void Game::setNeshaneJangOwner()
+{
+    static Player defaultPlayer;
+    std::vector< Player *> NeshaneJangOwners;
+    int min = players[0].getCountShirZan();
+
+    for (auto &player : players)
+    {
+        if (player.getCountShirZan() < min)
+        {
+            min = player.getCountShirZan();
+            NeshaneJangOwners.clear();
+            NeshaneJangOwners.push_back(&player);
+        }
+        else if (player.getCountShirZan() == min)
+        {
+            NeshaneJangOwners.push_back(&player);
+        }
+    }
+
+    if (NeshaneJangOwners.size() == 1)
+    {
+        NeshaneJangOwners[0]->setCanPutNeshaneJang(true);
+        NeshaneJangOwner = *NeshaneJangOwners[0];
+    }
+    else
+    {
+        NeshaneJangOwner = defaultPlayer;
+    }
 }
 
 void Game::updateCardHoldersCount()

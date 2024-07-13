@@ -6,7 +6,7 @@
 #include "PurpleCard.hpp"
 #include <vector>
 // constructors
-Player::Player() : age(0), totalScore(0), isAbleToPlay(true), winStatus(false) {}
+Player::Player() : age(0), totalScore(0), isAbleToPlay(true), winStatus(false), countShirZan(0), canPutNeshaneSolh(false), canPutNeshaneJang(false) {}
 Player::Player(int ageVal, std::string nameVal) : age(ageVal), name(nameVal), totalScore(0), isAbleToPlay(true), winStatus(false) {}
 
 // setters
@@ -25,6 +25,10 @@ void Player::setScore(int scoreVal)
 void Player::setColor(std::string colorVal)
 {
     color = colorVal;
+}
+void Player::setCanPutNeshaneJang(bool x)
+{
+    canPutNeshaneJang = x;
 }
 void Player::updatePlayerEligibility(bool canPlayVal)
 {
@@ -204,6 +208,16 @@ int Player::playPurpleCard(const std::string &cardName)
                 purpleHand.shrink_to_fit();
                 return 3; // we found ShirDokht
             }
+            else if (playedCard->getName() == "ShirZan")
+            {
+                // purpleCard->startEffect();
+                ++countShirZan;
+                purpleOnTable.push_back(playedCard);
+                playedCards.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 3; // we found ShirZan
+            }
         }
     }
     return 0;
@@ -218,7 +232,7 @@ bool Player::playYellowCard(const std::string &cardName)
         std::cout << "played " << playedCard->getName() << " for " << name << std::endl;
         yellowOnTable.push_back(playedCard); // Add the card to the on-table vector
         playedCards.push_back(playedCard);
-        yellowHand.erase(it);                // Remove the card from the hand after playing
+        yellowHand.erase(it); // Remove the card from the hand after playing
         yellowHand.shrink_to_fit();
         return true;
     }
@@ -291,6 +305,16 @@ int Player::PlayThisCard(const std::string userChoice)
 int Player::getNumberOfOwnedProvinces()
 {
     return dominatedAreas.size();
+}
+
+int Player::getCountShirZan() const
+{
+    return countShirZan;
+}
+
+bool Player::getCanPutNeshaneJang() const
+{
+    return canPutNeshaneJang;
 }
 
 void Player::flushTable()

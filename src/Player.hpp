@@ -19,6 +19,7 @@ public:
     void setName(std::string name);
     void setScore(int score);
     void setColor(std::string color);
+    void setCanPutNeshaneJang(bool);
     void updatePlayerEligibility(bool);
     void setWinStatus(bool status);
     void addOwnedProvinces(const std::string &);
@@ -44,6 +45,8 @@ public:
 
     int getPoints() const;
     int getNumberOfOwnedProvinces();
+    int getCountShirZan() const;
+    bool getCanPutNeshaneJang() const;
 
     void removeSeasonOnTheTable(const std::string);
 
@@ -64,6 +67,9 @@ private:
     bool isAbleToPlay;
     bool winStatus;
     bool usedTablZan;
+    int countShirZan;
+    bool canPutNeshaneSolh; // can be changed by RishSefid
+    bool canPutNeshaneJang; // can be changed by ShirZan
     std::vector<std::string> dominatedAreas;
     std::vector<std::shared_ptr<Card>> yellowOnTable;
     std::vector<std::shared_ptr<Card>> purpleOnTable;

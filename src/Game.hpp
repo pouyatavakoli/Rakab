@@ -30,6 +30,7 @@ private:
     void checkThisBattleWinner(const std::string &);
     void setBattleStarter(const Player &);
     void setLastWinner(Player);
+    void setNeshaneJangOwner();
     // Functions for Season
     void startSeason(const std::string);
     void endSeason(const std::string &);
@@ -63,6 +64,7 @@ private:
     std::string seasonSituation;
     Player lastWinner;
     Player *lastPlayerWhoPassed;
+    Player NeshaneJangOwner;
     int cardHoldersCount;
     void clearScreen();
 };
