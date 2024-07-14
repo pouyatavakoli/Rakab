@@ -1,13 +1,44 @@
-# This file is used to ignore files which are generated
-# ----------------------------------------------------------------------------
+# C++ objects and libs
+*.slo
+*.lo
+*.o
+*.a
+*.la
+*.lai
+*.so.*
+*.dll
+*.dylib
+
+# Qt-es
+object_script.*.Release
+object_script.*.Debug
+*_plugin_import.cpp
+/.qmake.cache
+/.qmake.stash
+*.pro.user.*
+*.qbs.user.*
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*.qmlc
+*.jsc
+*build-*
+*.qm
+*.prl
+
+# Qt unit tests
+target_wrapper.*
+
+# QtCreator
+*.autosave
+*creator.user*
+*_qmlcache.qrc
 
 # Prerequisites
 *.d
 
 # Compiled Object files
-*.slo
-*.lo
-*.o
 *.obj
 
 # Precompiled Headers
@@ -27,7 +58,6 @@
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
@@ -37,35 +67,21 @@
 /.vscode
 
 # gui componenets
-
 *~
-*.autosave
 *.core
-*.moc
 *.orig
 *.rej
-*.so.*
 *_pch.h.cpp
 *_resource.rc
-*.qm
-.#*
-*.*#
+.*#
 core
-!core/
 tags
 .DS_Store
 .directory
 *.debug
-Makefile*
-*.prl
-moc_*.cpp
-ui_*.h
-qrc_*.cpp
 Thumbs.db
 *.res
 *.rc
-/.qmake.cache
-/.qmake.stash
 
 # qtcreator generated files
 *.pro.user*
