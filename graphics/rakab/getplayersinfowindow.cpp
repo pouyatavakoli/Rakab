@@ -1,7 +1,10 @@
+#include <QMainWindow>
+
 #include "getplayersinfowindow.h"
 #include "ui_getplayersinfowindow.h"
 #include "mainmenu.h"
-#include <QMainWindow>
+#include "mapwindow.h"
+
 
 getPlayersInfoWindow::getPlayersInfoWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -68,7 +71,8 @@ void getPlayersInfoWindow::updatePlayerNames(int count)
 
 void getPlayersInfoWindow::handleSubmit()
 {
-    // todo: open main game window
+    mapwindow* map = new mapwindow;
+    map->show();
     this->close();
 }
 

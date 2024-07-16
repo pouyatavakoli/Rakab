@@ -12,16 +12,19 @@ SOURCES += \
     getplayersinfowindow.cpp \
     main.cpp \
     mainmenu.cpp \
+    mapwindow.cpp \
     savedgamesmenu.cpp
 
 HEADERS += \
     getplayersinfowindow.h \
     mainmenu.h \
+    mapwindow.h \
     savedgamesmenu.h
 
 FORMS += \
     getplayersinfowindow.ui \
     mainmenu.ui \
+    mapwindow.ui \
     savedgamesmenu.ui
 
 # Default rules for deployment.
