@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/new/map">
+        <file>assets/Map.png</file>
+    </qresource>
+    <qresource prefix="/new/cards/zard">
+        <file>assets/cards/zard/010.png</file>
+        <file>assets/cards/zard/009.png</file>
+        <file>assets/cards/zard/008.png</file>
+        <file>assets/cards/zard/007.png</file>
+        <file>assets/cards/zard/006.png</file>
+        <file>assets/cards/zard/005.png</file>
+        <file>assets/cards/zard/004.png</file>
+        <file>assets/cards/zard/003.png</file>
+        <file>assets/cards/zard/002.png</file>
+        <file>assets/cards/zard/001.png</file>
+    </qresource>
+    <qresource prefix="/new/cards/banafsh">
+        <file>assets/cards/banafsh/Shir_Zan.png</file>
+        <file>assets/cards/banafsh/Matarsak.png</file>
+        <file>assets/cards/banafsh/Tabl_Zan.png</file>
+        <file>assets/cards/banafsh/Zemestan.png</file>
+        <file>assets/cards/banafsh/Bahar.png</file>
+        <file>assets/cards/banafsh/Shah_Dokht.png</file>
+        <file>assets/cards/banafsh/Parcham_Dar.png</file>
+        <file>assets/cards/banafsh/Rish_Sefid.png</file>
+    </qresource>
+    <qresource prefix="/new/cards/qermez">
+        <file>assets/cards/qermez/Roh_Jangal.png</file>
+        <file>assets/cards/qermez/Koh_Shekan.png</file>
+        <file>assets/cards/qermez/Herkol.png</file>
+    </qresource>
+    <qresource prefix="/new/symbols">
+        <file>assets/symbols/Wa_Sym.png</file>
+        <file>assets/background/background.png</file>
+    </qresource>
+    <qresource prefix="/new/background">
+        <file>assets/background/background.png</file>
+    </qresource>
+</RCC>
