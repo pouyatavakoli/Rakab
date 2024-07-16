@@ -1,6 +1,8 @@
 #include "mainmenu.h"
-#include"savedgamesmenu.h"
 #include "ui_mainmenu.h"
+#include"savedgamesmenu.h"
+#include "getplayersinfowindow.h"
+
 
 
 mainmenu::mainmenu(QWidget *parent)
@@ -51,4 +53,12 @@ void mainmenu::on_saved_btn_clicked()
 
 }
 
+
+
+void mainmenu::on_newgame_btn_clicked()
+{
+    getPlayersInfoWindow *getinfo = new getPlayersInfoWindow();
+    getinfo->show();
+    this->close();
+}
 

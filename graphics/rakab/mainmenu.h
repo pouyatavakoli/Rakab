@@ -23,5 +23,6 @@ private:
 private slots:
     void on_exit_btn_clicked();
     void on_saved_btn_clicked();
+    void on_newgame_btn_clicked();
 };
 #endif // MAINMENU_H
