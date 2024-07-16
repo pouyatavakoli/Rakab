@@ -2,6 +2,7 @@
 #define MAINMENU_H
 
 #include <QMainWindow>
+#include "savedgamesmenu.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mainmenu; }
@@ -17,8 +18,10 @@ public:
 
 private:
     Ui::mainmenu *ui;
-public slots:
-    void exitApplication();
+   // savedGamesMenu *sgMenu;
 
+private slots:
+    void on_exit_btn_clicked();
+    void on_saved_btn_clicked();
 };
 #endif // MAINMENU_H

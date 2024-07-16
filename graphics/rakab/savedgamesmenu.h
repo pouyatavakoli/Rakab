@@ -15,6 +15,9 @@ public:
     explicit savedGamesMenu(QWidget *parent = nullptr);
     ~savedGamesMenu();
 
+private slots:
+    void on_back_btn_clicked();
+
 private:
     Ui::savedGamesMenu *ui;
 };

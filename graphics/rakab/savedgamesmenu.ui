@@ -26,6 +26,19 @@
     <string>saved games</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="back_btn">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>270</y>
+     <width>89</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>back</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

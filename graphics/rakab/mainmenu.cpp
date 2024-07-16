@@ -1,5 +1,7 @@
 #include "mainmenu.h"
+#include"savedgamesmenu.h"
 #include "ui_mainmenu.h"
+
 
 mainmenu::mainmenu(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::mainmenu)
@@ -18,15 +20,35 @@ mainmenu::mainmenu(QWidget *parent)
 
     // title
     this->ui->title_lbl->setStyleSheet("color: red");
-    // Exit button functionality
-    connect(ui->exit_btn, &QPushButton::clicked, this, &mainmenu::exitApplication);
+
+
 }
 
-void mainmenu::exitApplication() {
-    this->close();
-}
 
 mainmenu::~mainmenu()
 {
     delete ui;
 }
+
+
+
+
+void mainmenu::on_exit_btn_clicked()
+{
+    this->close();
+}
+
+
+void mainmenu::on_saved_btn_clicked()
+{
+
+    // Show the saved games menu window
+    savedGamesMenu *sgMenu = new savedGamesMenu();
+    sgMenu->show();
+    // close the current window
+    this->close();
+
+
+}
+
+
