@@ -1,3 +1,6 @@
-#include "YellowCard.hpp"
+#include "yellowcard.h"
 
-YellowCard::YellowCard(int numberOnTheCardVal, std::string nameVal) : Card(numberOnTheCardVal, "Yellow", nameVal) {}
+YellowCard::YellowCard(int numberOnTheCard, const QString &nameVal, QObject *parent)
+    : Card(numberOnTheCard, "Yellow", nameVal, parent)
+{
+}

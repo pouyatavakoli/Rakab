@@ -1,20 +1,37 @@
-#include "PurpleCard.hpp"
+#include "purplecard.h"
 
-PurpleCard::PurpleCard(int numberOnTheCardVal, std::string nameVal) : Card(numberOnTheCardVal, "Purple", nameVal) {}
+PurpleCard::PurpleCard(int numberOnTheCardVal, const QString &nameVal, QObject *parent)
+    : Card(numberOnTheCardVal, "Purple", nameVal, parent)
+{
 
-void PurpleCard::startEffect() {}
+}
 
-void PurpleCard::endEffect() {}
+void PurpleCard::setPoints(int pointsVal)
+{
+    points = pointsVal;
+}
 
-void PurpleCard::refresh() {}
+void PurpleCard::startEffect()
+{
 
-void PurpleCard::startEffect(Player &) {}
+}
 
-void PurpleCard::endEffect(Player &) {}
+void PurpleCard::startEffect(Player &player)
+{
 
+}
 
-// std::string PurpleCard::getName() const {}
-// std::string PurpleCard::getType() const {}
-// int PurpleCard::getNumerOnTheCard() const {}
-// int PurpleCard::getPoints() const {}
-void PurpleCard::setPoints(int) {}
+void PurpleCard::endEffect()
+{
+
+}
+
+void PurpleCard::endEffect(Player &player)
+{
+
+}
+
+void PurpleCard::refresh()
+{
+
+}
