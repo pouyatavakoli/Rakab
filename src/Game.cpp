@@ -325,6 +325,7 @@ void Game::startBattle(const std::string &province, Interface &interface)
     std::cout << "Battle started on province: " << province << std::endl;
     while (!winnerIsPicked)
     {
+        bool parchamdarIsPlayed = false;
         anyPlayerCanPlay = false;
         for (Player &player : players)
         {
@@ -412,6 +413,11 @@ void Game::startBattle(const std::string &province, Interface &interface)
                         StartEffectOfRishSefid();
                         break; // Exit the while loop to go to the next player
                     }
+                    else if (situation == 6) // It is ParchamDar
+                    {
+                        parchamdarIsPlayed =true;
+                        break; // Exit the while loop to go to the next player
+                    }
                 }
                 else
                 {
@@ -434,7 +440,7 @@ void Game::startBattle(const std::string &province, Interface &interface)
             clearScreen();
         }
 
-        if (!anyPlayerCanPlay)
+        if (!anyPlayerCanPlay || parchamdarIsPlayed)
         {
             std::cout << "No one can play. The game has ended." << std::endl;
             checkThisBattleWinner(province); // Not sure about the rules

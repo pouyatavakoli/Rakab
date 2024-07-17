@@ -227,6 +227,15 @@ int Player::playPurpleCard(const std::string &cardName)
                 purpleHand.shrink_to_fit();
                 return 3; // we found ShirZan
             }
+            else if (playedCard->getName() == "ParchamDar")
+            {
+                // purpleCard->startEffect();
+                purpleOnTable.push_back(playedCard);
+                playedCards.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 6; // we found ParchamDar
+            }
         }
     }
     return 0;
@@ -309,6 +318,10 @@ int Player::PlayThisCard(const std::string userChoice)
             else if (situation == 5)
             {
                 return 5; // RishSefid should be played 
+            }
+            else if (situation == 6)
+            {
+                return 6; // ParchamDar should be played 
             }
         }
         return 0;
