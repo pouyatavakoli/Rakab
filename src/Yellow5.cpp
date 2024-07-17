@@ -1,31 +1,24 @@
-#include "yellow5.h"
+#include "Yellow5.hpp"
 
-Yellow5::Yellow5(QObject *parent)
-    : YellowCard(5, "Yellow5", parent)
-{
-}
+Yellow5::Yellow5() : YellowCard(5, "Yellow5") {}
 
-QString Yellow5::getName() const
+std::string Yellow5::getName() const
 {
     return name;
 }
-
-QString Yellow5::getType() const
+std::string Yellow5::getType() const
 {
     return type;
 }
-
-int Yellow5::getNumberOnTheCard() const
+int Yellow5::getNumerOnTheCard() const
 {
     return numberOnTheCard;
 }
-
 int Yellow5::getPoints() const
 {
     return points;
 }
-
 void Yellow5::setPoints(int pointsVal)
 {
-    points = pointsVal;
+    points = pointsVal ;
 }

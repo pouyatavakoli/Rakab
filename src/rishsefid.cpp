@@ -1,22 +1,22 @@
-#include "rishsefid.h"
+#include "RishSefid.hpp"
 
-RishSefid::RishSefid(QObject *parent)
-    : PurpleCard(0, "RishSefid", parent) // Initialize PurpleCard with default values
+RishSefid::RishSefid()
+    : PurpleCard(0, "RishSefid") // Initialize PurpleCard with default values
 {
     // Additional initialization specific to RishSefid if needed
 }
 
-QString RishSefid::getName() const
+std::string RishSefid::getName() const
 {
     return name;
 }
 
-QString RishSefid::getType() const
+std::string RishSefid::getType() const
 {
     return type;
 }
 
-int RishSefid::getNumberOnTheCard() const
+int RishSefid::getNumerOnTheCard() const
 {
     return numberOnTheCard;
 }

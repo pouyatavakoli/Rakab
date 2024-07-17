@@ -1,31 +1,23 @@
-#include "spring.h"
+#include "Spring.hpp"
 
-Spring::Spring(QObject *parent)
-    : Season(0, "Spring", parent) // Initialize Season with default values
-{
-    // Additional initialization specific to Spring if needed
-}
+Spring::Spring() : Season(0, "Spring") {}
 
-QString Spring::getName() const
+std::string Spring::getName() const
 {
     return name;
 }
-
-QString Spring::getType() const
+std::string Spring::getType() const
 {
     return type;
 }
-
-int Spring::getNumberOnTheCard() const
+int Spring::getNumerOnTheCard() const
 {
     return numberOnTheCard;
 }
-
 int Spring::getPoints() const
 {
     return points;
 }
-
 void Spring::setPoints(int pointsVal)
 {
     points = pointsVal;

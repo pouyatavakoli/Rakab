@@ -1,31 +1,23 @@
-#include "Winter.h"
+#include "Winter.hpp"
 
-Winter::Winter(QObject *parent)
-    : Season(0, "Winter", parent) // Initialize Season with default values
-{
-    // Additional initialization specific to Winter if needed
-}
+Winter::Winter() : Season(0, "Winter") {}
 
-QString Winter::getName() const
+std::string Winter::getName() const
 {
     return name;
 }
-
-QString Winter::getType() const
+std::string Winter::getType() const
 {
     return type;
 }
-
-int Winter::getNumberOnTheCard() const
+int Winter::getNumerOnTheCard() const
 {
     return numberOnTheCard;
 }
-
 int Winter::getPoints() const
 {
     return points;
 }
-
 void Winter::setPoints(int pointsVal)
 {
     points = pointsVal;

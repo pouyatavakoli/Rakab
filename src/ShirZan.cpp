@@ -1,41 +1,27 @@
-#include "shirZan.h"
+#include "ShirZan.hpp"
 
-ShirZan::ShirZan(QObject *parent)
-    : PurpleCard(1, "ShirZan", parent) // Initialize PurpleCard with default values
-{
-    // Additional initialization specific to ShirZan if needed
-}
+ShirZan::ShirZan() : PurpleCard(1, "ShirZan") {}
 
-void ShirZan::startEffect()
-{
-    // Implement start effect for ShirZan
-}
+void ShirZan::startEffect() {}
 
-void ShirZan::endEffect()
-{
-    // Implement end effect for ShirZan
-}
+void ShirZan::endEffect() {}
 
-QString ShirZan::getName() const
+std::string ShirZan::getName() const
 {
     return name;
 }
-
-QString ShirZan::getType() const
+std::string ShirZan::getType() const
 {
     return type;
 }
-
-int ShirZan::getNumberOnTheCard() const
+int ShirZan::getNumerOnTheCard() const
 {
     return numberOnTheCard;
 }
-
 int ShirZan::getPoints() const
 {
     return points;
 }
-
 void ShirZan::setPoints(int pointsVal)
 {
     points = pointsVal;
