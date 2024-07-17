@@ -1,4 +1,4 @@
-#include "parchamDar.h"
+#include "parchamdar.h"
 
 ParchamDar::ParchamDar(QObject *parent)
     : PurpleCard(0, "ParchamDar", parent) // Initialize PurpleCard with default values

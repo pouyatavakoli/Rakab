@@ -1,4 +1,4 @@
-#include "Season.h"
+#include "season.h"
 
 Season::Season(int numberOnTheCardVal, const QString &nameVal, QObject *parent)
     : PurpleCard(numberOnTheCardVal, nameVal, parent)

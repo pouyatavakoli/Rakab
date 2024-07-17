@@ -1,4 +1,4 @@
-#include "Winter.h"
+#include "winter.h"
 
 Winter::Winter(QObject *parent)
     : Season(0, "Winter", parent) // Initialize Season with default values

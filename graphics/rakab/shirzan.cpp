@@ -1,4 +1,4 @@
-#include "shirZan.h"
+#include "shirzan.h"
 
 ShirZan::ShirZan(QObject *parent)
     : PurpleCard(1, "ShirZan", parent) // Initialize PurpleCard with default values

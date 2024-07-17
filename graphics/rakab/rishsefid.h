@@ -1,7 +1,7 @@
 #ifndef RISHSEFID_HPP
 #define RISHSEFID_HPP
 
-#include "purpleCard.h"
+#include "purplecard.h"
 
 class RishSefid : public PurpleCard
 {

@@ -1,4 +1,4 @@
-#include "shahDokht.h"
+#include "shahdokht.h"
 
 ShahDokht::ShahDokht(QObject *parent)
     : PurpleCard(1, "ShahDokht", parent) // Initialize PurpleCard with default values

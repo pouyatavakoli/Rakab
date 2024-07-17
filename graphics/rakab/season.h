@@ -1,7 +1,7 @@
 #ifndef SEASON_HPP
 #define SEASON_HPP
 
-#include "purpleCard.h"
+#include "purplecard.h"
 
 class Season : public PurpleCard
 {

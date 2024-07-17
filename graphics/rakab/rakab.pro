@@ -17,7 +17,7 @@ SOURCES += \
     card.cpp\
     player.cpp\
     purplecard.cpp\
-    yelowcard.cpp\
+    yellowcard.cpp\
     season.cpp\
     parchamdar.cpp\
     winter.cpp\
@@ -43,7 +43,7 @@ HEADERS += \
     card.h\
     player.h\
     purplecard.h\
-    yelowcard.h\
+    yellowcard.h\
     season.h\
     parchamdar.h\
     winter.h\

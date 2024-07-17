@@ -1,7 +1,7 @@
 #ifndef SHAHDOKHT_HPP
 #define SHAHDOKHT_HPP
 
-#include "purpleCard.h"
+#include "purplecard.h"
 
 class ShahDokht : public PurpleCard
 {
