@@ -1,39 +1,36 @@
-#ifndef GETPLAYERSINFOWINDOW_H
-#define GETPLAYERSINFOWINDOW_H
-
-#include <QWidget>
-#include <QMainWindow>
-
-#include "QVBoxLayout"
-#include"QSpinBox"
 
 
+#ifndef GETINFO_H
+#define GETINFO_H
 
-namespace Ui {
-class getPlayersInfoWindow;
-}
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
 
-class getPlayersInfoWindow : public QMainWindow
-{
+class getPlayersInfoWindow : public QDialog {
     Q_OBJECT
 
 public:
-    explicit getPlayersInfoWindow(QWidget *parent = nullptr);
-    ~getPlayersInfoWindow();
+    getPlayersInfoWindow(QWidget *parent = nullptr);
 
 private slots:
-    void on_back_btn_clicked();
-public slots:
-    void updatePlayerNames(int count);
-    void handleSubmit();
-    void goback();
-
+    void submitPlayerCount();
+    void submitInfo();
 
 private:
-    Ui::getPlayersInfoWindow *ui;
-    QVBoxLayout *mainLayout;
-    QSpinBox *playerCountSpinBox;
-    QVector<QLineEdit*> playerNamesLineEdit;
+    QVBoxLayout *layout;
+    QLabel *playerCountLabel;
+    QLineEdit *playerCountInput;
+    QPushButton *playerCountSubmitButton;
+    QVector<QLabel*> playerNameLabels;
+    QVector<QLineEdit*> playerNameInputs;
+    QVector<QLabel*> playerAgeLabels;
+    QVector<QLineEdit*> playerAgeInputs;
+    QPushButton *submitButton;
+
+    void createPlayerFields(int count);
 };
 
-#endif // GETPLAYERSINFOWINDOW_H
+#endif

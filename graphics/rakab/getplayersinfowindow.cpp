@@ -1,86 +1,68 @@
-#include <QMainWindow>
-
-#include "getplayersinfowindow.h"
-#include "ui_getplayersinfowindow.h"
+//todo : back button
 #include "mainmenu.h"
 #include "mapwindow.h"
+#include "getplayersinfowindow.h"
+#include <QMessageBox>
 
-
-getPlayersInfoWindow::getPlayersInfoWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::getPlayersInfoWindow)
+getPlayersInfoWindow::getPlayersInfoWindow(QWidget *parent)
+    : QDialog(parent),
+      layout(new QVBoxLayout),
+      playerCountLabel(new QLabel("Enter the number of players:")),
+      playerCountInput(new QLineEdit),
+      playerCountSubmitButton(new QPushButton("Submit")),
+      submitButton(new QPushButton("Submit"))
 {
-   // ui->setupUi(this);
-    mainLayout = new QVBoxLayout;
-    playerCountSpinBox = new QSpinBox;
-    mainLayout->addWidget(playerCountSpinBox);
-    //todo: fix and uncommnet this
-    //playerCountSpinBox->setMinimum(3);
-    connect(playerCountSpinBox, qOverload<int>(&QSpinBox::valueChanged), this, &getPlayersInfoWindow::updatePlayerNames);
-    setCentralWidget(new QWidget);
-    centralWidget()->setLayout(mainLayout);
-    // submit button
-    QPushButton *submitButton = new QPushButton("Submit");
-    mainLayout->addWidget(submitButton);
-    connect(submitButton, &QPushButton::clicked, this, &getPlayersInfoWindow::handleSubmit);
+    setWindowTitle("Player Sign-up Wizard");
 
-    // back button
-    QPushButton *back_btn = new QPushButton("back");
-    mainLayout->addWidget(back_btn);
-    connect(back_btn, &QPushButton::clicked, this, &getPlayersInfoWindow::goback);
-}
+    layout->addWidget(playerCountLabel);
+    layout->addWidget(playerCountInput);
+    layout->addWidget(playerCountSubmitButton);
+    setLayout(layout);
 
-getPlayersInfoWindow::~getPlayersInfoWindow()
-{
-    delete ui;
-}
+    connect(playerCountSubmitButton, &QPushButton::clicked, this, &getPlayersInfoWindow::submitPlayerCount);
+    connect(submitButton ,  &QPushButton::clicked, this, &getPlayersInfoWindow::submitInfo );
+    };
 
-void getPlayersInfoWindow::on_back_btn_clicked()
-{
-    mainmenu *menu = new mainmenu();
-    menu -> show();
-    this -> close();
-}
-
-void getPlayersInfoWindow::updatePlayerNames(int count)
-{
-    // Clear previous line edits and labels
-    for (auto* lineEdit : playerNamesLineEdit) {
-        delete lineEdit;
+void getPlayersInfoWindow::submitPlayerCount() {
+    bool ok;
+    int count = playerCountInput->text().toInt(&ok);
+    if (ok && count >= 3 && count <= 6) {
+        createPlayerFields(count);
+    } else {
+        QMessageBox::critical(this, "Invalid Input", "Enter a valid number of players (between 3 and 6).");
     }
-    //todo: clear labels
-    playerNamesLineEdit.clear();
+}
 
-    // Create new line edits with labels for Name and Age
+void getPlayersInfoWindow::submitInfo(){
+    mapwindow* map = new mapwindow();
+    map ->show();
+    this ->close();
+}
+void getPlayersInfoWindow::createPlayerFields(int count) {
     for (int i = 0; i < count; ++i) {
-        QLabel *nameLabel = new QLabel("Name:");
-        QLineEdit *nameLineEdit = new QLineEdit;
-        mainLayout->addWidget(nameLabel);
-        mainLayout->addWidget(nameLineEdit);
-        playerNamesLineEdit.push_back(nameLineEdit);
+        QLabel *nameLabel = new QLabel("Enter name for Player " + QString::number(i + 1) + ":");
+        QLineEdit *nameInput = new QLineEdit;
+        layout->addWidget(nameLabel);
+        layout->addWidget(nameInput);
+        playerNameLabels.append(nameLabel);
+        playerNameInputs.append(nameInput);
 
-        QLabel *ageLabel = new QLabel("Age:");
-        QLineEdit *ageLineEdit = new QLineEdit;
-        mainLayout->addWidget(ageLabel);
-        mainLayout->addWidget(ageLineEdit);
-        playerNamesLineEdit.push_back(ageLineEdit);
+        QLabel *ageLabel = new QLabel("Enter age for Player " + QString::number(i + 1) + ":");
+        QLineEdit *ageInput = new QLineEdit;
+        layout->addWidget(ageLabel);
+        layout->addWidget(ageInput);
+        playerAgeLabels.append(ageLabel);
+        playerAgeInputs.append(ageInput);
     }
 
+    // Remove the previous widgets and add the new ones
+    layout->removeWidget(playerCountLabel);
+    layout->removeWidget(playerCountInput);
+    layout->removeWidget(playerCountSubmitButton);
+    playerCountLabel->deleteLater();
+    playerCountInput->deleteLater();
+    playerCountSubmitButton->deleteLater();
 
-}
-
-void getPlayersInfoWindow::handleSubmit()
-{
-    mapwindow* map = new mapwindow;
-    map->show();
-    this->close();
-}
-
-void getPlayersInfoWindow::goback()
-{
-    mainmenu *menu = new mainmenu();
-    menu ->show();
-    this->close();
-
+    layout->addWidget(submitButton);
 }
 
