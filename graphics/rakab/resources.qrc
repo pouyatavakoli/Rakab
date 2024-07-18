@@ -32,6 +32,7 @@
     <qresource prefix="/new/symbols">
         <file>assets/symbols/Wa_Sym.png</file>
         <file>assets/background/background.png</file>
+        <file>assets/symbols/Pe_Sym.png</file>
     </qresource>
     <qresource prefix="/new/background">
         <file>assets/background/background.png</file>
