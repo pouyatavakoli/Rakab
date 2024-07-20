@@ -1,7 +1,14 @@
 #include "mapwindow.h"
 #include "ui_mapwindow.h"
 #include "mainmenu.h"
+#include "playground.h"
+
 #include <QPainter>
+#include <QLabel>
+#include <QPoint>
+#include <QRect>
+#include <limits>
+#include <cmath>
 #include <QResizeEvent>
 #include <QMimeData>
 #include <QDragEnterEvent>
@@ -75,6 +82,7 @@ mapwindow::mapwindow(QWidget *parent) :
         QRect(508, 555, 50, 50)
     };
     // Initialize the neshan labels
+    initializeLabels();
     initializeNeshanLabels();
 
     // Enable drag and drop
@@ -145,40 +153,84 @@ void mapwindow::highlightDropArea(QPoint pos)
     update();
 }
 
-// Handle drop events
-void mapwindow::dropEvent(QDropEvent *event)
-{
-    QLabel *label = qobject_cast<QLabel *>(childAt(event->position().toPoint()));
+// Function to calculate the Euclidean distance between two points
+double calculateDistance(const QPoint& p1, const QPoint& p2) {
+    return std::sqrt(std::pow(p1.x() - p2.x(), 2) + std::pow(p1.y() - p2.y(), 2));
+}
 
-    if (label && label->objectName().startsWith("Neshane")) {
-        QPoint dropPosition = event->position().toPoint();
+// Function to find the nearest QLabel to the drop position
+QLabel* mapwindow::findNearestLabel(const QPoint& dropPosition, const QList<QLabel*>& labels) {
+    QLabel* nearestLabel = nullptr;
+    double minDistance = std::numeric_limits<double>::max();
 
-        QVector<QRect> *targetAreas = nullptr;
-        if (label->objectName() == "NeshaneSolh") {
-            targetAreas = &dropAreasSolh;
-            qDebug() << "solh";
-        } else if (label->objectName() == "NeshaneJang") {
-            targetAreas = &dropAreasJang;
-            qDebug() << "jang";
-        }
+    for (QLabel* label : labels) {
+        QRect labelRect = label->geometry();
+        QPoint labelCenter = labelRect.center();
+        double distance = calculateDistance(dropPosition, labelCenter);
 
-        if (targetAreas) {
-            for (int i = 0; i < targetAreas->size(); ++i) {
-                if (targetAreas->at(i).contains(dropPosition)) {
-                    QRect area = targetAreas->at(i);
-                    label->move(area.topLeft());
-                    label->resize(area.size());
-                    label->setPixmap(QPixmap(neshan[label->objectName()]).scaled(area.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-                    QString areaName = (i == 0) ? "a" : (i == 1) ? "b" : "c";
-                    qDebug() << "Dropped in area:" << areaName;
-                    break;
-                }
-            }
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            nearestLabel = label;
         }
     }
+
+    return nearestLabel;
+}
+
+void mapwindow::dropEvent(QDropEvent *event)
+{
+    QPoint dropPosition = event->position().toPoint();
+    qDebug() << "Drop event detected at position:" << dropPosition;
+
+    // Collect all QLabel widgets
+    QList<QLabel*> labels;
+    foreach (QWidget *child, this->findChildren<QWidget*>()) {
+        QLabel *label = qobject_cast<QLabel *>(child);
+        if (label && label->objectName().startsWith("Neshane")) {
+            labels.append(label);
+        }
+    }
+
+    QLabel* nearestLabel = findNearestLabel(dropPosition, labels);
+    if (nearestLabel) {
+        qDebug() << "Nearest label detected:" << nearestLabel->objectName();
+
+        // Check if the drop position is within any of the drop areas
+        bool isDroppedInArea = false;
+        for (int i = 0; i < dropAreasSolh.size(); ++i) {
+            if (dropAreasSolh[i].contains(dropPosition)) {
+                QRect area = dropAreasSolh[i];
+                nearestLabel->move(area.topLeft());
+                nearestLabel->resize(area.size());
+
+                // Ensure the pixmap is valid before setting it
+                QString labelName = nearestLabel->objectName();
+                QPixmap pixmap = QPixmap(neshan[labelName]);
+                if (pixmap.isNull()) {
+                    qWarning() << "Pixmap for" << labelName << "is null. Check the path or pixmap loading.";
+                } else {
+                    nearestLabel->setPixmap(pixmap.scaled(area.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                }
+
+                QString areaName = (i == 0) ? "a" : (i == 1) ? "b" : "c";
+                qDebug() << "Dropped in area:" << areaName;
+                isDroppedInArea = true;
+                break;
+            }
+        }
+
+        if (!isDroppedInArea) {
+            qDebug() << "Drop position is not within any defined drop areas.";
+        }
+    } else {
+        qDebug() << "No nearest label found";
+    }
+
     currentDropAreas.clear();
     update();
 }
+
 void mapwindow::mousePressEvent(QMouseEvent *event)
 {
     QLabel *label = qobject_cast<QLabel *>(childAt(event->pos()));
@@ -234,4 +286,18 @@ void mapwindow::on_pushButton_clicked()
     mainmenu *menu = new mainmenu();
     menu->show();
     this->close();
+}
+
+void mapwindow::initializeLabels()
+{
+    // Create and position labels directly
+    for (int i = 0; i < dropAreasSolh.size(); ++i) {
+        QLabel *label = new QLabel(this);
+        label->setObjectName(QString("NeshaneLabel%1").arg(i));
+        label->setGeometry(dropAreasSolh[i]);
+        label->setStyleSheet("background-color: lightblue; border: 1px solid black;"); // For visibility
+        label->setText(QString::number(i)); // Set text with the label number
+        label->setAlignment(Qt::AlignCenter); // Center-align text
+        label->show(); // Ensure the label is visible
+    }
 }

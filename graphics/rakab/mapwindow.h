@@ -44,6 +44,9 @@ private:
 
     void initializeNeshanLabels();
     void highlightDropArea(QPoint pos);
+//    double calculateDistanceToRect(const QPoint&, const QPoint&);
+    QLabel* findNearestLabel(const QPoint&, const QList<QLabel*>&);
+    void initializeLabels();
 };
 
 #endif // MAPWINDOW_H

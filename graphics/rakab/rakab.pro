@@ -13,56 +13,57 @@ SOURCES += \
     main.cpp \
     mainmenu.cpp \
     mapwindow.cpp \
-    savedgamesmenu.cpp\
-    card.cpp\
-    player.cpp\
-    purplecard.cpp\
-    yellowcard.cpp\
-    season.cpp\
-    parchamdar.cpp\
-    winter.cpp\
-    spring.cpp\
-    shahdokht.cpp\
-    shirzan.cpp\
-    rishsefid.cpp\
-    yellow1.cpp\
-    yellow2.cpp\
-    yellow3.cpp\
-    yellow4.cpp\
-    yellow5.cpp\
-    yellow6.cpp\
-    yellow10.cpp\
-
-
+    playground.cpp \
+    savedgamesmenu.cpp \
+    card.cpp \
+    player.cpp \
+    purplecard.cpp \
+    yellowcard.cpp \
+    season.cpp \
+    parchamdar.cpp \
+    winter.cpp \
+    spring.cpp \
+    shahdokht.cpp \
+    shirzan.cpp \
+    rishsefid.cpp \
+    yellow1.cpp \
+    yellow2.cpp \
+    yellow3.cpp \
+    yellow4.cpp \
+    yellow5.cpp \
+    yellow6.cpp \
+    yellow10.cpp
 
 HEADERS += \
     getplayersinfowindow.h \
     mainmenu.h \
     mapwindow.h \
-    savedgamesmenu.h\
-    card.h\
-    player.h\
-    purplecard.h\
-    yellowcard.h\
-    season.h\
-    parchamdar.h\
-    winter.h\
-    spring.h\
-    shahdokht.h\
-    shirzan.h\
-    rishsefid.h\
-    yellow1.h\
-    yellow2.h\
-    yellow3.h\
-    yellow4.h\
-    yellow5.h\
-    yellow6.h\
-    yellow10.h\
+    playground.h \
+    savedgamesmenu.h \
+    card.h \
+    player.h \
+    purplecard.h \
+    yellowcard.h \
+    season.h \
+    parchamdar.h \
+    winter.h \
+    spring.h \
+    shahdokht.h \
+    shirzan.h \
+    rishsefid.h \
+    yellow1.h \
+    yellow2.h \
+    yellow3.h \
+    yellow4.h \
+    yellow5.h \
+    yellow6.h \
+    yellow10.h
 
 FORMS += \
     getplayersinfowindow.ui \
     mainmenu.ui \
     mapwindow.ui \
+    playground.ui \
     savedgamesmenu.ui
 
 # Default rules for deployment.
