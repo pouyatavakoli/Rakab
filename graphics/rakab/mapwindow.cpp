@@ -18,6 +18,10 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <iostream>
+#include <QDialog>
+#include <QHBoxLayout>
+
+
 
 mapwindow::mapwindow(QWidget *parent) :
     QWidget(parent),
@@ -65,7 +69,7 @@ mapwindow::mapwindow(QWidget *parent) :
         { "LIA", QRect(508, 555, 50, 50) }
     };
     */
-    dropAreasSolh = {
+    dropAreas = {
         QRect(52, 193, 40, 40),
         QRect(251, 37, 40, 40),
         QRect(453, 166, 40, 40),
@@ -144,7 +148,7 @@ void mapwindow::dragMoveEvent(QDragMoveEvent *event)
 void mapwindow::highlightDropArea(QPoint pos)
 {
     currentDropAreas.clear();
-    for (const QRect &area : dropAreasSolh + dropAreasJang) {
+    for (const QRect &area : dropAreas) {
         if (area.contains(pos)) {
             currentDropAreas.append(area);
             break;
@@ -198,9 +202,9 @@ void mapwindow::dropEvent(QDropEvent *event)
 
         // Check if the drop position is within any of the drop areas
         bool isDroppedInArea = false;
-        for (int i = 0; i < dropAreasSolh.size(); ++i) {
-            if (dropAreasSolh[i].contains(dropPosition)) {
-                QRect area = dropAreasSolh[i];
+        for (int i = 0; i < dropAreas.size(); ++i) {
+            if (dropAreas[i].contains(dropPosition)) {
+                QRect area = dropAreas[i];
                 nearestLabel->move(area.topLeft());
                 nearestLabel->resize(area.size());
 
@@ -215,6 +219,12 @@ void mapwindow::dropEvent(QDropEvent *event)
 
                 QString areaName = (i == 0) ? "a" : (i == 1) ? "b" : "c";
                 qDebug() << "Dropped in area:" << areaName;
+                // ask to start battle in area
+                askToStartBattle(this , areaName);
+                playground *pg = new playground();
+                pg->show();
+                this->hide();
+
                 isDroppedInArea = true;
                 break;
             }
@@ -288,16 +298,73 @@ void mapwindow::on_pushButton_clicked()
     this->close();
 }
 
+void mapwindow::openPlayground()
+{
+    playground *pg = new playground();
+    pg->show();
+    this->close();
+}
+
 void mapwindow::initializeLabels()
 {
     // Create and position labels directly
-    for (int i = 0; i < dropAreasSolh.size(); ++i) {
+    for (int i = 0; i < dropAreas.size(); ++i) {
         QLabel *label = new QLabel(this);
         label->setObjectName(QString("NeshaneLabel%1").arg(i));
-        label->setGeometry(dropAreasSolh[i]);
+        label->setGeometry(dropAreas[i]);
         label->setStyleSheet("background-color: lightblue; border: 1px solid black;"); // For visibility
         label->setText(QString::number(i)); // Set text with the label number
         label->setAlignment(Qt::AlignCenter); // Center-align text
         label->show(); // Ensure the label is visible
     }
 }
+
+void mapwindow::askToStartBattle(QWidget *parent, QString provinceName) {
+    // Create dialog
+    QDialog *askToStartBattle = new QDialog(parent);
+
+    // Set text for the dialog
+    QLabel *messageLabel = new QLabel("Do you want to start a battle on " + provinceName + " province?", askToStartBattle);
+    messageLabel->setAlignment(Qt::AlignCenter); // Optionally set alignment
+
+    // Set layout for the dialog
+    QVBoxLayout *mainLayout = new QVBoxLayout(askToStartBattle);
+
+    // Add the message label to the main layout
+    mainLayout->addWidget(messageLabel);
+
+    // Create buttons
+    QPushButton *okButton = new QPushButton("OK", askToStartBattle);
+    QPushButton *cancelButton = new QPushButton("Cancel", askToStartBattle);
+
+    // Create layout for buttons
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+
+    mainLayout->addLayout(buttonLayout);
+
+    // Connect button signals to slots
+    QObject::connect(okButton, &QPushButton::clicked, askToStartBattle, &QDialog::accept);
+    QObject::connect(cancelButton, &QPushButton::clicked, askToStartBattle, &QDialog::reject);
+
+    // Wait for user input
+    int result = askToStartBattle->exec();
+
+    // Handle button presses
+    if (result == QDialog::Accepted) {
+        // OK button pressed
+        // Handle OK button press here (open playground)
+        connect(askToStartBattle , &QDialog::accepted, this, &mapwindow::openPlayground);
+
+
+    } else if (result == QDialog::Rejected) {
+        // Cancel button pressed
+        // Handle Cancel button press here (ask to pick again)
+    }
+
+    // Clean up dialog instance
+    delete askToStartBattle;
+}
+

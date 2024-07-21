@@ -33,14 +33,16 @@ signals:
 
 private slots:
     void on_pushButton_clicked();
+    void openPlayground();
 
 private:
     Ui::mapwindow *ui;
     QPixmap backgroundPixmap;
     QMap<QString, QString> neshan;
-    QVector<QRect> dropAreasSolh;
-    QVector<QRect> dropAreasJang;
+    QVector<QRect> dropAreas;
     QVector<QRect> currentDropAreas;
+    void askToStartBattle(QWidget *parent , QString);
+
 
     void initializeNeshanLabels();
     void highlightDropArea(QPoint pos);

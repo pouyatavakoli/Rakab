@@ -1,7 +1,7 @@
 #ifndef SHIRZAN_H
 #define SHIRZAN_H
 
-#include "Purplecard.h"
+#include "purplecard.h"
 
 class ShirZan : public PurpleCard
 {
