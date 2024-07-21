@@ -2,13 +2,13 @@
 #define PLAYGROUND_H
 
 #include <QWidget>
+#include "game.hpp"
 
 namespace Ui {
 class playground;
 }
 
-class playground : public QWidget
-{
+class playground : public QWidget {
     Q_OBJECT
 
 public:
@@ -17,6 +17,15 @@ public:
 
 private:
     Ui::playground *ui;
+    Game *game;
+
+private slots:
+    void handleTurnChanged(int playerIndex);
+    void handleCardDropped(int playerIndex, const Card& card);
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
 };
 
 #endif // PLAYGROUND_H
