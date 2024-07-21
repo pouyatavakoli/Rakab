@@ -22,6 +22,7 @@ private:
 private slots:
     void handleTurnChanged(int playerIndex);
     void handleCardDropped(int playerIndex, const Card& card);
+    void updatePlayerHandUI(int playerIndex);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

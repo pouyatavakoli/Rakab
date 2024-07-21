@@ -1,10 +1,9 @@
 #include "playground.h"
 #include "ui_playground.h"
 #include <QDragEnterEvent>
+#include <QDropEvent>
 #include <QMimeData>
 #include <QDrag>
-#include <QLabel>
-#include <QVBoxLayout>
 #include "cardlabel.h"
 
 playground::playground(QWidget *parent) :
@@ -31,8 +30,11 @@ playground::playground(QWidget *parent) :
             cardLabel->setCard(card.color, card.numberOnTheCard, card.score);
             playerLayout->addWidget(cardLabel);
         }
-        ui->playerHandsLayout->addLayout(playerLayout);
+        ui->playerHandsLayout->addLayout(playerLayout);  // Ensure this matches the name in your .ui file
     }
+
+    // Display the current player's turn
+    handleTurnChanged(game->currentPlayerIndex);
 }
 
 playground::~playground() {
@@ -45,12 +47,33 @@ void playground::handleTurnChanged(int playerIndex) {
 }
 
 void playground::handleCardDropped(int playerIndex, const Card& card) {
-    // Handle card drop logic
-    if (playerIndex == game->currentPlayerIndex) {
-        game->currentPlayer().removeCard(card);
+    // Remove the card from the current player's hand and update UI
+    auto& hand = game->players[playerIndex].hand;
+    auto it = std::remove_if(hand.begin(), hand.end(), [&](const Card& c) {
+        return c.color == card.color && c.numberOnTheCard == card.numberOnTheCard && c.score == card.score;
+    });
+
+    if (it != hand.end()) {
+        hand.erase(it, hand.end());
+        updatePlayerHandUI(playerIndex);
         game->nextTurn();
-    } else {
-        // Optionally show a message that it's not this player's turn
+    }
+}
+
+void playground::updatePlayerHandUI(int playerIndex) {
+    // Clear existing layout for the player
+    QLayout *layout = ui->playerHandsLayout->itemAt(playerIndex)->layout();
+    QLayoutItem *item;
+    while ((item = layout->takeAt(0)) != nullptr) {
+        delete item->widget();
+        delete item;
+    }
+
+    // Re-add cards to the layout
+    for (const Card &card : game->players[playerIndex].hand) {
+        CardLabel *cardLabel = new CardLabel(this);
+        cardLabel->setCard(card.color, card.numberOnTheCard, card.score);
+        layout->addWidget(cardLabel);
     }
 }
 
