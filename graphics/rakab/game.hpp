@@ -2,55 +2,51 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "player.h"
+#include "card.h"
+
 #include <vector>
+#include <string>
 #include <QObject>
 #include <QWidget>
+#include <memory>
 
-class Card {
-public:
-    QString color; // "yellow" or "purple"
-    int numberOnTheCard;
-    int score;
-    Card(QString c, int n, int s) : color(c), numberOnTheCard(n), score(s) {}
-};
-
-class Player {
-public:
-    std::vector<Card> hand;
-    void addCard(const Card& card) {
-        hand.push_back(card);
-    }
-    void removeCard(const Card& card) {
-        auto it = std::remove_if(hand.begin(), hand.end(), [&card](const Card& c) {
-            return c.color == card.color && c.numberOnTheCard == card.numberOnTheCard && c.score == card.score;
-        });
-        hand.erase(it, hand.end());
-    }
-};
 
 class Game : public QObject {
     Q_OBJECT
 public:
-    std::vector<Player> players;
-    int currentPlayerIndex;
 
-    Game(int numPlayers, QObject *parent = nullptr) : QObject(parent), currentPlayerIndex(0) {
-        for(int i = 0; i < numPlayers; ++i) {
-            players.push_back(Player());
-        }
-    }
+    Game(QObject *parent = nullptr);
+    void setPlayersCount(int);
+    void setPlayers(const std::vector<std::string>&, const std::vector<int>&);
+    Player& currentPlayer();
+    void nextTurn();
 
-    Player& currentPlayer() {
-        return players[currentPlayerIndex];
-    }
-
-    void nextTurn() {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        emit turnChanged(currentPlayerIndex);
-    }
 
 signals:
     void turnChanged(int playerIndex);
+
+private:
+    void handCardsToPLayers();
+    void fillMainDeck();
+    void shuffleDeck();
+    int getHighestYellowCardInGame();
+    void updateCardHoldersCount();
+    void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
+    void updateTotalScore();
+    void reorderPurpleOnTable();
+    void endAllEffects();
+    void startAllEffects();
+    void refreshEffects();
+
+
+private:
+    int playerCount;
+    std::vector <Player*> players;
+    std::vector<std::shared_ptr<Card>> mainDeck;
+    int currentPlayerIndex;
+    int cardHoldersCount;
+
 };
 
 #endif // GAME_HPP

@@ -6,12 +6,12 @@ Spring::Spring(QObject *parent)
     // Additional initialization specific to Spring if needed
 }
 
-QString Spring::getName() const
+std::string Spring::getName() const
 {
     return name;
 }
 
-QString Spring::getType() const
+std::string Spring::getType() const
 {
     return type;
 }

@@ -6,12 +6,12 @@ RishSefid::RishSefid(QObject *parent)
     // Additional initialization specific to RishSefid if needed
 }
 
-QString RishSefid::getName() const
+std::string RishSefid::getName() const
 {
     return name;
 }
 
-QString RishSefid::getType() const
+std::string RishSefid::getType() const
 {
     return type;
 }

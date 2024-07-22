@@ -1,6 +1,6 @@
 #include "purplecard.h"
 
-PurpleCard::PurpleCard(int numberOnTheCardVal, const QString &nameVal, QObject *parent)
+PurpleCard::PurpleCard(int numberOnTheCardVal, const std::string &nameVal, QObject *parent)
     : Card(numberOnTheCardVal, "Purple", nameVal, parent)
 {
 

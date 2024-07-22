@@ -5,12 +5,12 @@ Yellow3::Yellow3(QObject *parent)
 {
 }
 
-QString Yellow3::getName() const
+std::string Yellow3::getName() const
 {
     return name;
 }
 
-QString Yellow3::getType() const
+std::string Yellow3::getType() const
 {
     return type;
 }

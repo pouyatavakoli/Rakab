@@ -57,7 +57,8 @@ void mainmenu::on_saved_btn_clicked()
 
 void mainmenu::on_newgame_btn_clicked()
 {
-    getPlayersInfoWindow *getinfo = new getPlayersInfoWindow();
+    Game *game = new Game();
+    getPlayersInfoWindow *getinfo = new getPlayersInfoWindow(*game);
     getinfo->show();
     this->close();
 }

@@ -1,7 +1,7 @@
-
-
 #ifndef GETINFO_H
 #define GETINFO_H
+
+#include "game.hpp"
 
 #include <QDialog>
 #include <QVBoxLayout>
@@ -13,13 +13,14 @@ class getPlayersInfoWindow : public QDialog {
     Q_OBJECT
 
 public:
-    getPlayersInfoWindow(QWidget *parent = nullptr);
+    getPlayersInfoWindow(Game&,QWidget *parent = nullptr);
 
 private slots:
     void submitPlayerCount();
     void submitInfo();
 
 private:
+    Game &game;
     QVBoxLayout *layout;
     QLabel *playerCountLabel;
     QLineEdit *playerCountInput;
@@ -31,6 +32,7 @@ private:
     QPushButton *submitButton;
 
     void createPlayerFields(int count);
+    void submitPlayerInfo();
 };
 
 #endif

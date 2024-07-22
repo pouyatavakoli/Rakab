@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "savedgamesmenu.h"
+#include "game.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mainmenu; }

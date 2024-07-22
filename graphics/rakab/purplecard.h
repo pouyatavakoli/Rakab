@@ -11,11 +11,11 @@ class PurpleCard : public Card
     Q_OBJECT
 
 public:
-    PurpleCard(int numberOnTheCardVal, const QString &nameVal, QObject *parent = nullptr);
+    PurpleCard(int numberOnTheCardVal, const std::string &nameVal, QObject *parent = nullptr);
 
     // Override pure virtual functions from Card
-    virtual QString getName() const override = 0;
-    virtual QString getType() const override = 0;
+    virtual std::string getName() const override = 0;
+    virtual std::string getType() const override = 0;
     virtual int getNumberOnTheCard() const override = 0;
     virtual int getPoints() const override = 0;
     virtual void setPoints(int pointsVal) override;

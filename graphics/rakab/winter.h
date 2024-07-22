@@ -11,8 +11,8 @@ public:
     Winter(QObject *parent = nullptr);
 
     // Override virtual functions from Season
-    QString getName() const override;
-    QString getType() const override;
+    std::string getName() const override;
+    std::string getType() const override;
     int getNumberOnTheCard() const override;
     int getPoints() const override;
     void setPoints(int pointsVal) override;

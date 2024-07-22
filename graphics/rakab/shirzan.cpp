@@ -16,12 +16,12 @@ void ShirZan::endEffect()
     // Implement end effect for ShirZan
 }
 
-QString ShirZan::getName() const
+std::string ShirZan::getName() const
 {
     return name;
 }
 
-QString ShirZan::getType() const
+std::string ShirZan::getType() const
 {
     return type;
 }

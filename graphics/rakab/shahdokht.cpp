@@ -6,12 +6,12 @@ ShahDokht::ShahDokht(QObject *parent)
     // Additional initialization specific to ShahDokht if needed
 }
 
-QString ShahDokht::getName() const
+std::string ShahDokht::getName() const
 {
     return name;
 }
 
-QString ShahDokht::getType() const
+std::string ShahDokht::getType() const
 {
     return type;
 }

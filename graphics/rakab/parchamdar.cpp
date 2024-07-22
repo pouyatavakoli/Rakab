@@ -6,12 +6,12 @@ ParchamDar::ParchamDar(QObject *parent)
     // Additional initialization specific to ParchamDar if needed
 }
 
-QString ParchamDar::getName() const
+std::string ParchamDar::getName() const
 {
     return name;
 }
 
-QString ParchamDar::getType() const
+std::string ParchamDar::getType() const
 {
     return type;
 }

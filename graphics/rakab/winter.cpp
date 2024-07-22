@@ -6,12 +6,12 @@ Winter::Winter(QObject *parent)
     // Additional initialization specific to Winter if needed
 }
 
-QString Winter::getName() const
+std::string Winter::getName() const
 {
     return name;
 }
 
-QString Winter::getType() const
+std::string Winter::getType() const
 {
     return type;
 }

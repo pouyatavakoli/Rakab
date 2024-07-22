@@ -2,24 +2,24 @@
 #define CARD_H
 
 #include <QObject>
-#include <QString>
+#include <string>
 
 class Card : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit Card(int numberOnTheCardVal, const QString &typeVal, const QString &nameVal, QObject *parent = nullptr);
+    explicit Card(int numberOnTheCardVal, const std::string &typeVal, const std::string &nameVal, QObject *parent = nullptr);
 
-    virtual QString getName() const = 0;
-    virtual QString getType() const = 0;
+    virtual std::string getName() const = 0;
+    virtual std::string getType() const = 0;
     virtual int getNumberOnTheCard() const = 0;
     virtual int getPoints() const = 0;
     virtual void setPoints(int pointsVal) = 0;
 
 protected:
-    QString name;
-    QString type;
+    std::string name;
+    std::string type;
     int numberOnTheCard;
     int points;
 };

@@ -5,12 +5,12 @@ Yellow4::Yellow4(QObject *parent)
 {
 }
 
-QString Yellow4::getName() const
+std::string Yellow4::getName() const
 {
     return name;
 }
 
-QString Yellow4::getType() const
+std::string Yellow4::getType() const
 {
     return type;
 }

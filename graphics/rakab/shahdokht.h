@@ -11,8 +11,8 @@ public:
     ShahDokht(QObject *parent = nullptr);
 
 
-    QString getName() const override;
-    QString getType() const override;
+    std::string getName() const override;
+    std::string getType() const override;
     int getNumberOnTheCard() const override;
     int getPoints() const override;
     void setPoints(int pointsVal) override;
