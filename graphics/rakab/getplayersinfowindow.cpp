@@ -38,7 +38,7 @@ void getPlayersInfoWindow::submitPlayerCount() {
 }
 
 void getPlayersInfoWindow::submitInfo(){
-    mapwindow* map = new mapwindow();
+    mapwindow* map = new mapwindow(game);
     map ->show();
     this ->close();
 }

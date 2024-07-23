@@ -160,7 +160,7 @@ void Game::shuffleDeck()
     }
 }
 
-int Game::getHighestYellowCardInGame()
+int Game::getHighestYellowCardInGame() const
 {
     int max = 1;
     for (auto player : players)
@@ -174,6 +174,18 @@ int Game::getHighestYellowCardInGame()
         }
     }
     return max;
+}
+
+int Game::getPlayerCount() const
+{
+    return playerCount;
+}
+
+const Player& Game::getPlayer(int index) {
+    if (index < 0 || index >= players.size()) {
+        throw std::out_of_range("Player index out of range");
+    }
+    return *players[index];
 }
 
 void Game::updateCardHoldersCount()

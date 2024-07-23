@@ -14,6 +14,7 @@ SOURCES += \
     getplayersinfowindow.cpp \
     main.cpp \
     mainmenu.cpp \
+    map.cpp \
     mapwindow.cpp \
     playground.cpp \
     savedgamesmenu.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     game.hpp \
     getplayersinfowindow.h \
     mainmenu.h \
+    map.h \
     mapwindow.h \
     playground.h \
     savedgamesmenu.h \

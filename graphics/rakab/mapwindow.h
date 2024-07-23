@@ -7,6 +7,8 @@
 #include <QPixmap>
 #include <QVector>
 
+#include "game.hpp"
+
 namespace Ui {
 class mapwindow;
 }
@@ -16,7 +18,7 @@ class mapwindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit mapwindow(QWidget *parent = nullptr);
+    explicit mapwindow(Game &, QWidget *parent = nullptr);
     ~mapwindow();
 
 protected:
@@ -36,6 +38,7 @@ private slots:
     void openPlayground();
 
 private:
+    Game &game;
     Ui::mapwindow *ui;
     QPixmap backgroundPixmap;
     QMap<QString, QString> neshan;

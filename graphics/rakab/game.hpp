@@ -21,16 +21,12 @@ public:
     void setPlayers(const std::vector<std::string>&, const std::vector<int>&);
     Player& currentPlayer();
     void nextTurn();
-
-
-signals:
-    void turnChanged(int playerIndex);
-
-private:
+    int getPlayerCount() const;
+    const Player& getPlayer(int);
     void handCardsToPLayers();
     void fillMainDeck();
     void shuffleDeck();
-    int getHighestYellowCardInGame();
+    int getHighestYellowCardInGame() const;
     void updateCardHoldersCount();
     void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
     void updateTotalScore();
@@ -38,6 +34,13 @@ private:
     void endAllEffects();
     void startAllEffects();
     void refreshEffects();
+
+
+
+signals:
+    void turnChanged(int playerIndex);
+
+private:
 
 
 private:
