@@ -6,7 +6,8 @@
 playground::playground(Game &game, const std::string province, QWidget *parent) :
     QWidget(parent),
     game(game),  // Ensure this matches the constructor declaration
-    ui(new Ui::playground)
+    ui(new Ui::playground) ,
+    currentPlayerIndex(0)
 {
     ui->setupUi(this);
 
@@ -29,7 +30,7 @@ playground::playground(Game &game, const std::string province, QWidget *parent) 
 
     // Set the size policy and fixed size for the playground widget
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    setFixedSize(800, 600); // Adjust the size as needed
+    //setFixedSize(800, 600); // Adjust the size as needed
 }
 
 playground::~playground()
@@ -58,14 +59,17 @@ void playground::initializeCardImages() {
 
 void playground::setupPlayground(int numPlayers) {
     // Ensure number of players is between 3 and 6
-    numPlayers = qMax(3, qMin(6, numPlayers));
+    // numPlayers = qMax(3, qMin(6, numPlayers));
+
+    // for now we will work with 3 and 4
+    numPlayers = qMax(3, qMin(4, numPlayers));
 
     // Create the central table layout
     tableLayout = new QVBoxLayout();
     QWidget *tableWidget = new QWidget();
     tableWidget->setLayout(tableLayout);
     playgroundLayout->addWidget(tableWidget, 1, 1); // Center of the grid
-
+    /*
     // Create player layouts and position them around the table
     for (int i = 0; i < numPlayers; ++i) {
         QHBoxLayout *playerLayout = new QHBoxLayout();
@@ -96,52 +100,60 @@ void playground::setupPlayground(int numPlayers) {
             default:
                 break;
         }
-    }
+        */
+
+
+    playerLayouts.append(ui->player1_hand);
+    playerLayouts.append(ui->player2_hand);
+    playerLayouts.append(ui->player3_hand);
+    playerLayouts.append(ui->player4_hand);
+
 }
 
-void playground::addCardToTable(const QString &cardName) {
-    QString cardPath = cardImages[cardName];
-    QLabel *cardLabel = new QLabel();
-    QPixmap pixmap(cardPath);
-    pixmap = pixmap.scaled(100, 150, Qt::KeepAspectRatio); // Set a fixed size for cards
-    cardLabel->setPixmap(pixmap);
-    tableLayout->addWidget(cardLabel);
-}
 
-void playground::removeCardFromTable(QLabel *cardLabel) {
-    tableLayout->removeWidget(cardLabel);
-    delete cardLabel;
-}
-
-void playground::addCardToPlayer(int playerIndex, const QString &cardName) {
-    if (playerIndex < 0 || playerIndex >= playerLayouts.size()) return;
-
-    QString cardPath = cardImages[cardName];
-    QLabel *cardLabel = new QLabel();
-    QPixmap pixmap(cardPath);
-    pixmap = pixmap.scaled(100, 150, Qt::KeepAspectRatio); // Set a fixed size for cards
-    cardLabel->setPixmap(pixmap);
-    playerLayouts[playerIndex]->addWidget(cardLabel);
-}
-
-void playground::setupPlayerCards(const Player &player, int playerIndex) {
-    // Setup yellow cards in hand
-    for (const auto &card : player.getYellowHand()) {
-        addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
+    void playground::addCardToTable(const QString &cardName) {
+        QString cardPath = cardImages[cardName];
+        QLabel *cardLabel = new QLabel();
+        QPixmap pixmap(cardPath);
+        pixmap = pixmap.scaled(100, 150, Qt::KeepAspectRatio); // Set a fixed size for cards
+        cardLabel->setPixmap(pixmap);
+        tableLayout->addWidget(cardLabel);
     }
 
-    // Setup yellow cards on table
-    for (const auto &card : player.getYellowOnTable()) {
-        addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
+    void playground::removeCardFromTable(QLabel *cardLabel) {
+        tableLayout->removeWidget(cardLabel);
+        delete cardLabel;
     }
 
-    // Setup purple cards in hand
-    for (const auto &card : player.getPurpleHand()) {
-        addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
+    void playground::addCardToPlayer(int playerIndex, const QString &cardName) {
+        if (playerIndex < 0 || playerIndex >= playerLayouts.size()) return;
+
+        QString cardPath = cardImages[cardName];
+        QLabel *cardLabel = new QLabel();
+        QPixmap pixmap(cardPath);
+        pixmap = pixmap.scaled(50, 75, Qt::KeepAspectRatio); // Set a fixed size for cards
+        cardLabel->setPixmap(pixmap.scaled(50, 75, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        playerLayouts[playerIndex]->addWidget(cardLabel);
     }
 
-    // Setup purple cards on table
-    for (const auto &card : player.getPurpleOnTable()) {
-        addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
+    void playground::setupPlayerCards(const Player &player, int playerIndex) {
+        // Setup yellow cards in hand
+        for (const auto &card : player.getYellowHand()) {
+            addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
+        }
+
+        // Setup yellow cards on table
+        for (const auto &card : player.getYellowOnTable()) {
+            addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
+        }
+
+        // Setup purple cards in hand
+        for (const auto &card : player.getPurpleHand()) {
+            addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
+        }
+
+        // Setup purple cards on table
+        for (const auto &card : player.getPurpleOnTable()) {
+            addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
+        }
     }
-}

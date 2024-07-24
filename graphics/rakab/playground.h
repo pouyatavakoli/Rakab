@@ -8,6 +8,8 @@
 #include <QLabel>
 #include <QString>
 #include <memory>
+#include <QSignalMapper>
+
 #include "game.hpp"
 
 namespace Ui {
@@ -27,8 +29,10 @@ private:
     Game &game;
     QGridLayout *playgroundLayout;
     QVBoxLayout *tableLayout;
-    QList<QHBoxLayout *> playerLayouts;
+    QList<QLayout *> playerLayouts;
     QMap<QString, QString> cardImages;
+    int currentPlayerIndex;
+    QSignalMapper *signalMapper;
 
     void initializeCardImages();
     void setupPlayground(int numPlayers);
@@ -36,6 +40,7 @@ private:
     void removeCardFromTable(QLabel *cardLabel);
     void addCardToPlayer(int playerIndex, const QString &cardName);
     void setupPlayerCards(const Player &player, int playerIndex);
+    void nextTurn();
 };
 
 #endif // PLAYGROUND_H
