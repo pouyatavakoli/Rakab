@@ -4,13 +4,14 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QVBoxLayout>
-#include <QMap>
+#include <QHBoxLayout>
+#include <QSignalMapper>
 #include <QLabel>
 #include <QString>
-#include <memory>
-#include <QSignalMapper>
-
+#include <QMap>
+#include <QPixmap>
 #include "game.hpp"
+#include "cardlabel.h"
 
 namespace Ui {
 class playground;
@@ -24,20 +25,23 @@ public:
     explicit playground(Game &game, const std::string province, QWidget *parent = nullptr);
     ~playground();
 
+private slots:
+    void onCardClicked(QWidget *cardLabel);
+
 private:
     Ui::playground *ui;
     Game &game;
     QGridLayout *playgroundLayout;
     QVBoxLayout *tableLayout;
-    QList<QLayout *> playerLayouts;
+    QList<QLayout*> playerLayouts;
+    QSignalMapper *signalMapper;
     QMap<QString, QString> cardImages;
     int currentPlayerIndex;
-    QSignalMapper *signalMapper;
 
     void initializeCardImages();
     void setupPlayground(int numPlayers);
     void addCardToTable(const QString &cardName);
-    void removeCardFromTable(QLabel *cardLabel);
+    void removeCardFromTable(CardLabel *cardLabel);
     void addCardToPlayer(int playerIndex, const QString &cardName);
     void setupPlayerCards(const Player &player, int playerIndex);
     void nextTurn();
