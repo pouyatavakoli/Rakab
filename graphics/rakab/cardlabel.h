@@ -2,21 +2,17 @@
 #define CARDLABEL_H
 
 #include <QLabel>
-#include <QWidget>
-#include <QMouseEvent>
 
-class CardLabel : public QLabel
-{
+class CardLabel : public QLabel {
     Q_OBJECT
-
 public:
     explicit CardLabel(QWidget *parent = nullptr);
 
 signals:
-    void clicked();
+    void clicked();  // Signal for card click
 
 protected:
-    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 };
 
 #endif // CARDLABEL_H

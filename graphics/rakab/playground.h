@@ -3,48 +3,49 @@
 
 #include <QWidget>
 #include <QGridLayout>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QSignalMapper>
 #include <QLabel>
-#include <QString>
+#include <QVBoxLayout>
 #include <QMap>
-#include <QPixmap>
+#include <QVector>
+
 #include "game.hpp"
-#include "cardlabel.h"
 
 namespace Ui {
 class playground;
 }
 
-class playground : public QWidget
-{
+class playground : public QWidget {
     Q_OBJECT
 
 public:
-    explicit playground(Game &game, const std::string province, QWidget *parent = nullptr);
+    explicit playground(Game &game, const std::string &province, QWidget *parent = nullptr);
     ~playground();
 
 private slots:
-    void onCardClicked(QWidget *cardLabel);
+    void handleCardClick(const QString &cardName, int playerIndex, QLabel *cardLabel);
+    void onCardPlayed(int playerIndex, const QString &cardName);
+    void onCardCannotBePlayed(int playerIndex, const QString &cardName);
+    void onUpdateUI();
 
 private:
     Ui::playground *ui;
     Game &game;
     QGridLayout *playgroundLayout;
     QVBoxLayout *tableLayout;
-    QList<QLayout*> playerLayouts;
-    QSignalMapper *signalMapper;
+    QVector<QLayout*> playerLayouts;
     QMap<QString, QString> cardImages;
     int currentPlayerIndex;
 
     void initializeCardImages();
     void setupPlayground(int numPlayers);
     void addCardToTable(const QString &cardName);
-    void removeCardFromTable(CardLabel *cardLabel);
+    void removeCardFromTable(QLabel *cardLabel);
     void addCardToPlayer(int playerIndex, const QString &cardName);
+    void removeCardFromPlayer(int playerIndex, QLabel *cardLabel);
     void setupPlayerCards(const Player &player, int playerIndex);
-    void nextTurn();
+
+    // Event filter to handle clicks
+    bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 #endif // PLAYGROUND_H

@@ -43,6 +43,10 @@ public:
     int getAge() const;
     std::string getName() const;
 
+    int playPurpleCard(const std::string &);
+    bool playYellowCard(const std::string &);
+    int PlayThisCard(const std::string);
+
 private:
     int age;
     std::string name;

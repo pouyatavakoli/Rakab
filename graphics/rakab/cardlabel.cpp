@@ -1,13 +1,14 @@
 #include "cardlabel.h"
+#include <QMouseEvent>
+#include <QDebug>
 
-CardLabel::CardLabel(QWidget *parent) : QLabel(parent)
-{
-}
+CardLabel::CardLabel(QWidget *parent) : QLabel(parent) {}
 
-void CardLabel::mousePressEvent(QMouseEvent *event)
-{
+void CardLabel::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
-        emit clicked();
+        qDebug() << "CardLabel clicked.";
+        emit clicked();  // Emit clicked signal
     }
-    QLabel::mousePressEvent(event);
+    QLabel::mouseReleaseEvent(event);  // Call base class handler
 }
+

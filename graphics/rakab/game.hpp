@@ -19,7 +19,6 @@ public:
     Game(QObject *parent = nullptr);
     void setPlayersCount(int);
     void setPlayers(const std::vector<std::string>&, const std::vector<int>&);
-    Player& currentPlayer();
     void nextTurn();
     int getPlayerCount() const;
     const Player& getPlayer(int);
@@ -34,11 +33,14 @@ public:
     void endAllEffects();
     void startAllEffects();
     void refreshEffects();
-
+    bool playCard(int playerIndex, const std::string& cardName);
 
 
 signals:
     void turnChanged(int playerIndex);
+    void cardPlayed(int playerIndex, const QString &cardName);
+    void cardCannotBePlayed(int playerIndex, const QString &cardName);
+    void updateUI();
 
 private:
 

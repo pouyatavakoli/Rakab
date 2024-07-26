@@ -1,4 +1,5 @@
 #include "player.h"
+#include "purplecard.h"
 
 // Default constructor
 Player::Player(QObject *parent) : QObject(parent), age(0) {}
@@ -117,3 +118,187 @@ bool Player::getCanPutNeshaneJang() const
 {
     return canPutNeshaneJang;
 }
+
+int Player::PlayThisCard(const std::string userChoice)
+{
+    if (userChoice == "pass")
+    {
+//        updatePlayerEligibility(false);
+        return -1;
+    }
+
+    // if (userChoice.substr(4) == "help")
+    // {
+    //     return -10 ; // show help
+    // }
+    if (userChoice == "help")
+    {
+        return -10; // show help
+    }
+    else
+    {
+        // Check if the user choice matches any card name
+        int situation{0};
+        bool cardFound = false;
+        for (int i = 1; i <= 10; ++i)
+        {
+            if (i == 7 || i == 8 || i == 9)
+            {
+                continue;
+            }
+            std::string cardName = "Yellow" + std::to_string(i);
+            if (userChoice == cardName)
+            {
+                cardFound = true;
+                if (playYellowCard(cardName))
+                {
+                    return 1; // card card has been played
+                }
+            }
+        }
+
+        // If the user choice is not a Yellow card, try to play a Purple card
+        if (!cardFound)
+        {
+            situation = playPurpleCard(userChoice);
+            if (situation == 0)
+            {
+                return 0; // nothing founded
+            }
+            else if (situation == 1 || situation == 3)
+            {
+                return 1; // Matarsak or TablZan or ShirDokht or ShirZan has been played
+            }
+            else if (situation == 2)
+            {
+                return 2; // Winter or spring should be played
+            }
+            else if (situation == 4)
+            {
+                return 4; // the card can not be used
+            }
+            else if (situation == 5)
+            {
+                return 5; // RishSefid should be played
+            }
+            else if (situation == 6)
+            {
+                return 6; // ParchamDar should be played
+            }
+        }
+        return 0;
+    }
+}
+
+bool Player::playYellowCard(const std::string &cardName)
+{
+    auto it = std::find_if(yellowHand.begin(), yellowHand.end(), [&cardName](const std::shared_ptr<Card> &card)
+                           { return card->getName() == cardName; });
+    if (it != yellowHand.end())
+    {
+        std::shared_ptr<Card> playedCard = *it; // Store the card to be played
+        yellowOnTable.push_back(playedCard); // Add the card to the on-table vector
+        playedCards.push_back(playedCard);
+        yellowHand.erase(it); // Remove the card from the hand after playing
+        yellowHand.shrink_to_fit();
+        return true;
+    }
+    return false;
+}
+
+int Player::playPurpleCard(const std::string &cardName)
+{
+
+    // TODO: add if else for each purple card name
+    auto it = std::find_if(purpleHand.begin(), purpleHand.end(), [&cardName](const std::shared_ptr<Card> &card)
+                           { return card->getName() == cardName; });
+    if (it != purpleHand.end())
+    {
+        std::shared_ptr<Card> playedCard = *it; // Store the card to be played
+        std::shared_ptr<PurpleCard> purpleCard = std::dynamic_pointer_cast<PurpleCard>(playedCard);
+        if (purpleCard)
+        {
+            if (playedCard->getName() == "Matarsak")
+            {
+                if (!yellowOnTable.empty())
+                {
+                    purpleCard->startEffect(*this);
+                    purpleOnTable.push_back(playedCard);
+                    playedCards.push_back(playedCard);
+                    purpleHand.erase(it);
+                    purpleHand.shrink_to_fit();
+                    return 1; // we found Matarsak
+
+                }
+                else
+                {
+                    return 4; // The card can not be played
+                }
+            }
+            else if (playedCard->getName() == "TablZan")
+            {
+                if (!usedTablZan)
+                {
+                    // purpleCard->startEffect(*this);
+                    purpleOnTable.push_back(playedCard);
+                    playedCards.push_back(playedCard);
+                    purpleHand.erase(it);
+                    purpleHand.shrink_to_fit();
+                    usedTablZan = true;
+                    return 1; // we found TablZan
+                }
+                return 4; // The card can not be played
+            }
+
+            else if (playedCard->getName() == "Winter" || playedCard->getName() == "Spring")
+            {
+                purpleOnTable.push_back(playedCard);
+                playedCards.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 2; // we found Winter or Spring
+            }
+            else if (playedCard->getName() == "RishSefid")
+            {
+                // purpleCard->startEffect();
+                purpleOnTable.push_back(playedCard);
+                playedCards.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 5; // we found RishSefid
+            }
+            else if (playedCard->getName() == "ShirDokht")
+            {
+                // purpleCard->startEffect();
+                purpleOnTable.push_back(playedCard);
+                playedCards.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 3; // we found ShirDokht
+            }
+            else if (playedCard->getName() == "ShirZan")
+            {
+                // purpleCard->startEffect();
+                ++countShirZan;
+                purpleOnTable.push_back(playedCard);
+                playedCards.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 3; // we found ShirZan
+            }
+            else if (playedCard->getName() == "ParchamDar")
+            {
+                // purpleCard->startEffect();
+                purpleOnTable.push_back(playedCard);
+                playedCards.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 6; // we found ParchamDar
+            }
+        }
+    }
+    return 0;
+}
+
+
+

@@ -1,43 +1,42 @@
 #include "playground.h"
 #include "ui_playground.h"
-#include "cardlabel.h"
+#include <QPixmap>
+#include <QDebug>
+#include <QEvent>
+#include <QMouseEvent>
 
-playground::playground(Game &game, const std::string province, QWidget *parent) :
+playground::playground(Game &game, const std::string &province, QWidget *parent) :
     QWidget(parent),
     game(game),
     ui(new Ui::playground),
-    currentPlayerIndex(0) // Start with the first player
+    currentPlayerIndex(0) // Corrected to 0 for indexing
 {
     ui->setupUi(this);
 
-    // Create the main layout as a grid
     playgroundLayout = new QGridLayout(this);
-
-    // Initialize card images
     initializeCardImages();
     game.fillMainDeck();
     game.shuffleDeck();
     game.handCardsToPLayers();
-
-    // Setup the playground with the players around the table
     setupPlayground(game.getPlayerCount());
 
-    // Setup cards for each player
     for (int i = 0; i < game.getPlayerCount(); ++i) {
         setupPlayerCards(game.getPlayer(i), i);
     }
 
-    // Set the size policy and fixed size for the playground widget
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    setFixedSize(800, 600); // Adjust the size as needed
+    connect(&game, &Game::cardPlayed, this, &playground::onCardPlayed);
+    connect(&game, &Game::cardCannotBePlayed, this, &playground::onCardCannotBePlayed);
+    connect(&game, &Game::updateUI, this, &playground::onUpdateUI);
 
-    // Initialize signal mapper
-    signalMapper = new QSignalMapper(this);
-    connect(signalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(onCardClicked(QWidget*)));
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    // Install event filter
+    for (QObject *child : findChildren<QObject*>()) {
+            child->installEventFilter(this);
+        }
 }
 
-playground::~playground()
-{
+playground::~playground() {
     delete ui;
 }
 
@@ -61,14 +60,12 @@ void playground::initializeCardImages() {
 }
 
 void playground::setupPlayground(int numPlayers) {
-    // Ensure number of players is between 3 and 4 for now
     numPlayers = qMax(3, qMin(4, numPlayers));
 
-    // Create the central table layout
     tableLayout = new QVBoxLayout();
     QWidget *tableWidget = new QWidget();
     tableWidget->setLayout(tableLayout);
-    playgroundLayout->addWidget(tableWidget, 1, 1); // Center of the grid
+    playgroundLayout->addWidget(tableWidget, 1, 1);
 
     playerLayouts.append(ui->player1_hand);
     playerLayouts.append(ui->player2_hand);
@@ -76,63 +73,109 @@ void playground::setupPlayground(int numPlayers) {
     playerLayouts.append(ui->player4_hand);
 }
 
+void playground::setupPlayerCards(const Player &player, int playerIndex) {
+    for (const auto &card : player.getYellowHand()) {
+        addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
+    }
+
+    for (const auto &card : player.getPurpleHand()) {
+        addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
+    }
+}
+
+void playground::handleCardClick(const QString &cardName, int playerIndex, QLabel *cardLabel) {
+    qDebug() << "Card clicked:" << cardName << "by player" << playerIndex;
+    if (cardName.isEmpty()) {
+        qDebug() << "Card name is empty!";
+        return;
+    }
+
+    if (playerIndex < 0 || playerIndex >= playerLayouts.size()) {
+        qDebug() << "Invalid player index!";
+        return;
+    }
+
+    if (game.playCard(playerIndex, cardName.toStdString())) {
+        qDebug() << "Card successfully played:" << cardName;
+        removeCardFromPlayer(playerIndex, cardLabel);
+        addCardToTable(cardName);
+    } else {
+        qDebug() << "Failed to play card:" << cardName;
+    }
+}
+
+void playground::onCardPlayed(int playerIndex, const QString &cardName) {
+    qDebug() << "Card played by player" << playerIndex << ":" << cardName;
+    // Handle UI update for card played
+}
+
+void playground::onCardCannotBePlayed(int playerIndex, const QString &cardName) {
+    qDebug() << "Card cannot be played by player" << playerIndex << ":" << cardName;
+    // Handle UI update for card cannot be played
+}
+
+void playground::onUpdateUI() {
+    // Update the UI based on the game state
+}
+
 void playground::addCardToTable(const QString &cardName) {
     QString cardPath = cardImages[cardName];
-    CardLabel *cardLabel = new CardLabel();
+    QLabel *cardLabel = new QLabel(this); // Use QLabel directly
     QPixmap pixmap(cardPath);
-    pixmap = pixmap.scaled(100, 150, Qt::KeepAspectRatio); // Set a fixed size for cards
+    pixmap = pixmap.scaled(100, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     cardLabel->setPixmap(pixmap);
+    cardLabel->setFixedSize(pixmap.size());
     tableLayout->addWidget(cardLabel);
 }
 
-void playground::removeCardFromTable(CardLabel *cardLabel) {
+void playground::removeCardFromTable(QLabel *cardLabel) {
     tableLayout->removeWidget(cardLabel);
-    delete cardLabel;
+    cardLabel->deleteLater();
 }
 
 void playground::addCardToPlayer(int playerIndex, const QString &cardName) {
     if (playerIndex < 0 || playerIndex >= playerLayouts.size()) return;
 
     QString cardPath = cardImages[cardName];
-    CardLabel *cardLabel = new CardLabel();
+    QLabel *cardLabel = new QLabel(this);
+
     QPixmap pixmap(cardPath);
-    pixmap = pixmap.scaled(50, 75, Qt::KeepAspectRatio); // Set a fixed size for cards
-    cardLabel->setPixmap(pixmap.scaled(50, 75, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    cardLabel->setObjectName(QString::number(playerIndex)); // Store player index in object name
-    connect(cardLabel, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    signalMapper->setMapping(cardLabel, cardLabel);
+    pixmap = pixmap.scaled(50, 75, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    cardLabel->setPixmap(pixmap);
+
+    cardLabel->setObjectName(cardName); // Use cardName for identification
+    cardLabel->setProperty("playerIndex", playerIndex); // Store playerIndex as property
+
+    // Install event filter directly on the QLabel
+    cardLabel->installEventFilter(this);
+    qDebug() << "installEventFilter";
 
     playerLayouts[playerIndex]->addWidget(cardLabel);
+    cardLabel->show(); // Ensure the label is shown
 }
 
-void playground::setupPlayerCards(const Player &player, int playerIndex) {
-    // Setup yellow cards in hand
-    for (const auto &card : player.getYellowHand()) {
-        addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
-    }
 
-    // Setup yellow cards on table
-    for (const auto &card : player.getYellowOnTable()) {
-        addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
-    }
-
-    // Setup purple cards in hand
-    for (const auto &card : player.getPurpleHand()) {
-        addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
-    }
-
-    // Setup purple cards on table
-    for (const auto &card : player.getPurpleOnTable()) {
-        addCardToPlayer(playerIndex, QString::fromStdString(card->getName()));
-    }
+void playground::removeCardFromPlayer(int playerIndex, QLabel *cardLabel) {
+    playerLayouts[playerIndex]->removeWidget(cardLabel);
+    cardLabel->deleteLater();
 }
 
-void playground::onCardClicked(QWidget *cardLabel) {
-    int playerIndex = cardLabel->objectName().toInt();
-    if (playerIndex == currentPlayerIndex) {
-        CardLabel *label = qobject_cast<CardLabel*>(cardLabel);
-        if (label) {
-            removeCardFromTable(label);
+bool playground::eventFilter(QObject *obj, QEvent *event) {
+    if (event->type() == QEvent::MouseButtonRelease) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->button() == Qt::LeftButton) {
+            qDebug() << "Object type:" << obj->metaObject()->className(); // Log the type of the object
+            QLabel *label = qobject_cast<QLabel*>(obj);
+            if (label) {
+                QString cardName = label->objectName();
+                int playerIndex = label->property("playerIndex").toInt();
+                qDebug() << "Event filter detected click on card:" << cardName << "from player" << playerIndex;
+                handleCardClick(cardName, playerIndex, label);
+                return true; // Event handled
+            } else {
+                qDebug() << "Not a QLabel!";
+            }
         }
     }
+    return QWidget::eventFilter(obj, event); // Pass the event to the base class
 }

@@ -39,10 +39,7 @@ void Game::setPlayers(const std::vector<std::string>& names, const std::vector<i
         players.push_back(player);
     }
 }
-// Returns the current player
-Player& Game::currentPlayer() {
-    return *players[currentPlayerIndex];
-}
+
 
 // Advances to the next turn
 void Game::nextTurn() {
@@ -263,5 +260,18 @@ void Game::reorderPurpleOnTable()
 
         //  set the sorted cards back to the player
         player->setPurpleOnTable(purplesOnTable);
+    }
+}
+
+bool Game::playCard(int playerIndex, const std::string &cardName) {
+    Player& player = *players[playerIndex];
+    int result = player.PlayThisCard(cardName);
+
+    if (result == 1) {
+        emit cardPlayed(playerIndex, QString::fromStdString(cardName));
+        return true;
+    } else {
+        emit cardCannotBePlayed(playerIndex, QString::fromStdString(cardName));
+        return false;
     }
 }
