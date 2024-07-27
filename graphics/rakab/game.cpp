@@ -275,3 +275,6 @@ bool Game::playCard(int playerIndex, const std::string &cardName) {
         return false;
     }
 }
+std::vector<std::shared_ptr<Card>> getMainDeck(){
+
+}

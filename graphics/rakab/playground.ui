@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1112</width>
-    <height>802</height>
+    <width>1089</width>
+    <height>783</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -107,6 +107,19 @@
    </property>
    <property name="text">
     <string>2</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="province_label">
+   <property name="geometry">
+    <rect>
+     <x>1000</x>
+     <y>10</y>
+     <width>67</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
    </property>
   </widget>
  </widget>

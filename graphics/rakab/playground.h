@@ -27,9 +27,12 @@ private slots:
     void onCardCannotBePlayed(int playerIndex, const QString &cardName);
     void onUpdateUI();
 
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
 private:
-    Ui::playground *ui;
     Game &game;
+    Ui::playground *ui;
     QGridLayout *playgroundLayout;
     QVBoxLayout *tableLayout;
     QVector<QLayout*> playerLayouts;
@@ -44,8 +47,6 @@ private:
     void removeCardFromPlayer(int playerIndex, QLabel *cardLabel);
     void setupPlayerCards(const Player &player, int playerIndex);
 
-    // Event filter to handle clicks
-    bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 #endif // PLAYGROUND_H

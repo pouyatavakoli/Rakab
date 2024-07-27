@@ -12,7 +12,7 @@ playground::playground(Game &game, const std::string &province, QWidget *parent)
     currentPlayerIndex(0) // Corrected to 0 for indexing
 {
     ui->setupUi(this);
-
+    ui->province_label->setText(QString::fromStdString(province));
     playgroundLayout = new QGridLayout(this);
     initializeCardImages();
     game.fillMainDeck();
@@ -71,6 +71,10 @@ void playground::setupPlayground(int numPlayers) {
     playerLayouts.append(ui->player2_hand);
     playerLayouts.append(ui->player3_hand);
     playerLayouts.append(ui->player4_hand);
+
+    if (numPlayers == 3){
+        ui->player4_label->setText("empty");
+    }
 }
 
 void playground::setupPlayerCards(const Player &player, int playerIndex) {
@@ -126,6 +130,9 @@ void playground::addCardToTable(const QString &cardName) {
     cardLabel->setPixmap(pixmap);
     cardLabel->setFixedSize(pixmap.size());
     tableLayout->addWidget(cardLabel);
+    // Install event filter directly on the QLabel
+    cardLabel->installEventFilter(this);
+    qDebug() << "installEventFilter on table" ;
 }
 
 void playground::removeCardFromTable(QLabel *cardLabel) {
@@ -148,7 +155,7 @@ void playground::addCardToPlayer(int playerIndex, const QString &cardName) {
 
     // Install event filter directly on the QLabel
     cardLabel->installEventFilter(this);
-    qDebug() << "installEventFilter";
+    qDebug() << "installEventFilter on player" ;
 
     playerLayouts[playerIndex]->addWidget(cardLabel);
     cardLabel->show(); // Ensure the label is shown
@@ -161,21 +168,16 @@ void playground::removeCardFromPlayer(int playerIndex, QLabel *cardLabel) {
 }
 
 bool playground::eventFilter(QObject *obj, QEvent *event) {
-    if (event->type() == QEvent::MouseButtonRelease) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        if (mouseEvent->button() == Qt::LeftButton) {
-            qDebug() << "Object type:" << obj->metaObject()->className(); // Log the type of the object
-            QLabel *label = qobject_cast<QLabel*>(obj);
-            if (label) {
-                QString cardName = label->objectName();
-                int playerIndex = label->property("playerIndex").toInt();
-                qDebug() << "Event filter detected click on card:" << cardName << "from player" << playerIndex;
-                handleCardClick(cardName, playerIndex, label);
-                return true; // Event handled
-            } else {
-                qDebug() << "Not a QLabel!";
-            }
+    if (event->type() == QEvent::MouseButtonPress) {
+        QLabel *label = qobject_cast<QLabel *>(obj);
+        if (label) {
+            QString cardName = label->property("cardName").toString();
+            qDebug() << "Card clicked:" << cardName; // Log the card name
         }
+        else {
+            qDebug() << "can not click but i know you clicked";
+        }
+
     }
-    return QWidget::eventFilter(obj, event); // Pass the event to the base class
+    return QObject::eventFilter(obj, event); // Pass the event on to the parent class
 }

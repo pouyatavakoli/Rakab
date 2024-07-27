@@ -1,15 +1,17 @@
 #ifndef CARD_H
 #define CARD_H
 
-#include <QObject>
+#include <QLabel>
+#include <QMouseEvent>
+#include <QString>
 #include <string>
 
-class Card : public QObject
+class Card : public QLabel
 {
     Q_OBJECT
 
 public:
-    explicit Card(int numberOnTheCardVal, const std::string &typeVal, const std::string &nameVal, QObject *parent = nullptr);
+    explicit Card(int numberOnTheCardVal, const std::string &typeVal, const std::string &nameVal, QWidget *parent = nullptr);
 
     virtual std::string getName() const = 0;
     virtual std::string getType() const = 0;
@@ -18,6 +20,12 @@ public:
     virtual void setPoints(int pointsVal) = 0;
 
 protected:
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
+signals:
+    void clicked();  // Signal for card click
+
+private:
     std::string name;
     std::string type;
     int numberOnTheCard;
