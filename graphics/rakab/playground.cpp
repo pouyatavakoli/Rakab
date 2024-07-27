@@ -1,5 +1,6 @@
 #include "playground.h"
 #include "ui_playground.h"
+#include "card.h"
 #include <QPixmap>
 #include <QDebug>
 #include <QEvent>
@@ -18,6 +19,7 @@ playground::playground(Game &game, const std::string &province, QWidget *parent)
     game.fillMainDeck();
     game.shuffleDeck();
     game.handCardsToPLayers();
+    auto mainDeck = game.getMainDeck();
     setupPlayground(game.getPlayerCount());
 
     for (int i = 0; i < game.getPlayerCount(); ++i) {
@@ -87,7 +89,7 @@ void playground::setupPlayerCards(const Player &player, int playerIndex) {
     }
 }
 
-void playground::handleCardClick(const QString &cardName, int playerIndex, QLabel *cardLabel) {
+void playground::handleCardClick(const QString &cardName, int playerIndex , Card *cardLabel ) {
     qDebug() << "Card clicked:" << cardName << "by player" << playerIndex;
     if (cardName.isEmpty()) {
         qDebug() << "Card name is empty!";
@@ -122,20 +124,21 @@ void playground::onUpdateUI() {
     // Update the UI based on the game state
 }
 
+// dont make new cards handle all cards in these with pointers and use the main deck
 void playground::addCardToTable(const QString &cardName) {
-    QString cardPath = cardImages[cardName];
-    QLabel *cardLabel = new QLabel(this); // Use QLabel directly
-    QPixmap pixmap(cardPath);
-    pixmap = pixmap.scaled(100, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    cardLabel->setPixmap(pixmap);
-    cardLabel->setFixedSize(pixmap.size());
-    tableLayout->addWidget(cardLabel);
-    // Install event filter directly on the QLabel
-    cardLabel->installEventFilter(this);
-    qDebug() << "installEventFilter on table" ;
+    Card *cardLabel = new Card();
+    cardLabel->setText(cardName);  // For example, set card name as text
+    cardLabel->setPixmap(QPixmap(cardImages[cardName]));  // Use your card image map
+
+    connect(cardLabel, &CardLabel::clicked, [this, cardName]() {
+        handleCardClick(cardName, currentPlayerIndex , cardLabel );  // Handle card click
+    });
+
+    // Add cardLabel to layout and update UI...
+    playgroundLayout->addWidget(cardLabel);
 }
 
-void playground::removeCardFromTable(QLabel *cardLabel) {
+void playground::removeCardFromTable(Card *cardLabel) {
     tableLayout->removeWidget(cardLabel);
     cardLabel->deleteLater();
 }
@@ -162,7 +165,7 @@ void playground::addCardToPlayer(int playerIndex, const QString &cardName) {
 }
 
 
-void playground::removeCardFromPlayer(int playerIndex, QLabel *cardLabel) {
+void playground::removeCardFromPlayer(int playerIndex, Card *cardLabel) {
     playerLayouts[playerIndex]->removeWidget(cardLabel);
     cardLabel->deleteLater();
 }

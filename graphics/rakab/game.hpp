@@ -34,6 +34,7 @@ public:
     void startAllEffects();
     void refreshEffects();
     bool playCard(int playerIndex, const std::string& cardName);
+    std::vector<std::shared_ptr<Card>> getMainDeck();
 
 
 signals:

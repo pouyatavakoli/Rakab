@@ -7,8 +7,11 @@
 #include <QVBoxLayout>
 #include <QMap>
 #include <QVector>
+#include <QMouseEvent>
+#include <QDebug>
 
 #include "game.hpp"
+#include "cardlabel.h"  // Include CardLabel header
 
 namespace Ui {
 class playground;
@@ -22,7 +25,7 @@ public:
     ~playground();
 
 private slots:
-    void handleCardClick(const QString &cardName, int playerIndex, QLabel *cardLabel);
+    void handleCardClick(const QString &cardName, int playerIndex , Card *cardLabel);
     void onCardPlayed(int playerIndex, const QString &cardName);
     void onCardCannotBePlayed(int playerIndex, const QString &cardName);
     void onUpdateUI();
@@ -42,11 +45,10 @@ private:
     void initializeCardImages();
     void setupPlayground(int numPlayers);
     void addCardToTable(const QString &cardName);
-    void removeCardFromTable(QLabel *cardLabel);
+    void removeCardFromTable(Card *cardLabel);  // Change to CardLabel
     void addCardToPlayer(int playerIndex, const QString &cardName);
-    void removeCardFromPlayer(int playerIndex, QLabel *cardLabel);
+    void removeCardFromPlayer(int playerIndex, Card *cardLabel);  // Change to CardLabel
     void setupPlayerCards(const Player &player, int playerIndex);
-
 };
 
 #endif // PLAYGROUND_H
