@@ -26,6 +26,7 @@ public:
     void fillMainDeck();
     void shuffleDeck();
     int getHighestYellowCardInGame() const;
+    int getCurrentPlayerIndex() const;
     void updateCardHoldersCount();
     void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
     void updateTotalScore();
@@ -33,15 +34,18 @@ public:
     void endAllEffects();
     void startAllEffects();
     void refreshEffects();
-    bool playCard(int playerIndex, const std::string& cardName);
+    void playCard(int playerIndex, const std::string& cardName);
     std::vector<std::shared_ptr<Card>> getMainDeck();
+    void playPlayerCard(int playerIndex, const std::string& cardName);
+
+    std::vector<std::shared_ptr<Card>> getPlayerYellowHand(int playerIndex) const;
+    std::vector<std::shared_ptr<Card>> getPlayerPurpleHand(int playerIndex) const;
+    std::vector<std::shared_ptr<Card>> getPlayerYellowOnTable(int playerIndex) const;
+    std::vector<std::shared_ptr<Card>> getPlayerPurpleOnTable(int playerIndex) const;
 
 
 signals:
-    void turnChanged(int playerIndex);
-    void cardPlayed(int playerIndex, const QString &cardName);
-    void cardCannotBePlayed(int playerIndex, const QString &cardName);
-    void updateUI();
+    void cardPlayed(int playerIndex, const std::shared_ptr<Card>& card);
 
 private:
 

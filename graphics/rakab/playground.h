@@ -3,52 +3,31 @@
 
 #include <QWidget>
 #include <QGridLayout>
-#include <QLabel>
 #include <QVBoxLayout>
-#include <QMap>
-#include <QVector>
-#include <QMouseEvent>
-#include <QDebug>
-
+#include <QLabel>
+#include <memory>
+#include <vector>
 #include "game.hpp"
-#include "cardlabel.h"  // Include CardLabel header
+#include "card.h"
 
-namespace Ui {
-class playground;
-}
-
-class playground : public QWidget {
+class Playground : public QWidget {
     Q_OBJECT
 
 public:
-    explicit playground(Game &game, const std::string &province, QWidget *parent = nullptr);
-    ~playground();
-
-private slots:
-    void handleCardClick(const QString &cardName, int playerIndex , Card *cardLabel);
-    void onCardPlayed(int playerIndex, const QString &cardName);
-    void onCardCannotBePlayed(int playerIndex, const QString &cardName);
-    void onUpdateUI();
-
-protected:
-    bool eventFilter(QObject *obj, QEvent *event) override;
+    explicit Playground(Game& game,std::string province, QWidget *parent = nullptr);
+    void setupUI();
 
 private:
-    Game &game;
-    Ui::playground *ui;
-    QGridLayout *playgroundLayout;
-    QVBoxLayout *tableLayout;
-    QVector<QLayout*> playerLayouts;
-    QMap<QString, QString> cardImages;
-    int currentPlayerIndex;
+    Game& game;
+    QGridLayout* playgroundLayout;
+    QVBoxLayout* tableLayout;
+    QVector<QVBoxLayout*> playerLayouts;
 
-    void initializeCardImages();
-    void setupPlayground(int numPlayers);
-    void addCardToTable(const QString &cardName);
-    void removeCardFromTable(Card *cardLabel);  // Change to CardLabel
-    void addCardToPlayer(int playerIndex, const QString &cardName);
-    void removeCardFromPlayer(int playerIndex, Card *cardLabel);  // Change to CardLabel
-    void setupPlayerCards(const Player &player, int playerIndex);
+    void displayCards();
+    void updateUI();
+
+private slots:
+    void handleCardClick(Card* card);
 };
 
 #endif // PLAYGROUND_H

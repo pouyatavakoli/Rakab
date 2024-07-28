@@ -18,18 +18,22 @@ public:
     virtual int getNumberOnTheCard() const = 0;
     virtual int getPoints() const = 0;
     virtual void setPoints(int pointsVal) = 0;
+    virtual void setImage(const QString &);
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
+
+protected:
+    std::string name;
+    std::string type;
+    int numberOnTheCard;
+    int points;
 
 signals:
     void clicked();  // Signal for card click
 
 private:
-    std::string name;
-    std::string type;
-    int numberOnTheCard;
-    int points;
+
 };
 
 #endif // CARD_H
