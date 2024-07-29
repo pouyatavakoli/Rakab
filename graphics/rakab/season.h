@@ -8,7 +8,7 @@ class Season : public PurpleCard
     Q_OBJECT
 
 public:
-    Season(int numberOnTheCardVal, const std::string &nameVal, QObject *parent = nullptr);
+    Season(int numberOnTheCardVal, const std::string &nameVal, QWidget *parent = nullptr);
 
     // Override virtual functions from PurpleCard
     virtual std::string getName() const override = 0;

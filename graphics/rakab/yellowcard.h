@@ -8,7 +8,7 @@ class YellowCard : public Card
     Q_OBJECT
 
 public:
-    YellowCard(int numberOnTheCard, const std::string &nameVal, QObject *parent = nullptr);
+    YellowCard(int numberOnTheCard, const std::string &nameVal, QWidget *parent = nullptr);
 
     // Pure virtual functions to be implemented by derived classes
     virtual std::string getType() const override = 0;

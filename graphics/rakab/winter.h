@@ -8,7 +8,7 @@ class Winter : public Season
     Q_OBJECT
 
 public:
-    Winter(QObject *parent = nullptr);
+    Winter(QWidget *parent = nullptr);
 
     // Override virtual functions from Season
     std::string getName() const override;

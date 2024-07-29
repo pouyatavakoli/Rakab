@@ -8,7 +8,7 @@ class ParchamDar : public PurpleCard
     Q_OBJECT
 
 public:
-    ParchamDar(QObject *parent = nullptr);
+    ParchamDar(QWidget *parent = nullptr);
 
     // Override virtual functions from PurpleCard
     std::string getName() const override;

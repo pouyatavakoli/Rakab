@@ -180,6 +180,11 @@ int Game::getHighestYellowCardInGame() const
     return max;
 }
 
+int Game::getCurrentPlayerIndex() const
+{
+    return currentPlayerIndex ;
+}
+
 int Game::getPlayerCount() const
 {
     return playerCount;

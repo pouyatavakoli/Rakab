@@ -8,7 +8,7 @@ class ShahDokht : public PurpleCard
     Q_OBJECT
 
 public:
-    ShahDokht(QObject *parent = nullptr);
+    ShahDokht(QWidget *parent = nullptr);
 
 
     std::string getName() const override;

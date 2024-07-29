@@ -8,7 +8,7 @@ class ShirZan : public PurpleCard
     Q_OBJECT
 
 public:
-    ShirZan(QObject *parent = nullptr);
+    ShirZan(QWidget *parent = nullptr);
 
     // Override virtual functions from PurpleCard
     void startEffect() override;

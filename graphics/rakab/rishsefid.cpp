@@ -1,6 +1,6 @@
 #include "rishsefid.h"
 
-RishSefid::RishSefid(QObject *parent)
+RishSefid::RishSefid(QWidget *parent)
     : PurpleCard(0, "RishSefid", parent) // Initialize PurpleCard with default values
 {
     // Additional initialization specific to RishSefid if needed

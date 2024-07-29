@@ -1,6 +1,6 @@
 #include "yellow1.h"
 
-Yellow1::Yellow1(QObject *parent)
+Yellow1::Yellow1(QWidget *parent)
     : YellowCard(1, "Yellow1", parent)
 {
 }

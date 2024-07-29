@@ -1,6 +1,6 @@
 #include "spring.h"
 
-Spring::Spring(QObject *parent)
+Spring::Spring(QWidget *parent)
     : Season(0, "Spring", parent) // Initialize Season with default values
 {
     // Additional initialization specific to Spring if needed

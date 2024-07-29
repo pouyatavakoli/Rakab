@@ -1,6 +1,6 @@
 #include "shahdokht.h"
 
-ShahDokht::ShahDokht(QObject *parent)
+ShahDokht::ShahDokht(QWidget *parent)
     : PurpleCard(1, "ShahDokht", parent) // Initialize PurpleCard with default values
 {
     // Additional initialization specific to ShahDokht if needed

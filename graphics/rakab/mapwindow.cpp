@@ -222,7 +222,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                 qDebug() << "Dropped in area:" << areaName;
                 // ask to start battle in area
                 askToStartBattle(this , areaName);
-                Playground *pg = new Playground(game ,"BELLA");
+                Playground *pg = new Playground(game , areaName.toStdString());
                 pg->show();
                 this->hide();
 

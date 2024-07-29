@@ -8,7 +8,7 @@ class Spring : public Season
     Q_OBJECT
 
 public:
-    Spring(QObject *parent = nullptr);
+    Spring(QWidget *parent = nullptr);
 
     // Override virtual functions from Season
     std::string getName() const override;

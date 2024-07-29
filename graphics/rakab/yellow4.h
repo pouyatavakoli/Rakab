@@ -8,7 +8,7 @@ class Yellow4 : public YellowCard
     Q_OBJECT
 
 public:
-    Yellow4(QObject *parent = nullptr);
+    Yellow4(QWidget *parent = nullptr);
 
     std::string getName() const override;
     std::string getType() const override;

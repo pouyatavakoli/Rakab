@@ -1,6 +1,6 @@
 #include "parchamdar.h"
 
-ParchamDar::ParchamDar(QObject *parent)
+ParchamDar::ParchamDar(QWidget *parent)
     : PurpleCard(0, "ParchamDar", parent) // Initialize PurpleCard with default values
 {
     // Additional initialization specific to ParchamDar if needed

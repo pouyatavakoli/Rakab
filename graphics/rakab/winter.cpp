@@ -1,6 +1,6 @@
 #include "winter.h"
 
-Winter::Winter(QObject *parent)
+Winter::Winter(QWidget *parent)
     : Season(0, "Winter", parent) // Initialize Season with default values
 {
     // Additional initialization specific to Winter if needed

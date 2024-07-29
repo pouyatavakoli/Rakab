@@ -1,6 +1,6 @@
 #include "shirzan.h"
 
-ShirZan::ShirZan(QObject *parent)
+ShirZan::ShirZan(QWidget *parent)
     : PurpleCard(1, "ShirZan", parent) // Initialize PurpleCard with default values
 {
     // Additional initialization specific to ShirZan if needed

@@ -8,7 +8,7 @@ class RishSefid : public PurpleCard
     Q_OBJECT
 
 public:
-    RishSefid(QObject *parent = nullptr);
+    RishSefid(QWidget *parent = nullptr);
 
     // Override virtual functions from PurpleCard
     std::string getName() const override;
