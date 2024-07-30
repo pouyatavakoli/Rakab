@@ -276,16 +276,22 @@ void Game::reorderPurpleOnTable()
 }
 
 void Game::playPlayerCard(int playerIndex, const std::string& cardName) {
+    //qDebug() << "playing card for player";
     if (playerIndex < 0 || playerIndex >= players.size()) {
+        qDebug() << "invalid player index";
         return; // Invalid player index
     }
 
     Player* player = players[playerIndex];
+    qDebug() <<"playing card for" << QString::fromStdString(player->getName());
     int result = player->PlayThisCard(cardName);
 
     // Handle result and update game state
     if (result != -1) {
         nextTurn(); // Move to the next player's turn
+    }
+    if (result == 1){
+        qDebug() << "card played successfully";
     }
 }
 

@@ -15,6 +15,8 @@ void Card::mouseReleaseEvent(QMouseEvent *event) {
 void Card::setImage(const QString &imagePath)
 {
     QPixmap pixmap(imagePath);
-    this->setPixmap(pixmap);
+    QPixmap scaledPixmap = pixmap.scaled(50, 75, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    this->setPixmap(scaledPixmap);
 }
+
 

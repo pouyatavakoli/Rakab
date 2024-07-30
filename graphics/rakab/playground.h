@@ -23,18 +23,21 @@ public:
     explicit Playground(Game& game, std::string province, QWidget *parent = nullptr);
     void setupUI();
 
+
 private:
     Ui::playground *ui;
     Game& game;
     QGridLayout* playgroundLayout;
-    QVBoxLayout* tableLayout;
+    //QVBoxLayout* tableLayout;
     QVector<QLayout*> playerLayouts;
+    QVector<QLayout*> tablelayouts;
+
     int currentPlayerIndex;
     //std::vector<std::shared_ptr<Card>> mainDeck;
-
+    void clearScreen();
     void displayCards();
-    void updateUI();
-
+    void updateUi();
+    void clearLayout(QLayout *layout);
 private slots:
     void handleCardClick(Card* card);
 };

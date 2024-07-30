@@ -14,11 +14,19 @@ Playground::Playground(Game &game, const std::string province, QWidget *parent) 
     qDebug() << "shuffed deck" ;
     game.handCardsToPLayers();
     qDebug() << "handed cards to players ";
+
     playerLayouts.append(ui->player1_hand);
     playerLayouts.append(ui->player2_hand);
     playerLayouts.append(ui->player3_hand);
     playerLayouts.append(ui->player4_hand);
-    qDebug() << "added cards to layouts" ;
+    qDebug() << "added card layouts" ;
+
+    tablelayouts.append((ui->player1_table));
+    tablelayouts.append((ui->player2_table));
+    tablelayouts.append((ui->player3_table));
+    tablelayouts.append((ui->player4_table));
+    qDebug() << "added table layouts";
+
     displayCards();
     qDebug() << "called dispaly cards" ;
 }
@@ -39,26 +47,36 @@ void Playground::setupUI() {
     displayCards();
 }
 */
-
-void Playground::displayCards() {
-    // Clear existing cards from layouts
-    qDebug() << "display cards start";
-
-    for (auto& layout : playerLayouts) {
-        QLayoutItem* item;
-        while ((item = layout->takeAt(0)) != nullptr) {
-            delete item->widget();
-            delete item;
-        }
-    }
+void Playground::clearScreen() {
+    qDebug() << "clearing screen";
     /*
+    // Clear player layouts
+    for (auto& layout : playerLayouts) {
+        clearLayout(layout);
+    }
+    */
+    qDebug() << "deleted previous hands";
+    /*
+    // Clear table layouts
+    for (auto& layout : tablelayouts) {
+        clearLayout(layout);
+    }
+    */
+    qDebug() << "deleted previous tables";
+}
+
+void Playground::clearLayout(QLayout* layout) {
     QLayoutItem* item;
-    while ((item = tableLayout->takeAt(0)) != nullptr) {
+    while ((item = layout->takeAt(0)) != nullptr) {
         delete item->widget();
         delete item;
-    }*/
-    qDebug() << "deleted previous";
-    // Iterate through each player and display yellow and purple cards
+    }
+}
+
+void Playground::displayCards() {
+    qDebug() << "display cards start";
+
+    // Iterate through each player and display yellow and purple cards from hand
     for (int i = 0; i < game.getPlayerCount(); ++i) {
         std::vector<Card*> player_hand; // Collecting player's cards here
 
@@ -71,6 +89,7 @@ void Playground::displayCards() {
             player_hand.push_back(card.get());
         }
         qDebug() << "getters called";
+
         // Now display all cards in player_hand
         for (const auto& cardLabel : player_hand) {
             cardLabel->setParent(this);
@@ -81,23 +100,38 @@ void Playground::displayCards() {
             });
         }
         qDebug() << "displayed hand";
-        /*
-        // Display cards on the table for each player
+    }
+
+    // Now display cards on the table for each player (moved out of player loop)
+    for (int i = 0; i < game.getPlayerCount(); ++i) {
+        std::vector<Card*> player_table;
+
+        // Get yellow and purple cards and add them to player_table
         for (const auto& card : game.getPlayerYellowOnTable(i)) {
-            Card* cardLabel = card.get();
-            cardLabel->setParent(this);
-            tableLayout->addWidget(cardLabel);
+            player_table.push_back(card.get());
         }
 
         for (const auto& card : game.getPlayerPurpleOnTable(i)) {
-            Card* cardLabel = card.get();
-            cardLabel->setParent(this);
-            tableLayout->addWidget(cardLabel);
+            player_table.push_back(card.get());
         }
-        qDebug() << "displayed table";
-        */
+
+        // Display all cards on the table for this player
+        for (const auto& cardLabel : player_table) {
+            cardLabel->setParent(this);
+            tablelayouts[i]->addWidget(cardLabel); // Assuming you have a layout for the table
+        }
+        qDebug() << "displayed table for player" << i;
     }
+
     qDebug() << "display cards ended";
+}
+
+
+void Playground::updateUi()
+{
+    clearScreen();
+    displayCards();
+    // todo : update scores
 }
 
 
@@ -107,12 +141,8 @@ void Playground::handleCardClick(Card* card) {
     qDebug() << "clicked on" << QString::fromStdString(cardName);
     // Tell the game to play the card
     game.playPlayerCard(playerIndex, cardName);
-
     // Update the UI to reflect the new state
-    updateUI();
+    updateUi();
 }
 
-void Playground::updateUI() {
-    // Refresh the UI to reflect the new state of the game
-    displayCards();
-}
+

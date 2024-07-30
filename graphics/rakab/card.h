@@ -20,7 +20,6 @@ public:
     virtual void setPoints(int pointsVal) = 0;
     virtual void setImage(const QString &);
 
-protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
 protected:
