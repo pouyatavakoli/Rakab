@@ -31,8 +31,7 @@ private:
     //QVBoxLayout* tableLayout;
     QVector<QLayout*> playerLayouts;
     QVector<QLayout*> tablelayouts;
-
-    int currentPlayerIndex;
+    std::string province;
     //std::vector<std::shared_ptr<Card>> mainDeck;
     void clearScreen();
     void displayCards();

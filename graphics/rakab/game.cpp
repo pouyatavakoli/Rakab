@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <unordered_map>
+#include <QMessageBox>
 
 #include "game.hpp"
 #include "card.h"
@@ -62,16 +63,16 @@ void Game::fillMainDeck()
 
     for (int i = 1; i <= 10; ++i)
     {
-        std::shared_ptr<Yellow1> yellowCard = std::make_shared<Yellow1>();
-        yellowCard->setImage(QString::fromStdString(cardImages["Yellow1"]));
-        mainDeck.push_back(yellowCard);
+        std::shared_ptr<Yellow1> yellowCard1 = std::make_shared<Yellow1>();
+        yellowCard1->setImage(QString::fromStdString(cardImages["Yellow1"]));
+        mainDeck.push_back(yellowCard1);
     }
 
     for (int i = 1; i <= 8; ++i)
     {
-        std::shared_ptr<Yellow2> yellowCard = std::make_shared<Yellow2>();
-        yellowCard->setImage(QString::fromStdString(cardImages["Yellow2"]));
-        mainDeck.push_back(yellowCard);
+        std::shared_ptr<Yellow2> yellowCard2 = std::make_shared<Yellow2>();
+        yellowCard2->setImage(QString::fromStdString(cardImages["Yellow2"]));
+        mainDeck.push_back(yellowCard2);
     }
 
     for (int i = 1; i <= 8; ++i)
@@ -150,6 +151,13 @@ void Game::fillMainDeck()
         rishsefid->setImage(QString::fromStdString(cardImages["RishSefid"]));
         mainDeck.push_back(rishsefid);
     }
+
+    for (int i = 1; i <= 6; ++i)
+    {
+        std::shared_ptr<RishSefid> rishsefid = std::make_shared<RishSefid>();
+        rishsefid->setImage(QString::fromStdString(cardImages["RishSefid"]));
+        mainDeck.push_back(rishsefid);
+    }
 }
 
 
@@ -180,21 +188,15 @@ int Game::getHighestYellowCardInGame() const
     return max;
 }
 
-int Game::getCurrentPlayerIndex() const
-{
-    return currentPlayerIndex ;
-}
-
-int Game::getPlayerCount() const
-{
-    return playerCount;
-}
-
 const Player& Game::getPlayer(int index) {
     if (index < 0 || index >= players.size()) {
         throw std::out_of_range("Player index out of range");
     }
     return *players[index];
+}
+
+int Game::getPlayerCount() const{
+    return playerCount;
 }
 
 void Game::updateCardHoldersCount()
@@ -211,9 +213,9 @@ void Game::updateCardHoldersCount()
 void Game::handCardsToPLayers()
 {
 //    std::cout << "handing cards to players..." << std::endl;
-    for (Player *player : players)
+    for (int i = 0 ; i < playerCount ; i++)
     {
-        for (int i = 0; i < 10 + player->getNumberOfOwnedProvinces(); i++)
+        for (int j = 0; j < 10 + players[i]->getNumberOfOwnedProvinces(); j++)
         {
             if (!mainDeck.empty())
             {
@@ -222,11 +224,13 @@ void Game::handCardsToPLayers()
                 // Add the card to the player's deck
                 if (card->getType() == "Purple")
                 {
-                    player->addCardToPurpleHand(card);
+                    card->setindexOfOwner(i);
+                    players[i]->addCardToPurpleHand(card);
                 }
                 else if (card->getType() == "Yellow")
                 {
-                    player->addCardToYellowHand(card);
+                    card->setindexOfOwner(i);
+                    players[i]->addCardToYellowHand(card);
                 }
             }
             else
@@ -244,6 +248,25 @@ void Game::removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::share
     if (it != deckOfCards.end())
     {
         deckOfCards.erase(it);
+    }
+}
+
+void Game::updateTotalScore()
+{
+    refreshEffects();
+    for (auto &player : players)
+    {
+        int totalOnTable = 0;
+
+        for (const auto &card : player->getYellowOnTable())
+        {
+            totalOnTable += card->getPoints();
+        }
+        for (const auto &card : player->getPurpleOnTable())
+        {
+            totalOnTable += card->getPoints();
+        }
+        player->setScore(totalOnTable);
     }
 }
 
@@ -275,28 +298,215 @@ void Game::reorderPurpleOnTable()
     }
 }
 
-void Game::playPlayerCard(int playerIndex, const std::string& cardName) {
+void Game::endAllEffects()
+{
+    for (auto &player : players)
+    {
+        player->cancelEffects();
+    }
+}
+
+void Game::startAllEffects()
+{
+    if (seasonSituation == "Winter")
+    {
+        startSeason("Winter");
+        for (auto &player : players)
+        {
+            player->applyEffect();
+        }
+    }
+    else if (seasonSituation == "Spring")
+    {
+        for (auto &player : players)
+        {
+            player->applyEffect();
+        }
+        startSeason("Spring");
+    }
+    else
+    {
+        for (auto &player : players)
+        {
+            player->applyEffect();
+        }
+    }
+}
+
+void Game::refreshEffects()
+{
+    endAllEffects();
+    reorderPurpleOnTable();
+    startAllEffects();
+}
+
+void Game::StartEffectOfRishSefid()
+{
+    int max = getHighestYellowCardInGame();
+    for (auto &player : players)
+    {
+        for (auto &yellowCard : player->getYellowOnTable())
+        {
+            if (yellowCard->getPoints() == max)
+            {
+                yellowCard->setPoints(0);
+            }
+        }
+    }
+}
+
+bool Game::canStartSeason(const std::string season) const
+{
+    if (seasonSituation == season)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+void Game::startSeason(const std::string userChoice)
+{
+    if (userChoice == "Winter")
+    {
+        // removeGameSeason("Spring");
+        seasonSituation = "Winter";
+        for (auto &changePlayer : players)
+        {
+            for (auto &yellowcards : changePlayer->getYellowOnTable())
+            {
+                if (yellowcards->getPoints() != 1)
+                {
+                    yellowcards->setPoints(1);
+                }
+            }
+        }
+    }
+    else if (userChoice == "Spring")
+    {
+
+        // removeGameSeason("Winter");
+        seasonSituation = "Spring";
+
+        int max = getHighestYellowCardInGame();
+        for (auto &player : players)
+        {
+            for (auto &yellowCard : player->getYellowOnTable())
+            {
+                if (yellowCard->getPoints() == max)
+                {
+                    yellowCard->setPoints(max + 3);
+                }
+            }
+        }
+    }
+    else
+    {
+
+    }
+}
+
+void Game::endSeason(const std::string &userChoice)
+{
+    if (userChoice == "Winter" && seasonSituation == "Winter")
+    {
+        for (auto &player : players)
+        {
+            for (auto &yellowCard : player->getYellowOnTable())
+            {
+                yellowCard->setPoints(yellowCard->getNumberOnTheCard());
+            }
+        }
+    }
+    else if (userChoice == "Spring" && seasonSituation == "Spring")
+    {
+        for (auto &player : players)
+        {
+            for (auto &yellowCard : player->getYellowOnTable())
+            {
+                yellowCard->setPoints(yellowCard->getNumberOnTheCard());
+            }
+        }
+    }
+}
+
+int Game::playPlayerCard(int playerIndex, const std::string& cardName) {
     //qDebug() << "playing card for player";
-    if (playerIndex < 0 || playerIndex >= players.size()) {
-        qDebug() << "invalid player index";
-        return; // Invalid player index
+//    if (playerIndex < 0 || playerIndex >= players.size()) {
+//        qDebug() << "invalid player index";
+//        return; // Invalid player index
+//    }
+    qDebug() <<"playing card for" << QString::fromStdString(players[playerIndex]->getName());
+    int situation{0};
+    if(cardName == "Winter" || cardName == "Spring")
+    {
+        if(canStartSeason(cardName))
+        {
+         situation = players[playerIndex]->PlayThisCard(cardName);
+         qDebug() <<"chanegd sit to ";
+        }
+        else
+        {
+            return 4;
+        }
+    }
+    else
+    {
+       situation = players[playerIndex]->PlayThisCard(cardName);
     }
 
-    Player* player = players[playerIndex];
-    qDebug() <<"playing card for" << QString::fromStdString(player->getName());
-    int result = player->PlayThisCard(cardName);
 
     // Handle result and update game state
-    if (result != -1) {
-        nextTurn(); // Move to the next player's turn
+    if (situation == -1) {
+       nextTurn(); // Move to the next player's turn TODO:it should pass
+       if(!anyPlayerCanPlay)
+       {
+           return 11; //the match has ended
+       }
+       else
+       {
+           return -1;
+       }
     }
-    if (result == 1){
+    else if (situation == 0) {
+        // was not found so we are not going next player.
+        nextTurn();
+        return 0;
+    }
+    else if (situation == 1){ // Successfully played a card
         qDebug() << "card played successfully";
+        nextTurn();
+        return 1;
+    }
+    else if (situation == 2){ // It is a season
+        seasonSituation = cardName;
+        nextTurn();
+        return 2;
+    }
+    else if (situation == 4) //Can not be Played.
+    {
+        return 4;
+
+    }
+    else if (situation == 5) // It is RishSefid
+    {
+        StartEffectOfRishSefid();
+        nextTurn();
+        return 5;
+    }
+    else if (situation == 6) // It is ParchamDar
+    {
+        parchamDarIsPlayed = true;
+        nextTurn(); // TODO:it should end game
+        return 11; //the match has ended
     }
 }
 
 void Game::nextTurn() {
     currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+    qDebug() << "Next turn: currentPlayerIndex = " << currentPlayerIndex ;
 }
 
 
@@ -327,5 +537,65 @@ std::vector<std::shared_ptr<Card>> Game::getPlayerPurpleOnTable(int playerIndex)
     }
     return {};
 }
+
+
+void Game::setPlayerIndex(int playerIndex)
+{
+    currentPlayerIndex = playerIndex;
+}
+
+int Game::getPlayerIndex() const
+{
+    return currentPlayerIndex;
+}
+
+void Game::setLastWinner(Player &winnerVal)
+{
+    lastWinner = &winnerVal;
+}
+
+int Game::checkThisBattleWinner(const std::string &province)
+{
+
+    int max{0};
+    Player *winner = nullptr;
+    // find max score
+    for (auto &player : players)
+    {
+        if (player->getPoints() >= max)
+        {
+            max = player->getPoints();
+            winner = player;
+        }
+    }
+    int tieCounter{0};
+    // count players with max score
+    for (auto &player : players)
+    {
+        if (player->getPoints() == max)
+        {
+            tieCounter++;
+        }
+    }
+    // if there are more than 1 max, its a tie
+    if (tieCounter > 1)
+    {
+        return 0;
+//      std::cout << "The game has no winner, it's a tie." << std::endl;
+    }
+    else if (winner != nullptr)
+    {
+//      std::cout << winner->getName() << " captured " << province << " with " << winner->getPoints() << " points." << std::endl;
+        winner->addOwnedProvinces(province);
+        setLastWinner(*winner);
+        return 1;
+    }
+    else
+    {
+//        std::cout << "No winner could be determined." << std::endl;
+          return 2;
+    }
+}
+
 
 

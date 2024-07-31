@@ -18,6 +18,8 @@ public:
     virtual int getNumberOnTheCard() const = 0;
     virtual int getPoints() const = 0;
     virtual void setPoints(int pointsVal) = 0;
+    virtual void setindexOfOwner(int) ;
+    virtual int getindexOfOwner() const;
     virtual void setImage(const QString &);
 
     void mouseReleaseEvent(QMouseEvent *event) override;
@@ -27,6 +29,7 @@ protected:
     std::string type;
     int numberOnTheCard;
     int points;
+    int indexOfOwner;
 
 signals:
     void clicked();  // Signal for card click

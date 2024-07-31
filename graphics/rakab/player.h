@@ -47,6 +47,15 @@ public:
     bool playYellowCard(const std::string &);
     int PlayThisCard(const std::string);
 
+    void applyEffect();
+    void cancelEffects();
+    void burnHand();
+
+    bool canPlay();
+    void updatePlayerEligibility(bool);
+
+    void flushTable();
+
 private:
     int age;
     std::string name;

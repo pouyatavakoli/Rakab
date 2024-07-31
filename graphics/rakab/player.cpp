@@ -267,7 +267,7 @@ int Player::playPurpleCard(const std::string &cardName)
                 purpleHand.shrink_to_fit();
                 return 5; // we found RishSefid
             }
-            else if (playedCard->getName() == "ShirDokht")
+            else if (playedCard->getName() == "ShahDokht")
             {
                 // purpleCard->startEffect();
                 purpleOnTable.push_back(playedCard);
@@ -298,6 +298,66 @@ int Player::playPurpleCard(const std::string &cardName)
         }
     }
     return 0;
+}
+
+void Player::applyEffect()
+{
+    for (auto &card : purpleOnTable)
+    {
+        if (card->getName() == "Winter" || card->getName() == "Spring" || card->getName() == "ShahDokht")
+        {
+            // card is Winter, Spring, or ShirDokht, no effect to apply here
+        }
+        else if (card->getName() == "TablZan")
+        {
+            std::shared_ptr<PurpleCard> TablZan = std::dynamic_pointer_cast<PurpleCard>(card);
+            if (TablZan)
+            {
+                TablZan->startEffect(*this);
+            }
+            else
+            {
+                //Error: dynamic_pointer_cast failed for TablZan.
+            }
+        }
+    }
+}
+
+void Player::cancelEffects()
+{
+    for (auto &card : yellowOnTable)
+    {
+        card->setPoints(card->getNumberOnTheCard());
+    }
+}
+void Player::burnHand()
+{
+
+    burntCards.insert(burntCards.end(), purpleHand.rbegin(), purpleHand.rend());
+    burntCards.insert(burntCards.end(), yellowHand.rbegin(), yellowHand.rend());
+
+    purpleHand.clear();
+    yellowHand.clear();
+}
+
+bool Player::canPlay()
+{
+    return isAbleToPlay;
+}
+
+void Player::updatePlayerEligibility(bool canPlayVal)
+{
+    isAbleToPlay = canPlayVal;
+}
+
+void Player::flushTable()
+{
+
+    burntCards.insert(burntCards.end(), purpleOnTable.rbegin(), purpleOnTable.rend());
+    burntCards.insert(burntCards.end(), yellowOnTable.rbegin(), yellowOnTable.rend());
+
+    purpleOnTable.clear();
+    yellowOnTable.clear();
 }
 
 

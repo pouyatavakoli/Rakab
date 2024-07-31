@@ -21,6 +21,7 @@ SOURCES += \
     card.cpp \
     player.cpp \
     purplecard.cpp \
+    tablzan.cpp \
     yellowcard.cpp \
     season.cpp \
     parchamdar.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     card.h \
     player.h \
     purplecard.h \
+    tablzan.h \
     yellowcard.h \
     season.h \
     parchamdar.h \

@@ -4,6 +4,7 @@
 
 #include "player.h"
 #include "card.h"
+#include "map.h"
 
 #include <vector>
 #include <string>
@@ -26,22 +27,39 @@ public:
     void fillMainDeck();
     void shuffleDeck();
     int getHighestYellowCardInGame() const;
-    int getCurrentPlayerIndex() const;
     void updateCardHoldersCount();
     void removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::shared_ptr<Card>> &);
     void updateTotalScore();
     void reorderPurpleOnTable();
+
     void endAllEffects();
     void startAllEffects();
     void refreshEffects();
-    void playCard(int playerIndex, const std::string& cardName);
+    void StartEffectOfRishSefid();
+
+
+    bool canStartSeason(const std::string) const;
+    void startSeason(const std::string);
+    void endSeason(const std::string &);
+
     std::vector<std::shared_ptr<Card>> getMainDeck();
-    void playPlayerCard(int playerIndex, const std::string& cardName);
+    int playPlayerCard(int playerIndex, const std::string& cardName );
 
     std::vector<std::shared_ptr<Card>> getPlayerYellowHand(int playerIndex) const;
     std::vector<std::shared_ptr<Card>> getPlayerPurpleHand(int playerIndex) const;
     std::vector<std::shared_ptr<Card>> getPlayerYellowOnTable(int playerIndex) const;
     std::vector<std::shared_ptr<Card>> getPlayerPurpleOnTable(int playerIndex) const;
+
+    void setPlayerIndex(int);
+    int getPlayerIndex() const;
+
+    bool winGame1();
+    bool winGame2();
+    void findWinner();
+
+    void setLastWinner(Player &);
+    int checkThisBattleWinner(const std::string &);
+
 
 
 signals:
@@ -53,9 +71,14 @@ private:
 private:
     int playerCount;
     std::vector <Player*> players;
+    Player *lastWinner;
     std::vector<std::shared_ptr<Card>> mainDeck;
+    Map map;
     int currentPlayerIndex;
     int cardHoldersCount;
+    bool anyPlayerCanPlay{false};
+    std::string seasonSituation;
+    bool parchamDarIsPlayed{false};
 
 };
 

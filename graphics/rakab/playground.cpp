@@ -1,10 +1,10 @@
 #include "playground.h"
+#include <QMessageBox>
 
 
-Playground::Playground(Game &game, const std::string province, QWidget *parent) :
+Playground::Playground(Game &game, const std::string provinceName, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::playground),game(game),
-    currentPlayerIndex(0)
+    ui(new Ui::playground),game(game),province(provinceName)
 {
     ui->setupUi(this);
     //mainDeck  = game.getMainDeck();
@@ -102,6 +102,8 @@ void Playground::displayCards() {
         qDebug() << "displayed hand";
     }
 
+    qDebug() << "1111now is turn of player" << game.getPlayerIndex();
+
     // Now display cards on the table for each player (moved out of player loop)
     for (int i = 0; i < game.getPlayerCount(); ++i) {
         std::vector<Card*> player_table;
@@ -120,7 +122,8 @@ void Playground::displayCards() {
             cardLabel->setParent(this);
             tablelayouts[i]->addWidget(cardLabel); // Assuming you have a layout for the table
         }
-        qDebug() << "displayed table for player" << i;
+        qDebug() << "displayed table for player" << i + 1;
+        qDebug() << "222now is turn of player" << game.getPlayerIndex();
     }
 
     qDebug() << "display cards ended";
@@ -129,20 +132,76 @@ void Playground::displayCards() {
 
 void Playground::updateUi()
 {
-    clearScreen();
-    displayCards();
+//    clearScreen();
+      displayCards();
     // todo : update scores
 }
 
 
 void Playground::handleCardClick(Card* card) {
-    int playerIndex = game.getCurrentPlayerIndex();
+    int playerIndex = game.getPlayerIndex();
     std::string cardName = card->getName();
     qDebug() << "clicked on" << QString::fromStdString(cardName);
     // Tell the game to play the card
-    game.playPlayerCard(playerIndex, cardName);
+    if(playerIndex == card->getindexOfOwner())
+    {
+      int situation = game.playPlayerCard(playerIndex, cardName);
+      if (situation == -1) {
+          // Move to the next player's turn   TODO:it should be pass
+
+      }
+      else if (situation == 0) { // was not found so we are not going next player.
+
+          QString message = QString::fromStdString(cardName) + " was not found. Please pick a card or pass.";
+          QMessageBox::warning(this, "Invalid Move", message);
+      }
+      else if (situation == 1){ // Successfully played a card
+
+      }
+      else if (situation == 2){ // It is a season
+
+      }
+      else if (situation == 4) //Can not be Played.
+      {
+          QString message = QString::fromStdString(cardName) + " cannot be played. Please pick a card or pass.";
+          QMessageBox::warning(this, "Invalid Move", message);
+      }
+      else if (situation == 5) // It is RishSefid
+      {
+  //        StartEffectOfRishSefid();
+
+      }
+      else if (situation == 6) // It is ParchamDar
+      {
+  //       parchamdarIsPlayed =true;
+
+      }
+      updateUi();
+      if(situation == 11)
+      {
+          int winstat = game.checkThisBattleWinner(province);
+          if(winstat == 0)
+          {
+              QString message = " The game has no winner, it's a tie.";
+              QMessageBox::information(this, "Status", message);
+          }
+          else if(winstat == 1)
+          {
+              QString message = " We have a winner.";
+              QMessageBox::information(nullptr, "Winner", message);
+          }
+          else if (winstat == 2)
+          {
+              QString message = "No winner could be determined.";
+              QMessageBox::information(nullptr, "Status", message);
+
+          }
+
+      }
+    }
+
     // Update the UI to reflect the new state
-    updateUi();
+
 }
 
 

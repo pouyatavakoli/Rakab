@@ -12,6 +12,16 @@ void Card::mouseReleaseEvent(QMouseEvent *event) {
     QLabel::mouseReleaseEvent(event);  // Call base class handler
 }
 
+void Card::setindexOfOwner(int x)
+{
+    indexOfOwner = x;
+}
+
+int Card::getindexOfOwner() const
+{
+    return indexOfOwner;
+}
+
 void Card::setImage(const QString &imagePath)
 {
     QPixmap pixmap(imagePath);

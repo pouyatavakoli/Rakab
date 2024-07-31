@@ -192,9 +192,9 @@ void mapwindow::dropEvent(QDropEvent *event)
     QList<QLabel*> labels;
     foreach (QWidget *child, this->findChildren<QWidget*>()) {
         QLabel *label = qobject_cast<QLabel *>(child);
-        if (label && label->objectName().startsWith("Neshane")) {
-            labels.append(label);
-        }
+        if (label) {
+                labels.append(label);
+            }
     }
 
     QLabel* nearestLabel = findNearestLabel(dropPosition, labels);
@@ -211,6 +211,7 @@ void mapwindow::dropEvent(QDropEvent *event)
 
                 // Ensure the pixmap is valid before setting it
                 QString labelName = nearestLabel->objectName();
+                std::string labelNameStd = labelName.toStdString();
                 QPixmap pixmap = QPixmap(neshan[labelName]);
                 if (pixmap.isNull()) {
                     qWarning() << "Pixmap for" << labelName << "is null. Check the path or pixmap loading.";
@@ -218,11 +219,10 @@ void mapwindow::dropEvent(QDropEvent *event)
                     nearestLabel->setPixmap(pixmap.scaled(area.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 }
 
-                QString areaName = (i == 0) ? "a" : (i == 1) ? "b" : "c";
-                qDebug() << "Dropped in area:" << areaName;
+                qDebug() << "Dropped in area:" << labelName;
                 // ask to start battle in area
-                askToStartBattle(this , areaName);
-                Playground *pg = new Playground(game , areaName.toStdString());
+                askToStartBattle(this , labelName);
+                Playground *pg = new Playground(game , labelNameStd);
                 pg->show();
                 this->hide();
 
@@ -311,10 +311,54 @@ void mapwindow::initializeLabels()
     // Create and position labels directly
     for (int i = 0; i < dropAreas.size(); ++i) {
         QLabel *label = new QLabel(this);
-        label->setObjectName(QString("NeshaneLabel%1").arg(i));
+        switch (i)
+        {
+        case 0:
+            label->setObjectName(QString("ELINIA"));
+            break;
+        case 1:
+            label->setObjectName(QString("ROLLO"));
+            break;
+        case 2:
+            label->setObjectName(QString("TALMONE"));
+            break;
+        case 3:
+            label->setObjectName(QString("PLADACI"));
+            break;
+        case 4:
+            label->setObjectName(QString("BORGE"));
+            break;
+        case 5:
+            label->setObjectName(QString("BELLA"));
+            break;
+        case 6:
+            label->setObjectName(QString("MORINA"));
+            break;
+        case 7:
+            label->setObjectName(QString("CALINE"));
+            break;
+        case 8:
+            label->setObjectName(QString("ARMENTO"));
+            break;
+        case 9:
+            label->setObjectName(QString("OLIVADI"));
+            break;
+        case 10:
+            label->setObjectName(QString("ENNA"));
+            break;
+        case 11:
+            label->setObjectName(QString("ATELA"));
+            break;
+        case 12:
+            label->setObjectName(QString("DISMASE"));
+            break;
+        case 13:
+            label->setObjectName(QString("LIA"));
+            break;
+        }
         label->setGeometry(dropAreas[i]);
         label->setStyleSheet("background-color: lightblue; border: 1px solid black;"); // For visibility
-        label->setText(QString::number(i)); // Set text with the label number
+        label->setText(label->objectName()); // Set text with the label number
         label->setAlignment(Qt::AlignCenter); // Center-align text
         label->show(); // Ensure the label is visible
     }
