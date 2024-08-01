@@ -4,6 +4,7 @@ RishSefid::RishSefid(QWidget *parent)
     : PurpleCard(0, "RishSefid", parent) // Initialize PurpleCard with default values
 {
     // Additional initialization specific to RishSefid if needed
+    faceURL = ":/new/cards/banafsh/assets/cards/banafsh/Rish_Sefid.png";
 }
 
 std::string RishSefid::getName() const

@@ -24,12 +24,18 @@ public:
 
     void mouseReleaseEvent(QMouseEvent *event) override;
 
+    QString getFaceURL();
+    QString getBackURL();
+
 protected:
     std::string name;
     std::string type;
     int numberOnTheCard;
     int points;
     int indexOfOwner;
+
+    QString faceURL = "" ;
+    QString backURL= ":/new/background/assets/cards/Back.png";
 
 signals:
     void clicked();  // Signal for card click

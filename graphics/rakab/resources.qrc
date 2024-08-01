@@ -36,5 +36,6 @@
     </qresource>
     <qresource prefix="/new/background">
         <file>assets/background/background.png</file>
+        <file>assets/cards/Back.png</file>
     </qresource>
 </RCC>

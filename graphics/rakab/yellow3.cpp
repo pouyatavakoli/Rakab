@@ -3,6 +3,7 @@
 Yellow3::Yellow3(QWidget *parent)
     : YellowCard(3, "Yellow3", parent)
 {
+    faceURL = ":/new/cards/zard/assets/cards/zard/003.png";
 }
 
 std::string Yellow3::getName() const

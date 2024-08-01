@@ -4,6 +4,7 @@ Winter::Winter(QWidget *parent)
     : Season(0, "Winter", parent) // Initialize Season with default values
 {
     // Additional initialization specific to Winter if needed
+    faceURL = ":/new/cards/banafsh/assets/cards/banafsh/Zemestan.png";
 }
 
 std::string Winter::getName() const

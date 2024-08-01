@@ -1,6 +1,9 @@
 #include "tablzan.h"
 
-TablZan::TablZan(QWidget *parent) : PurpleCard(0, "TablZan", parent) {}
+TablZan::TablZan(QWidget *parent) : PurpleCard(0, "TablZan", parent)
+{
+    faceURL = ":/new/cards/banafsh/assets/cards/banafsh/Tabl_Zan.png";
+}
 
 void TablZan::startEffect(Player &player)
 {

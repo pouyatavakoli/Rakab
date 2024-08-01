@@ -4,6 +4,7 @@ ShirZan::ShirZan(QWidget *parent)
     : PurpleCard(1, "ShirZan", parent) // Initialize PurpleCard with default values
 {
     // Additional initialization specific to ShirZan if needed
+    faceURL = ":/new/cards/banafsh/assets/cards/banafsh/Shir_Zan.png";
 }
 
 void ShirZan::startEffect()

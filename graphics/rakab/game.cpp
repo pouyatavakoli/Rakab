@@ -44,6 +44,7 @@ void Game::setPlayers(const std::vector<std::string>& names, const std::vector<i
 
 void Game::fillMainDeck()
 {
+    /*
     std::map<std::string, std::string> cardImages;
     cardImages["RishSefid"] = ":/new/cards/banafsh/assets/cards/banafsh/Rish_Sefid.png";
     cardImages["ShahDokht"] = ":/new/cards/banafsh/assets/cards/banafsh/Shah_Dokht.png";
@@ -60,104 +61,107 @@ void Game::fillMainDeck()
     cardImages["Yellow5"] = ":/new/cards/zard/assets/cards/zard/005.png";
     cardImages["Yellow6"] = ":/new/cards/zard/assets/cards/zard/006.png";
     cardImages["Yellow10"] = ":/new/cards/zard/assets/cards/zard/010.png";
+    */
 
     for (int i = 1; i <= 10; ++i)
     {
         std::shared_ptr<Yellow1> yellowCard1 = std::make_shared<Yellow1>();
-        yellowCard1->setImage(QString::fromStdString(cardImages["Yellow1"]));
+        //yellowCard1->setImage(QString::fromStdString(cardImages["Yellow1"]));
         mainDeck.push_back(yellowCard1);
     }
 
     for (int i = 1; i <= 8; ++i)
     {
         std::shared_ptr<Yellow2> yellowCard2 = std::make_shared<Yellow2>();
-        yellowCard2->setImage(QString::fromStdString(cardImages["Yellow2"]));
+        //yellowCard2->setImage(QString::fromStdString(cardImages["Yellow2"]));
         mainDeck.push_back(yellowCard2);
     }
 
     for (int i = 1; i <= 8; ++i)
     {
         std::shared_ptr<Yellow3> yellowCard3 = std::make_shared<Yellow3>();
-        yellowCard3->setImage(QString::fromStdString(cardImages["Yellow3"]));
+        //yellowCard3->setImage(QString::fromStdString(cardImages["Yellow3"]));
         mainDeck.push_back(yellowCard3);
     }
 
     for (int i = 1; i <= 8; ++i)
     {
         std::shared_ptr<Yellow4> yellowCard4 = std::make_shared<Yellow4>();
-        yellowCard4->setImage(QString::fromStdString(cardImages["Yellow4"]));
+        //yellowCard4->setImage(QString::fromStdString(cardImages["Yellow4"]));
         mainDeck.push_back(yellowCard4);
     }
 
     for (int i = 1; i <= 8; ++i)
     {
         std::shared_ptr<Yellow5> yellowCard5 = std::make_shared<Yellow5>();
-        yellowCard5->setImage(QString::fromStdString(cardImages["Yellow5"]));
+        //yellowCard5->setImage(QString::fromStdString(cardImages["Yellow5"]));
         mainDeck.push_back(yellowCard5);
     }
 
     for (int i = 1; i <= 8; ++i)
     {
         std::shared_ptr<Yellow6> yellowCard6 = std::make_shared<Yellow6>();
-        yellowCard6->setImage(QString::fromStdString(cardImages["Yellow6"]));
+        //yellowCard6->setImage(QString::fromStdString(cardImages["Yellow6"]));
         mainDeck.push_back(yellowCard6);
     }
 
     for (int i = 1; i <= 8; ++i)
     {
         std::shared_ptr<Yellow10> yellowCard10 = std::make_shared<Yellow10>();
-        yellowCard10->setImage(QString::fromStdString(cardImages["Yellow10"]));
+        //yellowCard10->setImage(QString::fromStdString(cardImages["Yellow10"]));
         mainDeck.push_back(yellowCard10);
     }
 
     for (int i = 1; i <= 3; ++i)
     {
         std::shared_ptr<ParchamDar> parchamDar = std::make_shared<ParchamDar>();
-        parchamDar->setImage(QString::fromStdString(cardImages["ParchamDar"]));
+        //parchamDar->setImage(QString::fromStdString(cardImages["ParchamDar"]));
         mainDeck.push_back(parchamDar);
     }
 
     for (int i = 1; i <= 3; ++i)
     {
         std::shared_ptr<Spring> spring = std::make_shared<Spring>();
-        spring->setImage(QString::fromStdString(cardImages["Spring"]));
+        //spring->setImage(QString::fromStdString(cardImages["Spring"]));
         mainDeck.push_back(spring);
     }
 
     for (int i = 1; i <= 3; ++i)
     {
         std::shared_ptr<Winter> winter = std::make_shared<Winter>();
-        winter->setImage(QString::fromStdString(cardImages["Winter"]));
+        //winter->setImage(QString::fromStdString(cardImages["Winter"]));
         mainDeck.push_back(winter);
     }
 
     for (int i = 1; i <= 12; ++i)
     {
         std::shared_ptr<ShirZan> shirzan = std::make_shared<ShirZan>();
-        shirzan->setImage(QString::fromStdString(cardImages["ShirZan"]));
+        //shirzan->setImage(QString::fromStdString(cardImages["ShirZan"]));
         mainDeck.push_back(shirzan);
     }
 
     for (int i = 1; i <= 3; ++i)
     {
         std::shared_ptr<ShahDokht> shahdokht = std::make_shared<ShahDokht>();
-        shahdokht->setImage(QString::fromStdString(cardImages["ShahDokht"]));
+        //shahdokht->setImage(QString::fromStdString(cardImages["ShahDokht"]));
         mainDeck.push_back(shahdokht);
     }
 
     for (int i = 1; i <= 6; ++i)
     {
         std::shared_ptr<RishSefid> rishsefid = std::make_shared<RishSefid>();
-        rishsefid->setImage(QString::fromStdString(cardImages["RishSefid"]));
+        //rishsefid->setImage(QString::fromStdString(cardImages["RishSefid"]));
         mainDeck.push_back(rishsefid);
     }
 
+    /*
     for (int i = 1; i <= 6; ++i)
     {
         std::shared_ptr<RishSefid> rishsefid = std::make_shared<RishSefid>();
         rishsefid->setImage(QString::fromStdString(cardImages["RishSefid"]));
         mainDeck.push_back(rishsefid);
     }
+    */
 }
 
 

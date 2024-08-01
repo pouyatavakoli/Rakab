@@ -12,6 +12,16 @@ void Card::mouseReleaseEvent(QMouseEvent *event) {
     QLabel::mouseReleaseEvent(event);  // Call base class handler
 }
 
+QString Card::getFaceURL()
+{
+    return faceURL;
+}
+
+QString Card::getBackURL()
+{
+    return backURL ;
+}
+
 void Card::setindexOfOwner(int x)
 {
     indexOfOwner = x;

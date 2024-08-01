@@ -88,6 +88,17 @@ void Playground::displayCards() {
         for (const auto& card : game.getPlayerPurpleHand(i)) {
             player_hand.push_back(card.get());
         }
+        // setting cards face and back
+        if( i == game.getPlayerIndex()){
+            for(auto card : player_hand){
+                card->setImage(card->getFaceURL());
+            }
+        }
+        else {
+            for (auto card : player_hand){
+                card->setImage(card->getBackURL());
+            }
+        }
         qDebug() << "getters called";
 
         // Now display all cards in player_hand
@@ -99,6 +110,7 @@ void Playground::displayCards() {
                 handleCardClick(cardLabel);
             });
         }
+
         qDebug() << "displayed hand";
     }
 

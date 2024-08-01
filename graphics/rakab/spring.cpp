@@ -4,6 +4,7 @@ Spring::Spring(QWidget *parent)
     : Season(0, "Spring", parent) // Initialize Season with default values
 {
     // Additional initialization specific to Spring if needed
+    faceURL = ":/new/cards/banafsh/assets/cards/banafsh/Bahar.png";
 }
 
 std::string Spring::getName() const
