@@ -357,7 +357,7 @@ void Player::flushTable()
     burntCards.insert(burntCards.end(), yellowOnTable.rbegin(), yellowOnTable.rend());
 
     purpleOnTable.clear();
-    yellowOnTable.clear();
+    yellowOnTable.clear();   
 }
 
 

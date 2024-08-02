@@ -21,6 +21,7 @@ class Playground : public QWidget {
 
 public:
     explicit Playground(Game& game, std::string province, QWidget *parent = nullptr);
+     ~Playground();
     void setupUI();
 
 
@@ -39,6 +40,7 @@ private:
     void clearLayout(QLayout *layout);
 private slots:
     void handleCardClick(Card* card);
+    void on_pushButton_clicked();
 };
 
 #endif // PLAYGROUND_H

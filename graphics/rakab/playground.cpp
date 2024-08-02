@@ -31,6 +31,17 @@ Playground::Playground(Game &game, const std::string provinceName, QWidget *pare
     qDebug() << "called dispaly cards" ;
 }
 
+Playground::~Playground()
+{
+    // remember to save here befor clearing
+    int playersCount = game.getPlayerCount();
+    for (int i = 0 ; i < playersCount ; i++){
+        game.getPlayer(i).flushTable();
+    }
+    displayCards();
+
+}
+
 /*
 void Playground::setupUI() {
     playgroundLayout = new QGridLayout(this);
@@ -144,8 +155,8 @@ void Playground::displayCards() {
 
 void Playground::updateUi()
 {
-//    clearScreen();
-      displayCards();
+    //    clearScreen();
+    displayCards();
     // todo : update scores
 }
 
@@ -157,63 +168,71 @@ void Playground::handleCardClick(Card* card) {
     // Tell the game to play the card
     if(playerIndex == card->getindexOfOwner())
     {
-      int situation = game.playPlayerCard(playerIndex, cardName);
-      if (situation == -1) {
-          // Move to the next player's turn   TODO:it should be pass
+        int situation = game.playPlayerCard(playerIndex, cardName);
+        if (situation == -1) {
+            // Move to the next player's turn   TODO:it should be pass
 
-      }
-      else if (situation == 0) { // was not found so we are not going next player.
+        }
+        else if (situation == 0) { // was not found so we are not going next player.
 
-          QString message = QString::fromStdString(cardName) + " was not found. Please pick a card or pass.";
-          QMessageBox::warning(this, "Invalid Move", message);
-      }
-      else if (situation == 1){ // Successfully played a card
+            QString message = QString::fromStdString(cardName) + " was not found. Please pick a card or pass.";
+            QMessageBox::warning(this, "Invalid Move", message);
+        }
+        else if (situation == 1){ // Successfully played a card
 
-      }
-      else if (situation == 2){ // It is a season
+        }
+        else if (situation == 2){ // It is a season
 
-      }
-      else if (situation == 4) //Can not be Played.
-      {
-          QString message = QString::fromStdString(cardName) + " cannot be played. Please pick a card or pass.";
-          QMessageBox::warning(this, "Invalid Move", message);
-      }
-      else if (situation == 5) // It is RishSefid
-      {
-  //        StartEffectOfRishSefid();
+        }
+        else if (situation == 4) //Can not be Played.
+        {
+            QString message = QString::fromStdString(cardName) + " cannot be played. Please pick a card or pass.";
+            QMessageBox::warning(this, "Invalid Move", message);
+        }
+        else if (situation == 5) // It is RishSefid
+        {
+            //        StartEffectOfRishSefid();
 
-      }
-      else if (situation == 6) // It is ParchamDar
-      {
-  //       parchamdarIsPlayed =true;
+        }
+        else if (situation == 6) // It is ParchamDar
+        {
+            //       parchamdarIsPlayed =true;
 
-      }
-      updateUi();
-      if(situation == 11)
-      {
-          int winstat = game.checkThisBattleWinner(province);
-          if(winstat == 0)
-          {
-              QString message = " The game has no winner, it's a tie.";
-              QMessageBox::information(this, "Status", message);
-          }
-          else if(winstat == 1)
-          {
-              QString message = " We have a winner.";
-              QMessageBox::information(nullptr, "Winner", message);
-          }
-          else if (winstat == 2)
-          {
-              QString message = "No winner could be determined.";
-              QMessageBox::information(nullptr, "Status", message);
+        }
+        updateUi();
+        if(situation == 11)
+        {
+            int winstat = game.checkThisBattleWinner(province);
+            if(winstat == 0)
+            {
+                QString message = " The game has no winner, it's a tie.";
+                QMessageBox::information(this, "Status", message);
+            }
+            else if(winstat == 1)
+            {
+                QString message = " We have a winner.";
+                QMessageBox::information(nullptr, "Winner", message);
+            }
+            else if (winstat == 2)
+            {
+                QString message = "No winner could be determined.";
+                QMessageBox::information(nullptr, "Status", message);
 
-          }
+            }
 
-      }
+        }
     }
 
     // Update the UI to reflect the new state
 
 }
 
+
+
+void Playground::on_pushButton_clicked()
+{
+    game.nextTurn();
+    displayCards();
+    game.getPlayer(game.getPlayerIndex()).updatePlayerEligibility(false);
+}
 

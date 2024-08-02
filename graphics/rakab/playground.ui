@@ -166,6 +166,19 @@
    </property>
    <layout class="QVBoxLayout" name="player4_table"/>
   </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>500</x>
+     <y>380</y>
+     <width>89</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>pass</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

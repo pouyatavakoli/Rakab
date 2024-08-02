@@ -192,7 +192,7 @@ int Game::getHighestYellowCardInGame() const
     return max;
 }
 
-const Player& Game::getPlayer(int index) {
+Player& Game::getPlayer(int index) {
     if (index < 0 || index >= players.size()) {
         throw std::out_of_range("Player index out of range");
     }

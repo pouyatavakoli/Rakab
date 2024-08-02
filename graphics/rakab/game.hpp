@@ -22,7 +22,8 @@ public:
     void setPlayers(const std::vector<std::string>&, const std::vector<int>&);
     void nextTurn();
     int getPlayerCount() const;
-    const Player& getPlayer(int);
+    // getplayer used to return const value but now returns non const to change player eligibility
+    Player& getPlayer(int);
     void handCardsToPLayers();
     void fillMainDeck();
     void shuffleDeck();
