@@ -5,7 +5,6 @@ ParchamDar::ParchamDar(QWidget *parent)
 {
     // Additional initialization specific to ParchamDar if needed
     faceURL = ":/new/cards/banafsh/assets/cards/banafsh/Parcham_Dar.png";
-    backURL= "qrc:/new/background/assets/cards/Back.png";
 }
 
 std::string ParchamDar::getName() const

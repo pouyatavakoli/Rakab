@@ -185,6 +185,7 @@ QLabel* mapwindow::findNearestLabel(const QPoint& dropPosition, const QList<QLab
 
 void mapwindow::dropEvent(QDropEvent *event)
 {
+    bool isDroppedInArea = false;
     QPoint dropPosition = event->position().toPoint();
     qDebug() << "Drop event detected at position:" << dropPosition;
 
@@ -193,8 +194,8 @@ void mapwindow::dropEvent(QDropEvent *event)
     foreach (QWidget *child, this->findChildren<QWidget*>()) {
         QLabel *label = qobject_cast<QLabel *>(child);
         if (label) {
-                labels.append(label);
-            }
+            labels.append(label);
+        }
     }
 
     QLabel* nearestLabel = findNearestLabel(dropPosition, labels);
@@ -202,7 +203,7 @@ void mapwindow::dropEvent(QDropEvent *event)
         qDebug() << "Nearest label detected:" << nearestLabel->objectName();
 
         // Check if the drop position is within any of the drop areas
-        bool isDroppedInArea = false;
+        isDroppedInArea = false;
         for (int i = 0; i < dropAreas.size(); ++i) {
             if (dropAreas[i].contains(dropPosition)) {
                 QRect area = dropAreas[i];
@@ -220,26 +221,58 @@ void mapwindow::dropEvent(QDropEvent *event)
                 }
 
                 qDebug() << "Dropped in area:" << labelName;
-                // ask to start battle in area
-                askToStartBattle(this , labelName);
-                Playground *pg = new Playground(game , labelNameStd);
-                pg->show();
-                this->hide();
+                // ask to start battle in area if available
+                if (checkAvailable(labelName)){
 
-                isDroppedInArea = true;
-                break;
+                    if (askToStartBattle(this , labelName))
+                    {
+                        Playground *pg = new Playground(game , labelNameStd);
+                        pg->show();
+                        //this->hide();
+                        isDroppedInArea = true;
+                        break;
+                    }
+
+                }
+                else {
+
+                    QDialog *provinceTaken = new QDialog(this);
+
+                    // Set text for the dialog
+                    QLabel *provinceTaken_lbl = new QLabel("this province is taken try onother one");
+                    provinceTaken_lbl->setAlignment(Qt::AlignCenter); // Optionally set alignment
+
+                    // Set layout for the dialog
+                    QVBoxLayout *mainLayout = new QVBoxLayout(provinceTaken);
+
+                    // Add the message label to the main layoutmessageLabel
+                    mainLayout->addWidget(provinceTaken_lbl);
+
+                    // Create buttons
+                    QPushButton *okButton = new QPushButton("OK", provinceTaken);
+                    // Create layout for buttons
+                    QHBoxLayout *buttonLayout = new QHBoxLayout;
+                    buttonLayout->addWidget(okButton);
+                    mainLayout->addLayout(buttonLayout);
+
+                    QObject::connect(okButton, &QPushButton::clicked, provinceTaken , &QDialog::accept);
+
+                    provinceTaken->show();
+                    continue;
+                }
             }
         }
 
         if (!isDroppedInArea) {
             qDebug() << "Drop position is not within any defined drop areas.";
         }
-    } else {
-        qDebug() << "No nearest label found";
-    }
+        else {
+            qDebug() << "No nearest label found";
+        }
 
-    currentDropAreas.clear();
-    update();
+        currentDropAreas.clear();
+        update();
+    }
 }
 
 void mapwindow::mousePressEvent(QMouseEvent *event)
@@ -364,7 +397,26 @@ void mapwindow::initializeLabels()
     }
 }
 
-void mapwindow::askToStartBattle(QWidget *parent, QString provinceName) {
+bool mapwindow::checkAvailable(QString province) {
+
+    std::vector<std::vector<std::string>> captured;
+
+    for (int i = 0; i < game.getPlayerCount(); i++) {
+        captured.push_back(game.getPlayer(i).getOwnedProvinces());
+    }
+
+    for (size_t j = 0; j < captured.size(); j++) {
+        for (const auto& iterator : captured[j]) {
+            if (QString::fromStdString(iterator) == province) {
+                return false; // Province is owned
+            }
+        }
+    }
+
+    return true; // Province is available
+}
+
+bool mapwindow::askToStartBattle(QWidget *parent, QString provinceName) {
     // Create dialog
     QDialog *askToStartBattle = new QDialog(parent);
 
@@ -402,14 +454,11 @@ void mapwindow::askToStartBattle(QWidget *parent, QString provinceName) {
         // OK button pressed
         // Handle OK button press here (open playground)
         connect(askToStartBattle , &QDialog::accepted, this, &mapwindow::openPlayground);
-
-
-    } else if (result == QDialog::Rejected) {
-        // Cancel button pressed
-        // Handle Cancel button press here (ask to pick again)
+        return true ;
     }
+    // clicked cancel
+    return false ;
 
-    // Clean up dialog instance
     delete askToStartBattle;
 }
 

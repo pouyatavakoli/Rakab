@@ -44,7 +44,7 @@ private:
     QMap<QString, QString> neshan;
     QVector<QRect> dropAreas;
     QVector<QRect> currentDropAreas;
-    void askToStartBattle(QWidget *parent , QString);
+    bool askToStartBattle(QWidget *parent , QString);
 
 
     void initializeNeshanLabels();
@@ -52,6 +52,7 @@ private:
 //    double calculateDistanceToRect(const QPoint&, const QPoint&);
     QLabel* findNearestLabel(const QPoint&, const QList<QLabel*>&);
     void initializeLabels();
+    bool checkAvailable(QString province);
 };
 
 #endif // MAPWINDOW_H
