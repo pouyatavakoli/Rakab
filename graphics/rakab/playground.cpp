@@ -117,6 +117,7 @@ void Playground::displayCards() {
             cardLabel->setParent(this);
             playerLayouts[i]->addWidget(cardLabel);
 
+            disconnect(cardLabel, &Card::clicked, nullptr, nullptr);
             connect(cardLabel, &Card::clicked, this, [this, cardLabel]() {
                 handleCardClick(cardLabel);
             });
@@ -163,6 +164,7 @@ void Playground::updateUi()
 
 void Playground::handleCardClick(Card* card) {
     int playerIndex = game.getPlayerIndex();
+    qDebug() << "is turn of in handleCardClick :" << playerIndex;
     std::string cardName = card->getName();
     qDebug() << "clicked on" << QString::fromStdString(cardName);
     // Tell the game to play the card
@@ -191,14 +193,13 @@ void Playground::handleCardClick(Card* card) {
         }
         else if (situation == 5) // It is RishSefid
         {
-            //        StartEffectOfRishSefid();
 
         }
         else if (situation == 6) // It is ParchamDar
         {
-            //       parchamdarIsPlayed =true;
 
         }
+        game.updateTotalScore();
         updateUi();
         if(situation == 11)
         {
@@ -230,9 +231,33 @@ void Playground::handleCardClick(Card* card) {
 
 
 void Playground::on_pushButton_clicked()
-{
-    game.nextTurn();
-    displayCards();
-    game.getPlayer(game.getPlayerIndex()).updatePlayerEligibility(false);
+{   
+    game.updatePlayersEligibility(game.getPlayerIndex());
+    game.updateAnyPlayerCanPlay();
+    if(game.getAnyPlayerCanPlay() == true)
+    {
+        game.nextTurn();
+        updateUi();
+    }
+    else
+    {
+        int winstat = game.checkThisBattleWinner(province);
+        if(winstat == 0)
+        {
+            QString message = " The game has no winner, it's a tie.";
+            QMessageBox::information(this, "Status", message);
+        }
+        else if(winstat == 1)
+        {
+            QString message = " We have a winner.";
+            QMessageBox::information(nullptr, "Winner", message);
+        }
+        else if (winstat == 2)
+        {
+            QString message = "No winner could be determined.";
+            QMessageBox::information(nullptr, "Status", message);
+
+        }
+    }
 }
 

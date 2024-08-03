@@ -23,7 +23,9 @@
 #include "yellow10.h"
 
 // Constructor
-Game::Game(QObject *parent) : QObject(parent), playerCount(0), currentPlayerIndex(0) {}
+Game::Game(QObject *parent) : QObject(parent), playerCount(0), currentPlayerIndex(0)
+                             ,lastWinner(nullptr) , NeshaneJangOwner(nullptr) , NeshaneSolhgOwner(nullptr)
+                             , lastPlayerWhoPassed(nullptr){}
 
 // Setter for player count
 void Game::setPlayersCount(int PlayerCountVal) {
@@ -312,28 +314,62 @@ void Game::endAllEffects()
 
 void Game::startAllEffects()
 {
-    if (seasonSituation == "Winter")
+    if(countRishSefid != 0)
     {
-        startSeason("Winter");
-        for (auto &player : players)
+        for(int i =0 ; i < countRishSefid ;i++)
         {
-            player->applyEffect();
+            StartEffectOfRishSefid();
         }
-    }
-    else if (seasonSituation == "Spring")
-    {
-        for (auto &player : players)
+        if (seasonSituation == "Winter")
         {
-            player->applyEffect();
+            startSeason("Winter");
+            for (auto &player : players)
+            {
+                player->applyEffect();
+            }
         }
-        startSeason("Spring");
+        else if (seasonSituation == "Spring")
+        {
+            for (auto &player : players)
+            {
+                player->applyEffect();
+            }
+            startSeason("Spring");
+        }
+        else
+        {
+            for (auto &player : players)
+            {
+            player->applyEffect();
+            }
+        }
     }
     else
     {
-        for (auto &player : players)
+        if (seasonSituation == "Winter")
         {
-            player->applyEffect();
+            startSeason("Winter");
+            for (auto &player : players)
+            {
+                player->applyEffect();
+            }
         }
+        else if (seasonSituation == "Spring")
+        {
+            for (auto &player : players)
+            {
+                player->applyEffect();
+            }
+            startSeason("Spring");
+        }
+        else
+        {
+            for (auto &player : players)
+            {
+            player->applyEffect();
+            }
+        }
+
     }
 }
 
@@ -359,6 +395,43 @@ void Game::StartEffectOfRishSefid()
     }
 }
 
+void Game::setNeshaneJangOwner()
+{
+    static Player* defaultPlayer;
+    std::vector<Player *> NeshaneJangOwners;
+    int min = players[0]->getCountShirZan();
+
+    for (auto &player : players)
+    {
+        if (player->getCountShirZan() < min)
+        {
+            min = player->getCountShirZan();
+            NeshaneJangOwners.clear();
+            NeshaneJangOwners.push_back(player);
+        }
+        else if (player->getCountShirZan() == min)
+        {
+            NeshaneJangOwners.push_back(player);
+        }
+    }
+
+    if (NeshaneJangOwners.size() == 1)
+    {
+        NeshaneJangOwners[0]->setCanPutNeshaneJang(true);
+        NeshaneJangOwner = NeshaneJangOwners[0];
+    }
+    else
+    {
+        NeshaneJangOwner = defaultPlayer;
+    }
+}
+
+
+void Game::setNeshaneSolhgOwner(int index)
+{
+    NeshaneSolhgOwner = players[index];
+}
+
 bool Game::canStartSeason(const std::string season) const
 {
     if (seasonSituation == season)
@@ -370,6 +443,75 @@ bool Game::canStartSeason(const std::string season) const
         return true;
     }
 }
+
+void Game::setBattleStarter(const Player &player1)
+{
+    // Find the player
+    for (int i = 0; i < playerCount; i++)
+    {
+        if (players[i]->getName() == player1.getName())
+        {
+            currentPlayerIndex = i;
+            break;
+        }
+    }
+
+
+}
+
+Player Game::getPlayerWhoShouldStart()
+{
+    if (NeshaneJangOwner->getCanPutNeshaneJang())
+    {
+        return NeshaneJangOwner;
+    }
+    else
+    {
+        if (lastWinner->getName().empty())
+        {
+            return lastPlayerWhoPassed;
+        }
+        else
+        {
+            return lastWinner;
+        }
+    }
+}
+
+const Player &Game::findSmallestPlayer()
+{
+    if (players.empty())
+    {
+        static Player defaultPlayer; // Return a default player if no players are found
+        return defaultPlayer;
+    }
+
+    std::vector<const Player *> smallestPlayers;
+    int minAge = players[0]->getAge();
+
+    for (const auto &player : players)
+    {
+        if (player->getAge() < minAge)
+        {
+            minAge = player->getAge();
+            smallestPlayers.clear();
+            smallestPlayers.push_back(player);
+        }
+        else if (player->getAge() == minAge)
+        {
+            smallestPlayers.push_back(player);
+        }
+    }
+
+    // Seed the random number generator
+    std::srand(std::time(0));
+
+    // Randomly select one of the youngest players
+    int randomIndex = std::rand() % smallestPlayers.size();
+
+    return *(smallestPlayers[randomIndex]);
+}
+
 
 void Game::startSeason(const std::string userChoice)
 {
@@ -496,7 +638,8 @@ int Game::playPlayerCard(int playerIndex, const std::string& cardName) {
     }
     else if (situation == 5) // It is RishSefid
     {
-        StartEffectOfRishSefid();
+        countRishSefid++;
+        setNeshaneSolhgOwner(playerIndex);
         nextTurn();
         return 5;
     }
@@ -509,9 +652,20 @@ int Game::playPlayerCard(int playerIndex, const std::string& cardName) {
 }
 
 void Game::nextTurn() {
-    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-    qDebug() << "Next turn: currentPlayerIndex = " << currentPlayerIndex ;
+
+    int checkedPlayers = 0;
+
+    while (checkedPlayers < playerCount) {
+        currentPlayerIndex = (currentPlayerIndex  + 1) % playerCount;
+        if (players[currentPlayerIndex]->canPlay())
+        {
+            qDebug() << "is turn of :" << currentPlayerIndex;
+            return;
+        }
+        checkedPlayers++;
+    }
 }
+
 
 
 std::vector<std::shared_ptr<Card>> Game::getPlayerYellowHand(int playerIndex) const {
@@ -551,6 +705,48 @@ void Game::setPlayerIndex(int playerIndex)
 int Game::getPlayerIndex() const
 {
     return currentPlayerIndex;
+}
+
+bool Game::getIsFirstRound() const
+{
+    return firstRound;
+}
+
+void Game::setIsFirstRound(bool situation)
+{
+    firstRound = situation;
+}
+
+bool Game::getAnyPlayerCanPlay() const
+{
+    return anyPlayerCanPlay;
+}
+
+void Game::updateAnyPlayerCanPlay()
+{
+    int count =0;
+    for(const auto player : players)
+    {
+        if(player->canPlay() ==false)
+        {
+            count++;
+        }
+    }
+    if(count == players.size())
+    {
+        anyPlayerCanPlay = false;
+    }
+    else
+    {
+       anyPlayerCanPlay = true;
+    }
+}
+
+void Game::updatePlayersEligibility(int index)
+{
+    players[index]->updatePlayerEligibility(false);
+
+    qDebug() << "updatePlayersEligibility";
 }
 
 void Game::setLastWinner(Player &winnerVal)
@@ -600,6 +796,60 @@ int Game::checkThisBattleWinner(const std::string &province)
           return 2;
     }
 }
+
+bool Game::winGame1()
+{
+    for (auto &player : players)
+    {
+        const auto &ownedProvinces = player->getOwnedProvinces();
+
+        for (const auto &province : ownedProvinces)
+        {
+            const auto &adjacentProvinces = map.get_adjacent_provinces(province);
+            int adjacentCount = 0;
+
+            for (const auto &adjacentProvince : adjacentProvinces)
+            {
+                if (std::find(ownedProvinces.begin(), ownedProvinces.end(), adjacentProvince) != ownedProvinces.end())
+                {
+                    adjacentCount++;
+                }
+                if (adjacentCount >= 2)
+                {
+                    player->setWinStatus(true);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::winGame2()
+{
+    for (auto &player : players)
+    {
+        if (player->getNumberOfOwnedProvinces() >= 5)
+        {
+            player->setWinStatus(true);
+            return true;
+        }
+    }
+    return false;
+}
+
+void Game::findWinner()
+{
+    for (auto player : players)
+    {
+        if (player->getWinStatus())
+        {
+//            std::cout << player.getName() << "is the winner of Game" << std::endl;
+            break;
+        }
+    }
+}
+
 
 
 

@@ -52,6 +52,7 @@ public:
     void burnHand();
 
     bool canPlay();
+    void passAndDontPlay();
     void updatePlayerEligibility(bool);
 
     void flushTable();
@@ -60,7 +61,7 @@ private:
     int age;
     std::string name;
     int totalScore;
-    bool isAbleToPlay;
+    bool isAbleToPlay{true};
     bool winStatus;
     bool usedTablZan;
     int countShirZan;

@@ -42,34 +42,7 @@ mapwindow::mapwindow(Game &game ,QWidget *parent) :
     // Update the paint event to handle resizing
     connect(this, &mapwindow::resized, this, QOverload<>::of(&mapwindow::update));
 
-    //neshan["NeshaneSolh"] = ":/new/symbols/assets/symbols/Pe_Sym.png";
-    //neshan["NeshaneJang"] = ":/new/symbols/assets/symbols/Wa_Sym.png";
 
-    // Define drop areas for Solh and Jang symbols
-
-    /*
-    struct Area {
-        QString name;
-        QRect rect;
-    };
-
-    QMap<QString, QRect> dropAreasSolh = {
-        { "ELINA", QRect(52, 193, 40, 40) },
-        { "ROLLO", QRect(251, 37, 40, 40) },
-        { "TALMONE", QRect(453, 166, 40, 40) },
-        { "PLADACI", QRect(726, 125, 40, 40) },
-        { "BORGE" , QRect(726 , 183 , 40 , 40)},
-        { "BELLA", QRect(888, 106, 40, 40) },
-        { "MORINA", QRect(578, 263, 40, 40) },
-        { "CALINE", QRect(1070, 191, 40, 40) },
-        { "ARMENTO", QRect(530, 453, 40, 40) },
-        { "OLIVADI", QRect(580, 410, 40, 40) },
-        { "ENNA", QRect(897, 295, 40, 40) },
-        { "ATELA", QRect(911, 464, 40, 40) },
-        { "DIMASE", QRect(848, 516, 40, 40) },
-        { "LIA", QRect(508, 555, 50, 50) }
-    };
-    */
     dropAreas = {
         QRect(52, 193, 40, 40),
         QRect(251, 37, 40, 40),
@@ -94,6 +67,7 @@ mapwindow::mapwindow(Game &game ,QWidget *parent) :
     setAcceptDrops(true);
     ui->NeshaneJang->setAcceptDrops(true);
     ui->NeshaneSolh->setAcceptDrops(true);
+
 }
 
 void mapwindow::paintEvent(QPaintEvent *event)
@@ -226,11 +200,26 @@ void mapwindow::dropEvent(QDropEvent *event)
 
                     if (askToStartBattle(this , labelName))
                     {
-                        Playground *pg = new Playground(game , labelNameStd);
-                        pg->show();
-                        //this->hide();
-                        isDroppedInArea = true;
-                        break;
+                        if(game.getIsFirstRound() == true)
+                        {
+                            game.setBattleStarter(game.findSmallestPlayer());
+                            Playground *pg = new Playground(game , labelNameStd);
+                            pg->show();
+                            //this->hide();
+                            isDroppedInArea = true;
+                            break;
+                        }
+                        else
+                        {
+                            game.setNeshaneJangOwner();
+                            game.setBattleStarter(game.getPlayerWhoShouldStart());
+                            Playground *pg = new Playground(game , labelNameStd);
+                            pg->show();
+                            //this->hide();
+                            isDroppedInArea = true;
+                            break;
+
+                        }
                     }
 
                 }

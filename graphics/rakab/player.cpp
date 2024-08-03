@@ -345,6 +345,11 @@ bool Player::canPlay()
     return isAbleToPlay;
 }
 
+void Player::passAndDontPlay()
+{
+    isAbleToPlay = false;
+}
+
 void Player::updatePlayerEligibility(bool canPlayVal)
 {
     isAbleToPlay = canPlayVal;

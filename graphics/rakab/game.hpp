@@ -37,6 +37,12 @@ public:
     void startAllEffects();
     void refreshEffects();
     void StartEffectOfRishSefid();
+    void setNeshaneSolhgOwner(int);
+    void setNeshaneJangOwner();
+    void setBattleStarter(const Player &);
+
+    Player getPlayerWhoShouldStart();
+    const Player &findSmallestPlayer();
 
 
     bool canStartSeason(const std::string) const;
@@ -54,6 +60,15 @@ public:
     void setPlayerIndex(int);
     int getPlayerIndex() const;
 
+    bool getIsFirstRound() const;
+    void setIsFirstRound(bool);
+
+    bool getAnyPlayerCanPlay() const;
+    void updateAnyPlayerCanPlay();
+
+
+    void updatePlayersEligibility(int);
+
     bool winGame1();
     bool winGame2();
     void findWinner();
@@ -62,24 +77,26 @@ public:
     int checkThisBattleWinner(const std::string &);
 
 
-
 signals:
     void cardPlayed(int playerIndex, const std::shared_ptr<Card>& card);
-
-private:
 
 
 private:
     int playerCount;
     std::vector <Player*> players;
-    Player *lastWinner;
     std::vector<std::shared_ptr<Card>> mainDeck;
     Map map;
     int currentPlayerIndex;
     int cardHoldersCount;
-    bool anyPlayerCanPlay{false};
+    bool anyPlayerCanPlay{true};
     std::string seasonSituation;
     bool parchamDarIsPlayed{false};
+    Player *lastWinner;
+    Player *NeshaneJangOwner;
+    Player *NeshaneSolhgOwner; //RishSefid
+    Player *lastPlayerWhoPassed;
+    int countRishSefid{0};
+    bool firstRound{true};
 
 };
 
