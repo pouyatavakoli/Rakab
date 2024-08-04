@@ -8,6 +8,7 @@ Playground::Playground(Game &game, const std::string provinceName, QWidget *pare
 {
     ui->setupUi(this);
     //mainDeck  = game.getMainDeck();
+
     game.fillMainDeck();
     qDebug() << "filled deck";
     game.shuffleDeck();
@@ -168,6 +169,12 @@ void Playground::handleCardClick(Card* card) {
     std::string cardName = card->getName();
     qDebug() << "clicked on" << QString::fromStdString(cardName);
     // Tell the game to play the card
+
+    if (matarsakEffectActive) {
+            handleMatarsakEffect(card);
+            return;
+        }
+
     if(playerIndex == card->getindexOfOwner())
     {
         int situation = game.playPlayerCard(playerIndex, cardName);
@@ -181,6 +188,11 @@ void Playground::handleCardClick(Card* card) {
             QMessageBox::warning(this, "Invalid Move", message);
         }
         else if (situation == 1){ // Successfully played a card
+            if (cardName == "Matarsak") {
+                matarsakEffectActive = true;
+                QMessageBox::information(this, "Matarsak", "Select a card from the table to return to your hand.");
+            }
+
 
         }
         else if (situation == 2){ // It is a season
@@ -241,6 +253,7 @@ void Playground::on_pushButton_clicked()
     }
     else
     {
+        game.updateTotalScore();
         int winstat = game.checkThisBattleWinner(province);
         if(winstat == 0)
         {
@@ -259,5 +272,22 @@ void Playground::on_pushButton_clicked()
 
         }
     }
+}
+
+void Playground::handleMatarsakEffect(Card* card) {
+    std::string cardName = card->getName();
+    qDebug() << "Matarsak effect active, clicked on" << QString::fromStdString(cardName);
+
+    int result = game.handleMatarsakEffect(game.getPlayerIndex(), cardName);
+
+    if (result == 1) { // Success
+        qDebug() << QString::fromStdString(cardName) << " has been picked up from the table and returned to the hand!";
+        matarsakEffectActive = false;
+    }
+    else { // Card not found on the table
+        QMessageBox::warning(this, "Invalid Move", QString::fromStdString(cardName) + " not found on the table. Please try again.");
+    }
+
+    updateUi();
 }
 

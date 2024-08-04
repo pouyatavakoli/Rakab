@@ -6,11 +6,11 @@
 
 #include "game.hpp"
 #include "card.h"
-//#include "Matarsak.h"
+#include "matarsak.h"
 #include "shahdokht.h"
 #include "winter.h"
 #include "spring.h"
-//#include "TablZan.h"
+#include "tablzan.h"
 #include "parchamdar.h"
 #include "rishsefid.h"
 #include "shirzan.h"
@@ -156,14 +156,21 @@ void Game::fillMainDeck()
         mainDeck.push_back(rishsefid);
     }
 
-    /*
+
+    for (int i = 1; i <= 16; ++i)
+    {
+        std::shared_ptr<Matarsak> matarsak = std::make_shared<Matarsak>();
+//      matarsak->setImage(QString::fromStdString(cardImages["Matarsak"]));
+        mainDeck.push_back(matarsak);
+    }
+
     for (int i = 1; i <= 6; ++i)
     {
-        std::shared_ptr<RishSefid> rishsefid = std::make_shared<RishSefid>();
-        rishsefid->setImage(QString::fromStdString(cardImages["RishSefid"]));
-        mainDeck.push_back(rishsefid);
+        std::shared_ptr<TablZan> tablzan = std::make_shared<TablZan>();
+//      matarsak->setImage(QString::fromStdString(cardImages["Matarsak"]));
+        mainDeck.push_back(tablzan);
     }
-    */
+
 }
 
 
@@ -622,9 +629,16 @@ int Game::playPlayerCard(int playerIndex, const std::string& cardName) {
         return 0;
     }
     else if (situation == 1){ // Successfully played a card
+        if(cardName != "Matarsak"){
         qDebug() << "card played successfully";
         nextTurn();
         return 1;
+        }
+        else
+        {
+            qDebug() << "card played matarsak successfully";
+            return 1;
+        }
     }
     else if (situation == 2){ // It is a season
         seasonSituation = cardName;
@@ -847,6 +861,20 @@ void Game::findWinner()
 //            std::cout << player.getName() << "is the winner of Game" << std::endl;
             break;
         }
+    }
+}
+
+
+int Game::handleMatarsakEffect(int playerIndex, const std::string& cardName) {
+
+    std::shared_ptr<Card> targetCard = players[playerIndex]->removeCardFromYellowOnTable(cardName);
+
+    if (targetCard) {
+        players[playerIndex]->addCardToYellowHand(targetCard);
+        nextTurn();
+        return 1; // Success
+    } else {
+        return 0; // Card not found on the table
     }
 }
 

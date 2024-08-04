@@ -26,6 +26,7 @@ public:
     void addCardToPurpleOnTable(std::shared_ptr<Card>);
     void setPurpleOnTable(std::vector<std::shared_ptr<Card>>);
     void addCardToPurpleHand(std::shared_ptr<Card>);
+    std::shared_ptr<Card> removeCardFromYellowOnTable(const std::string &cardName);
 
     bool getWinStatus();
     std::vector<std::string> getOwnedProvinces() const;

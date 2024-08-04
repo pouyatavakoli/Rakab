@@ -76,6 +76,9 @@ public:
     void setLastWinner(Player &);
     int checkThisBattleWinner(const std::string &);
 
+    int handleMatarsakEffect(int playerIndex, const std::string& cardName);
+
+
 
 signals:
     void cardPlayed(int playerIndex, const std::shared_ptr<Card>& card);

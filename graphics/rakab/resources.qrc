@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/new/map">
         <file>assets/Map.png</file>
+        <file>assets/background/green.png</file>
     </qresource>
     <qresource prefix="/new/cards/zard">
         <file>assets/cards/zard/010.png</file>

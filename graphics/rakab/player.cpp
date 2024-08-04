@@ -61,6 +61,22 @@ void Player::addCardToPurpleHand(std::shared_ptr<Card> card)
     purpleHand.push_back(card);
 }
 
+std::shared_ptr<Card> Player::removeCardFromYellowOnTable(const std::string &cardName)
+{
+    auto it = std::find_if(yellowOnTable.begin(), yellowOnTable.end(), [&cardName](const std::shared_ptr<Card> &card)
+                           { return card->getName() == cardName; });
+    if (it != yellowOnTable.end())
+    {
+        std::shared_ptr<Card> targetCard = *it;
+        yellowOnTable.erase(it);
+        return targetCard;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
 void Player::addCardToPurpleOnTable(std::shared_ptr<Card> card)
 {
     purpleOnTable.push_back(card);
@@ -125,15 +141,6 @@ int Player::PlayThisCard(const std::string userChoice)
     {
 //        updatePlayerEligibility(false);
         return -1;
-    }
-
-    // if (userChoice.substr(4) == "help")
-    // {
-    //     return -10 ; // show help
-    // }
-    if (userChoice == "help")
-    {
-        return -10; // show help
     }
     else
     {
@@ -222,7 +229,7 @@ int Player::playPurpleCard(const std::string &cardName)
             {
                 if (!yellowOnTable.empty())
                 {
-                    purpleCard->startEffect(*this);
+//                  purpleCard->startEffect(*this);
                     purpleOnTable.push_back(playedCard);
                     playedCards.push_back(playedCard);
                     purpleHand.erase(it);
@@ -239,7 +246,7 @@ int Player::playPurpleCard(const std::string &cardName)
             {
                 if (!usedTablZan)
                 {
-                    // purpleCard->startEffect(*this);
+                    purpleCard->startEffect(*this);
                     purpleOnTable.push_back(playedCard);
                     playedCards.push_back(playedCard);
                     purpleHand.erase(it);

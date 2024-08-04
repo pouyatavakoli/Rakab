@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <memory>
 #include <vector>
+#include <QPixmap>
 
 #include "ui_playground.h"
 #include "game.hpp"
@@ -28,6 +29,7 @@ public:
 private:
     Ui::playground *ui;
     Game& game;
+    QPixmap backgroundPixmap;
     QGridLayout* playgroundLayout;
     //QVBoxLayout* tableLayout;
     QVector<QLayout*> playerLayouts;
@@ -38,6 +40,10 @@ private:
     void displayCards();
     void updateUi();
     void clearLayout(QLayout *layout);
+    bool matarsakEffectActive{false};
+
+    void handleMatarsakEffect(Card* card);
+
 private slots:
     void handleCardClick(Card* card);
     void on_pushButton_clicked();
