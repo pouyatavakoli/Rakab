@@ -374,25 +374,28 @@ void Player::flushTable()
 
 std::string Player::toString() const {
     std::ostringstream oss;
-    oss << "Player Name: " << name << "\n"
-        << "Age: " << age << "\n"
-        << "Total Score: " << totalScore << "\n"
-        << "Win Status: " << (winStatus ? "Yes" : "No") << "\n"
-        << "Can Put Neshane Jang: " << (canPutNeshaneJang ? "Yes" : "No") << "\n"
-        << "Dominated Areas: ";
-
+    oss << name << ", "
+        << age << ", "
+        << totalScore << ", " ;
+//        << (winStatus ? "Yes" : "No") << ", "
+//        << (canPutNeshaneJang ? "Yes" : "No") << ", " ;
+/*
+    oss << "\n";
+    // dominated areas
     if (dominatedAreas.empty()) {
         oss << "None";
     } else {
         for (const auto& area : dominatedAreas) {
-            oss << area << " ";
+            oss << area << ", ";
         }
     }
-
+*/
+     // todo : save the autual cards instead of count
+    /*
     oss << "\nYellow Cards on Table: " << yellowOnTable.size() << "\n"
         << "Purple Cards on Table: " << purpleOnTable.size() << "\n"
         << "Yellow Cards in Hand: " << yellowHand.size() << "\n"
         << "Purple Cards in Hand: " << purpleHand.size() << "\n";
-
+   */
     return oss.str();
 }

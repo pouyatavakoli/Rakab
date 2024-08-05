@@ -884,21 +884,29 @@ int Game::handleMatarsakEffect(int playerIndex, const std::string& cardName) {
 
 std::string Game::toString() const {
     std::ostringstream oss;
-
+    std::string battleCompleted  = "No";
+    // current battle completed or not
+    for (const auto &player : players){
+       if (player->getWinStatus()){
+           battleCompleted = "Yes";
+       }
+    }
+    oss << battleCompleted << ", ";
     // Basic game information
-    oss << "Player Count: " << playerCount << "\n";
-    oss << "Current Player Index: " << currentPlayerIndex << "\n";
-    oss << "First Round: " << (firstRound ? "Yes" : "No") << "\n";
-    oss << "Any Player Can Play: " << (anyPlayerCanPlay ? "Yes" : "No") << "\n";
-    oss << "Season Situation: " << seasonSituation << "\n";
+    oss << playerCount  << ", ";
+    oss << currentPlayerIndex << ", ";
+    // oss << (firstRound ? "Yes" : "No") << ", ";
+    oss << (anyPlayerCanPlay ? "Yes" : "No") << ", ";
+    // oss << seasonSituation << ", ";
+    oss << "\n";
 
     // Player details
-    oss << "Players:\n";
     for (const auto &player : players) {
         if (player) {
             oss << player->toString() << "\n";
         }
     }
+    /*
 
     // Main deck details
     oss << "Main Deck:\n";
@@ -915,7 +923,7 @@ std::string Game::toString() const {
 
     // Game flags or counters can be added here
     oss << "Count Rish Sefid: " << countRishSefid << "\n";
-
+    */
     return oss.str();
 }
 

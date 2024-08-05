@@ -47,7 +47,7 @@ void mainmenu::on_saved_btn_clicked()
 {
 
     // Show the saved games menu window
-    savedGamesMenu *sgMenu = new savedGamesMenu();
+    savedGamesMenu *sgMenu = new savedGamesMenu(*save);
     sgMenu->show();
     // close the current window
     this->close();
