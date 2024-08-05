@@ -2,7 +2,7 @@
 #include "ui_mainmenu.h"
 #include"savedgamesmenu.h"
 #include "getplayersinfowindow.h"
-
+#include "save.h"
 
 
 mainmenu::mainmenu(QWidget *parent)
@@ -22,6 +22,8 @@ mainmenu::mainmenu(QWidget *parent)
 
     // title
     this->ui->title_lbl->setStyleSheet("color: red");
+    save = new Save();
+
 
 
 }
@@ -57,7 +59,7 @@ void mainmenu::on_saved_btn_clicked()
 
 void mainmenu::on_newgame_btn_clicked()
 {
-    Game *game = new Game();
+    Game *game = new Game(*save);
     getPlayersInfoWindow *getinfo = new getPlayersInfoWindow(*game);
     getinfo->show();
     this->close();

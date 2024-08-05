@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 #include <QString>
 #include <string>
+#include <sstream>
 
 class Card : public QLabel
 {
@@ -26,6 +27,8 @@ public:
 
     QString getFaceURL();
     QString getBackURL();
+
+    std::string toString() const;
 
 protected:
     std::string name;

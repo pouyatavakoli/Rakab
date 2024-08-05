@@ -1,9 +1,11 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "card.h"
 #include <QObject>
 #include <QString>
+#include <sstream>
+
+#include "card.h"
 
 class Player : public QObject {
     Q_OBJECT
@@ -57,6 +59,8 @@ public:
     void updatePlayerEligibility(bool);
 
     void flushTable();
+
+    std::string toString() const;
 
 private:
     int age;

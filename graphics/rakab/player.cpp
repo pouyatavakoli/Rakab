@@ -372,5 +372,27 @@ void Player::flushTable()
     yellowOnTable.clear();   
 }
 
+std::string Player::toString() const {
+    std::ostringstream oss;
+    oss << "Player Name: " << name << "\n"
+        << "Age: " << age << "\n"
+        << "Total Score: " << totalScore << "\n"
+        << "Win Status: " << (winStatus ? "Yes" : "No") << "\n"
+        << "Can Put Neshane Jang: " << (canPutNeshaneJang ? "Yes" : "No") << "\n"
+        << "Dominated Areas: ";
 
+    if (dominatedAreas.empty()) {
+        oss << "None";
+    } else {
+        for (const auto& area : dominatedAreas) {
+            oss << area << " ";
+        }
+    }
 
+    oss << "\nYellow Cards on Table: " << yellowOnTable.size() << "\n"
+        << "Purple Cards on Table: " << purpleOnTable.size() << "\n"
+        << "Yellow Cards in Hand: " << yellowHand.size() << "\n"
+        << "Purple Cards in Hand: " << purpleHand.size() << "\n";
+
+    return oss.str();
+}

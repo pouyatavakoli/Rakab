@@ -5,6 +5,7 @@
 #include "player.h"
 #include "card.h"
 #include "map.h"
+#include "save.h"
 
 #include <vector>
 #include <string>
@@ -17,7 +18,7 @@ class Game : public QObject {
     Q_OBJECT
 public:
 
-    Game(QObject *parent = nullptr);
+    Game(Save &save , QObject *parent = nullptr);
     void setPlayersCount(int);
     void setPlayers(const std::vector<std::string>&, const std::vector<int>&);
     void nextTurn();
@@ -78,7 +79,9 @@ public:
 
     int handleMatarsakEffect(int playerIndex, const std::string& cardName);
 
+    std::string toString() const;
 
+    void saveThisGame();
 
 signals:
     void cardPlayed(int playerIndex, const std::shared_ptr<Card>& card);
@@ -100,6 +103,7 @@ private:
     Player *lastPlayerWhoPassed;
     int countRishSefid{0};
     bool firstRound{true};
+    Save &save ;
 
 };
 

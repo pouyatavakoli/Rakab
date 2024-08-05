@@ -8,6 +8,7 @@
 #include <QVector>
 
 #include "game.hpp"
+#include "save.h"
 
 namespace Ui {
 class mapwindow;
@@ -39,6 +40,7 @@ private slots:
 
 private:
     Game &game;
+    //Save &save;
     Ui::mapwindow *ui;
     QPixmap backgroundPixmap;
     QMap<QString, QString> neshan;

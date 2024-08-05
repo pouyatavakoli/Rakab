@@ -18,6 +18,7 @@ SOURCES += \
     mapwindow.cpp \
     matarsak.cpp \
     playground.cpp \
+    save.cpp \
     savedgamesmenu.cpp \
     card.cpp \
     player.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     mapwindow.h \
     matarsak.h \
     playground.h \
+    save.h \
     savedgamesmenu.h \
     card.h \
     player.h \

@@ -22,10 +22,11 @@
 #include "yellow6.h"
 #include "yellow10.h"
 
+
 // Constructor
-Game::Game(QObject *parent) : QObject(parent), playerCount(0), currentPlayerIndex(0)
+Game::Game(Save &save , QObject *parent) : QObject(parent), playerCount(0), currentPlayerIndex(0)
                              ,lastWinner(nullptr) , NeshaneJangOwner(nullptr) , NeshaneSolhgOwner(nullptr)
-                             , lastPlayerWhoPassed(nullptr){}
+                             , lastPlayerWhoPassed(nullptr) , save(save){}
 
 // Setter for player count
 void Game::setPlayersCount(int PlayerCountVal) {
@@ -266,6 +267,9 @@ void Game::removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::share
 
 void Game::updateTotalScore()
 {
+    // find better place to call this
+    saveThisGame();
+
     refreshEffects();
     for (auto &player : players)
     {
@@ -878,6 +882,44 @@ int Game::handleMatarsakEffect(int playerIndex, const std::string& cardName) {
     }
 }
 
+std::string Game::toString() const {
+    std::ostringstream oss;
 
+    // Basic game information
+    oss << "Player Count: " << playerCount << "\n";
+    oss << "Current Player Index: " << currentPlayerIndex << "\n";
+    oss << "First Round: " << (firstRound ? "Yes" : "No") << "\n";
+    oss << "Any Player Can Play: " << (anyPlayerCanPlay ? "Yes" : "No") << "\n";
+    oss << "Season Situation: " << seasonSituation << "\n";
 
+    // Player details
+    oss << "Players:\n";
+    for (const auto &player : players) {
+        if (player) {
+            oss << player->toString() << "\n";
+        }
+    }
 
+    // Main deck details
+    oss << "Main Deck:\n";
+    for (const auto &card : mainDeck) {
+        if (card) {
+            oss << card->toString() << "\n";
+        }
+    }
+
+    // Additional game state details
+    oss << "Last Winner: " << (lastWinner ? lastWinner->getName() : "None") << "\n";
+    oss << "Neshane Solhg Owner: " << (NeshaneSolhgOwner ? NeshaneSolhgOwner->getName() : "None") << "\n";
+    oss << "Neshane Jang Owner: " << (NeshaneJangOwner ? NeshaneJangOwner->getName() : "None") << "\n";
+
+    // Game flags or counters can be added here
+    oss << "Count Rish Sefid: " << countRishSefid << "\n";
+
+    return oss.str();
+}
+
+void Game::saveThisGame()
+{
+    save.addGameToFile(this->toString());
+}

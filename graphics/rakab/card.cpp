@@ -39,4 +39,13 @@ void Card::setImage(const QString &imagePath)
     this->setPixmap(scaledPixmap);
 }
 
+std::string Card::toString() const {
+        std::ostringstream oss;
+        oss << "Card Name: " << name
+            << ", Type: " << type
+            << ", Number: " << numberOnTheCard
+            << ", Points: " << points
+            << ", Owner Index: " << indexOfOwner;
+        return oss.str();
+    }
 
