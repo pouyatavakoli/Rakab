@@ -376,11 +376,10 @@ std::string Player::toString() const {
     std::ostringstream oss;
     oss << name << ", "
         << age << ", "
-        << totalScore << ", " ;
-//        << (winStatus ? "Yes" : "No") << ", "
-//        << (canPutNeshaneJang ? "Yes" : "No") << ", " ;
-/*
-    oss << "\n";
+        << totalScore << ", "
+        << (winStatus ? "Yes" : "No") << ", "
+        << (canPutNeshaneJang ? "Yes" : "No") ; oss << "\n";
+
     // dominated areas
     if (dominatedAreas.empty()) {
         oss << "None";
@@ -389,7 +388,7 @@ std::string Player::toString() const {
             oss << area << ", ";
         }
     }
-*/
+
      // todo : save the autual cards instead of count
     /*
     oss << "\nYellow Cards on Table: " << yellowOnTable.size() << "\n"

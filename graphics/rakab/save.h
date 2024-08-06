@@ -27,6 +27,8 @@ public:
 
 
 private:
+    std::string battleCompleted ;
+    int playerCount;
     int numberOfGames;
     std::vector<std::shared_ptr<Player>> players;
     std::vector<std::shared_ptr<Card>> mainDeck;
@@ -34,8 +36,9 @@ private:
     std::string neshaneSolhgOwner;
     std::string neshaneJangOwner;
     int countRishSefid;
+    int currentPlayerIndex;
+    std::string anyPlayerCanPlay;
 
-    std::string battleCompleted;
 };
 //std::vector<Game> games;
 

@@ -24,82 +24,77 @@ bool Save::addGameToFile(const std::string game) {
 
 }
 
-void Save::loadGame()
-{
+void Save::loadGame() {
     std::string filename = "saved_games.txt";
-
-    std::ifstream inFile(filename);
-
-    if (!inFile.is_open()) {
-        qDebug() << "Could not open file for reading: " << QString::fromStdString(filename) ;
-        return; // Handle error
+    std::ifstream inputFile(filename);
+    if (!inputFile.is_open()) {
+        qDebug() << "Error opening file!";
+        return; // Exit if the file cannot be opened
     }
 
     std::string line;
-
-    // Read Players
-    while (std::getline(inFile, line) && !line.empty()) {
-        std::shared_ptr<Player> player ;
+    // Read the first line for battle completion status and other metadata
+    if (std::getline(inputFile, line)) {
         std::stringstream ss(line);
         std::string token;
-        std::getline(ss, token, ','); battleCompleted = token ;
-        /*
 
-        // Split by comma
-        std::getline(ss, token, ','); player.setName(token); // Player Name
-        std::getline(ss, token, ','); player.setAge(std::stoi(token)) ; // Age
-        std::getline(ss, token, ','); player.setScore(std::stoi(token)) ; // Total Score
-        std::getline(ss, token, ','); // Win Status
-        if (token == "Yes") {
-                player.setWinStatus(true);
-            } else {
-                player.setWinStatus(false);
+        // Read the first token for battle completion status
+        std::getline(ss, token, ',');
+        battleCompleted = token;
+        qDebug() << "Battle completed: " << QString::fromStdString(battleCompleted);
 
-        std::getline(ss, token, ','); player.canPutNeshaneJang = (token == "Yes"); // Can Put Neshane Jang
-        std::getline(ss, token, ','); player.dominatedAreas = token; // Dominated Areas
-        std::getline(ss, token, ','); player.yellowCardsOnTable = std::stoi(token); // Yellow Cards on Table
-        std::getline(ss, token, ','); player.purpleCardsOnTable = std::stoi(token); // Purple Cards on Table
-        std::getline(ss, token, ','); player.yellowCardsInHand = std::stoi(token); // Yellow Cards in Hand
-        std::getline(ss, token); player.purpleCardsInHand = std::stoi(token); // Purple Cards in Hand
+        std::getline(ss, token, ',');
+        playerCount = std::stoi(token); // Correctly convert string to integer
+        qDebug() << "Player count: " << playerCount;
 
+        std::getline(ss, token, ',');
+        currentPlayerIndex = std::stoi(token);
+        qDebug() << "Current player index: " << currentPlayerIndex;
 
-        */
-        players.push_back(player);
+        std::getline(ss, token, ',');
+        anyPlayerCanPlay = token;  // Yes or No
+        qDebug() << "Any player can play: " << QString::fromStdString(anyPlayerCanPlay);
     }
 
-    // Read Main Deck
-    /*
-    if (std::getline(inFile, line) && line == "Main Deck:") {
-        while (std::getline(inFile, line) && !line.empty()) {
-            Card card;
-            std::stringstream ss(line);
+    // Read player data
+    for (int i = 0; i < playerCount; i++) {
+        std::string playerLine;
+        if (std::getline(inputFile, playerLine)) {
+            if (playerLine == "None") {
+                continue; // Skip lines that are just "None"
+            }
+
+            auto player = std::make_shared<Player>();
+            std::stringstream ss(playerLine);
             std::string token;
 
-            // Split by comma
-            std::getline(ss, token, ','); card.name = token.substr(10); // Card Name
-            std::getline(ss, token, ','); card.type = token.substr(6); // Type
-            std::getline(ss, token, ','); card.number = std::stoi(token.substr(8)); // Number
-            std::getline(ss, token, ','); card.points = std::stoi(token.substr(8)); // Points
-            std::getline(ss, token); card.ownerIndex = std::stoi(token.substr(15)); // Owner Index
+            // Read player details
+            std::getline(ss, token, ',');
+            player->setName(token);
+            qDebug() << "Player name set: " << QString::fromStdString(token);
 
-            mainDeck.push_back(card);
+            std::getline(ss, token, ',');
+            player->setAge(std::stoi(token));
+            qDebug() << "Player age set: " << QString::fromStdString(token);
+
+            std::getline(ss, token, ',');
+            player->setScore(std::stoi(token));
+            qDebug() << "Player score set: " << QString::fromStdString(token);
+
+            std::getline(ss, token, ',');
+            player->setWinStatus(token == "Yes");
+            qDebug() << "Player win status set: " << QString::fromStdString(token);
+
+            std::getline(ss, token, ',');
+            player->setCanPutNeshaneJang(token == "Yes");
+            qDebug() << "Player nehsanJang set: " << QString::fromStdString(token);
+
+            // Push the shared pointer to the players vector
+            players.push_back(player);
         }
     }
-    */
-    // Read Other Game State Information
-    while (std::getline(inFile, line)) {
-        if (line.find("Last Winner:") == 0) {
-            lastWinner = line.substr(13); // Extract Last Winner
-        } else if (line.find("Neshane Solhg Owner:") == 0) {
-            neshaneSolhgOwner = line.substr(21); // Extract Neshane Solhg Owner
-        } else if (line.find("Neshane Jang Owner:") == 0) {
-            neshaneJangOwner = line.substr(20); // Extract Neshane Jang Owner
-        } else if (line.find("Count Rish Sefid:") == 0) {
-            countRishSefid = std::stoi(line.substr(17)); // Extract Count Rish Sefid
-        }
-    }
 
-    inFile.close(); // Close the file
+    inputFile.close(); // Close the file after reading
 }
 
 std::vector<std::shared_ptr<Player> > Save::getPlayers()

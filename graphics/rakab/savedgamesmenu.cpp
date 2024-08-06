@@ -32,6 +32,7 @@ void savedGamesMenu::on_back_btn_clicked()
 
 void savedGamesMenu::on_load1_btn_clicked()
 {
+    save->loadGame();
     auto players = save->getPlayers();
     std::vector<std::string> playerNames;
     std::vector<int> playerAges ;
