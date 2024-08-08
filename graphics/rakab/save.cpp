@@ -46,281 +46,287 @@ bool Save::addGameToFile(const std::string game) {
 
 }
 
-void Save::loadGame() {
-    std::string filename = "saved_games.txt";
-    std::ifstream inputFile(filename);
+bool Save::readMetaData(const std::string& line)
+{
+    std::stringstream ss(line);
+    std::string token;
+
+    try {
+        // Read and trim the first token (battleCompleted)
+        std::getline(ss, token, ',');
+        token.erase(0, token.find_first_not_of(" "));
+        token.erase(token.find_last_not_of(" ") + 1);
+        battleCompleted = (token == "Yes");
+        qDebug() << "battle completed: " << QString::fromStdString(token);
+
+        // Read and trim the second token (playerCount)
+        std::getline(ss, token, ',');
+        token.erase(0, token.find_first_not_of(" "));
+        token.erase(token.find_last_not_of(" ") + 1);
+        qDebug() << "player count: " << QString::fromStdString(token);
+        playerCount = std::stoi(token);
+
+        // Read and trim the third token (currentPlayerIndex)
+        std::getline(ss, token, ',');
+        token.erase(0, token.find_first_not_of(" "));
+        token.erase(token.find_last_not_of(" ") + 1);
+        currentPlayerIndex = std::stoi(token);
+        qDebug() << "current index: " << QString::fromStdString(token);
+
+        // Read and trim the fourth token (anyPlayerCanPlay)
+        std::getline(ss, token, ',');
+        token.erase(0, token.find_first_not_of(" "));
+        token.erase(token.find_last_not_of(" ") + 1);
+        anyPlayerCanPlay = token;
+        qDebug() << "any player can play: " << QString::fromStdString(token);
+
+        // Optionally, check if there are any extra tokens or trailing data
+        std::getline(ss, token, ',');
+        if (!token.empty() && token.find_first_not_of(" ") != std::string::npos) {
+            throw std::runtime_error("Unexpected extra data after last field.");
+        }
+    } catch (const std::exception& e) {
+        qDebug() << "Error parsing metadata: " << QString::fromStdString(e.what());
+        return false;
+    }
+    return true;
+}
+
+
+
+
+
+bool Save::readPlayerDetails(Player& player, const std::string& playerLine) {
+    std::stringstream ss(playerLine);
+    std::string token;
+
+    try {
+        std::getline(ss, token, ',');
+        player.setName(token);
+        qDebug() << "Player name set: " << QString::fromStdString(token);
+
+        std::getline(ss, token, ',');
+        player.setAge(std::stoi(token));
+        qDebug() << "Player age set: " << QString::fromStdString(token);
+
+        std::getline(ss, token, ',');
+        player.setScore(std::stoi(token));
+        qDebug() << "Player score set: " << QString::fromStdString(token);
+
+        std::getline(ss, token, ',');
+        player.setWinStatus(token == " Yes");
+        qDebug() << "Player win status set: " << QString::fromStdString(token);
+
+        std::getline(ss, token, ',');
+        player.setCanPutNeshaneSolh(token == " Yes");
+        qDebug() << "Player neshanSolh set: " << QString::fromStdString(token);
+
+        std::getline(ss, token, ',');
+        player.setCanPutNeshaneJang(token == " Yes");
+        qDebug() << "Player neshanJang set: " << QString::fromStdString(token);
+
+    } catch (const std::exception& e) {
+        qDebug() << "Error parsing player details: " << QString::fromStdString(e.what());
+        return false;
+    }
+    return true;
+}
+
+// Helper method to read province details
+bool Save::readProvinceDetails(Player& player, std::ifstream& inputFile) {
+    std::string line;
+    if (std::getline(inputFile, line)) {
+        try {
+            line.erase(0, line.find_first_not_of(" "));
+            line.erase(line.find_last_not_of(" ") + 1);
+            numberOfProvinces = std::stoi(line);
+            qDebug()<< "numberOfProvinces : " << numberOfProvinces;
+            if (numberOfProvinces == 0){
+                // burn the none line
+                std::getline(inputFile, line);
+            }
+
+        }
+        catch (const std::exception& e) {
+            qDebug() << "Error parsing province " ;
+            return false;
+        }
+
+        for (int j = 0; j < numberOfProvinces; j++) {
+            if (!std::getline(inputFile, line)) {
+                qDebug() << "Failed to read line from input file at iteration" << j;
+                return false;
+            }
+
+            if (line == "None") {
+                qDebug()<< "line was none";
+                continue; // Skip this iteration if the line is "None"
+            }
+
+            std::stringstream cardStream(line);
+            std::string token;
+
+            if (!std::getline(cardStream, token, ',')) {
+                qDebug() << "Error reading province name.";
+                continue;
+            }
+            else{
+                player.addOwnedProvinces(token);
+                qDebug() << QString::fromStdString(token) ;
+            }
+
+        }
+    }
+    return true;
+}
+
+
+
+// Helper method to read card details and add them to the player
+bool Save::readCardDetails(Player& player, std::ifstream& inputFile, const std::string& handType) {
+    std::string line;
+    if (std::getline(inputFile, line)) {
+        try {
+            line.erase(0, line.find_first_not_of(" "));
+            line.erase(line.find_last_not_of(" ") + 1);
+            cardCount = std::stoi(line);
+            qDebug() << QString::fromStdString(handType) + " count: " << cardCount;
+        } catch (const std::exception& e) {
+            qDebug() << "Error parsing card count for " << QString::fromStdString(handType) << ": " << QString::fromStdString(e.what());
+            return false;
+        }
+
+        for (int j = 0; j < cardCount; j++) {
+            if (!std::getline(inputFile, line)) {
+                qDebug() << "Failed to read line from input file at iteration" << j;
+                return false;
+            }
+
+            if (line == "None") {
+                continue; // Skip this iteration if the line is "None"
+            }
+
+            std::stringstream cardStream(line);
+            std::string token, cardType;
+            int index;
+
+            if (!std::getline(cardStream, token, ',')) {
+                qDebug() << "Error reading card type.";
+                continue;
+            }
+            cardType = token;
+
+            if (!std::getline(cardStream, token, ',')) {
+                qDebug() << "Error reading card index.";
+                continue;
+            }
+            try {
+                index = std::stoi(token);
+            } catch (const std::exception& e) {
+                qDebug() << "Error converting card index: " << QString::fromStdString(e.what());
+                continue;
+            }
+
+            auto card = createCard(cardType);
+            if (card) {
+                card->setindexOfOwner(index);
+                if (handType == "YellowHand") {
+                    player.addCardToYellowHand(card);
+                    qDebug() << "Yellow card added to hand: " << QString::fromStdString(cardType);
+                } else if (handType == "PurpleHand") {
+                    player.addCardToPurpleHand(card);
+                    qDebug() << "Purple card added to hand: " << QString::fromStdString(cardType);
+                } else if (handType == "YellowTable") {
+                    player.addCardToYellowOnTable(card);
+                    qDebug() << "Yellow on table added: " << QString::fromStdString(cardType);
+                } else if (handType == "PurpleTable") {
+                    player.addCardToPurpleOnTable(card);
+                    qDebug() << "Purple card added to table: " << QString::fromStdString(cardType);
+                }
+            } else {
+                qDebug() << "Failed to create card of type: " << QString::fromStdString(cardType);
+            }
+        }
+    }
+    return true;
+}
+
+// Helper method to create card objects
+std::shared_ptr<Card> Save::createCard(const std::string& cardType) {
+    if (cardType == "Yellow1") return std::make_shared<Yellow1>();
+    if (cardType == "Yellow2") return std::make_shared<Yellow2>();
+    if (cardType == "Yellow3") return std::make_shared<Yellow3>();
+    if (cardType == "Yellow4") return std::make_shared<Yellow4>();
+    if (cardType == "Yellow5") return std::make_shared<Yellow5>();
+    if (cardType == "Yellow6") return std::make_shared<Yellow6>();
+    if (cardType == "Yellow10") return std::make_shared<Yellow10>();
+    if (cardType == "TablZan") return std::make_shared<TablZan>();
+    if (cardType == "ShirZan") return std::make_shared<ShirZan>();
+    if (cardType == "Winter") return std::make_shared<Winter>();
+    if (cardType == "Spring") return std::make_shared<Spring>();
+    if (cardType == "Matarsak") return std::make_shared<Matarsak>();
+    if (cardType == "ParchamDar") return std::make_shared<ParchamDar>();
+    if (cardType == "RishSefid") return std::make_shared<RishSefid>();
+    if (cardType == "ShahDokht") return std::make_shared<ShahDokht>();
+    return nullptr;
+}
+
+// Main method to load the game from a file
+void Save::loadGame(const std::string& fileName, std::vector<Player*>& players) {
+    std::ifstream inputFile(fileName);
     if (!inputFile.is_open()) {
-        qDebug() << "Error opening file!";
-        return; // Exit if the file cannot be opened
+        qDebug() << "Failed to open file: " << QString::fromStdString(fileName);
+        return;
     }
 
     std::string line;
-    // Read the first line for battle completion status and other metadata
+
+    // Read the metadata line
     if (std::getline(inputFile, line)) {
-        std::stringstream ss(line);
-        std::string token;
-
-        // first line of file :
-        // Read the first token for battle completion status
-        std::getline(ss, token, ',');
-        battleCompleted = token;
-        qDebug() << "Battle completed: " << QString::fromStdString(battleCompleted);
-
-        std::getline(ss, token, ',');
-        playerCount = std::stoi(token); // Correctly convert string to integer
-        qDebug() << "Player count: " << playerCount;
-
-        std::getline(ss, token, ',');
-        currentPlayerIndex = std::stoi(token);
-        qDebug() << "Current player index: " << currentPlayerIndex;
-
-        std::getline(ss, token, ',');
-        anyPlayerCanPlay = token;  // Yes or No
-        qDebug() << "Any player can play: " << QString::fromStdString(anyPlayerCanPlay);
+        if (!readMetaData(line)) {
+            qDebug() << "Failed to read metadata.";
+            inputFile.close();
+            return;
+        }
+    } else {
+        qDebug() << "Failed to read metadata line.";
+        inputFile.close();
+        return;
     }
 
-    // Read player data
-    for (int i = 0; i < playerCount; i++) {
+
+    for (int i = 0; i <= playerCount; i++) {
+        Player* player = new Player(); // Allocate a new Player
         std::string playerLine;
+
         if (std::getline(inputFile, playerLine)) {
             if (playerLine == "None") {
-                continue; // Skip lines that are just "None"
+                delete player; // Clean up if no valid player data
+                continue;
             }
 
-            //auto player = std::make_shared<Player>();
-            Player player;
-            std::stringstream ss(playerLine);
-            std::string token;
-
-            // Read player details
-            std::getline(ss, token, ',');
-            player.setName(token);
-            qDebug() << "Player name set: " << QString::fromStdString(token);
-
-            std::getline(ss, token, ',');
-            player.setAge(std::stoi(token));
-            qDebug() << "Player age set: " << QString::fromStdString(token);
-
-            std::getline(ss, token, ',');
-            player.setScore(std::stoi(token));
-            qDebug() << "Player score set: " << QString::fromStdString(token);
-
-            std::getline(ss, token, ',');
-            player.setWinStatus(token == " Yes");
-            qDebug() << "Player win status set: " << QString::fromStdString(token);
-
-            std::getline(ss, token, ',');
-            player.setCanPutNeshaneSolh(token == " Yes");
-            qDebug() << "Player neshanSolh set: " << QString::fromStdString(token);
-
-            std::getline(ss, token, ',');
-            player.setCanPutNeshaneJang(token == " Yes");
-            qDebug() << "Player neshanJang set: " << QString::fromStdString(token);
-
-            if (std::getline(inputFile, line)) {
-                    try {
-                        numberOfProvinces = std::stoi(line);
-                        qDebug() << "numberOfProvinces: " << numberOfProvinces;
-                    } catch (const std::invalid_argument &e) {
-                        qDebug() << "Invalid argument for numberOfProvinces: " << QString::fromStdString(line);
-                    } catch (const std::out_of_range &e) {
-                        qDebug() << "Out of range error for numberOfProvinces: " << QString::fromStdString(line);
-                    }
-                }
-
-                if (std::getline(inputFile, line)) {
-                    std::istringstream ss(line);
-                    for (int i = 0; i < numberOfProvinces; ++i) {
-                        std::getline(ss, token, ',');
-                        player.addOwnedProvinces(token);
-                        qDebug() << "Player dominated area set: " << QString::fromStdString(token);
-                    }
-                }
-
-
-
-            // Read yellow hand details
-            if (std::getline(inputFile, line)) {
-                try {
-                    yellowCardsCount = std::stoi(line);
-                    qDebug() << "yellowCardsCount: " << yellowCardsCount;
-                } catch (const std::invalid_argument& e) {
-                    qDebug() << "Invalid argument for yellowCardsCount: " << QString::fromStdString(line);
-                    continue;
-                } catch (const std::out_of_range& e) {
-                    qDebug() << "Out of range error for yellowCardsCount: " << QString::fromStdString(line);
-                    continue;
-                }
-
-                for (int j = 0; j < yellowCardsCount; j++) {
-                    if (std::getline(inputFile, line)) {
-                        if (line == "None") {
-                            continue;
-                        }
-
-                        std::stringstream cardStream(line);
-                        std::getline(cardStream, token, ',');
-                        auto cardType = token;
-
-                        std::getline(cardStream, token, ',');
-                        int index = std::stoi(token);
-
-                        std::shared_ptr<Card> card;
-                        if (cardType == "Yellow1") card = std::make_shared<Yellow1>();
-                        else if (cardType == "Yellow2") card = std::make_shared<Yellow2>();
-                        else if (cardType == "Yellow3") card = std::make_shared<Yellow3>();
-                        else if (cardType == "Yellow4") card = std::make_shared<Yellow4>();
-                        else if (cardType == "Yellow5") card = std::make_shared<Yellow5>();
-                        else if (cardType == "Yellow6") card = std::make_shared<Yellow6>();
-                        else if (cardType == "Yellow10") card = std::make_shared<Yellow10>();
-
-                        if (card) {
-                            card->setindexOfOwner(index);
-                            player.addCardToYellowHand(card);
-                            qDebug() << "Yellow card added to hand: " << QString::fromStdString(cardType);
-                        }
-                    }
-                }
+            if (!readPlayerDetails(*player, playerLine) ||
+                    !readProvinceDetails(*player, inputFile)) {
+                delete player; // Clean up if an error occurred
+                continue;
             }
 
-            // Read purple hand details
-            if (std::getline(inputFile, line)) {
-                try {
-                    purpleCardsCount = std::stoi(line);
-                    qDebug() << "purpleCardsCount: " << purpleCardsCount;
-                } catch (const std::invalid_argument& e) {
-                    qDebug() << "Invalid argument for purpleCardsCount: " << QString::fromStdString(line);
-                    continue;
-                } catch (const std::out_of_range& e) {
-                    qDebug() << "Out of range error for purpleCardsCount: " << QString::fromStdString(line);
-                    continue;
-                }
-
-                for (int j = 0; j < purpleCardsCount; j++) {
-                    if (std::getline(inputFile, line)) {
-                        if (line == "None") {
-                            continue;
-                        }
-
-                        std::stringstream cardStream(line);
-                        std::getline(cardStream, token, ',');
-                        auto cardType = token;
-
-                        std::getline(cardStream, token, ',');
-                        int index = std::stoi(token);
-
-                        std::shared_ptr<Card> card;
-                        if (cardType == "TablZan") card = std::make_shared<TablZan>();
-                        else if (cardType == "ShirZan") card = std::make_shared<ShirZan>();
-                        else if (cardType == "Winter") card = std::make_shared<Winter>();
-                        else if (cardType == "Spring") card = std::make_shared<Spring>();
-                        else if (cardType == "Matarsak") card = std::make_shared<Matarsak>();
-                        else if (cardType == "ParchamDar") card = std::make_shared<ParchamDar>();
-                        else if (cardType == "RishSefid") card = std::make_shared<RishSefid>();
-
-                        if (card) {
-                            card->setindexOfOwner(index);
-                            player.addCardToPurpleHand(card);
-                            qDebug() << "Purple card added to hand: " << QString::fromStdString(cardType);
-                        }
-                    }
-                }
+            if (!readCardDetails(*player, inputFile, "YellowHand") ||
+                    !readCardDetails(*player, inputFile, "PurpleHand") ||
+                    !readCardDetails(*player, inputFile, "YellowTable") ||
+                    !readCardDetails(*player, inputFile, "PurpleTable")) {
+                delete player; // Clean up if an error occurred
+                continue;
             }
 
-            // Read yellow table details
-            if (std::getline(inputFile, line)) {
-                try {
-                    yellowCardsCount = std::stoi(line);
-                    qDebug() << "yellowCardsCount: " << yellowCardsCount;
-                } catch (const std::invalid_argument& e) {
-                    qDebug() << "Invalid argument for yellowCardsCount: " << QString::fromStdString(line);
-                    continue;
-                } catch (const std::out_of_range& e) {
-                    qDebug() << "Out of range error for yellowCardsCount: " << QString::fromStdString(line);
-                    continue;
-                }
-
-                for (int j = 0; j < yellowCardsCount; j++) {
-                    if (std::getline(inputFile, line)) {
-                        if (line == "None") {
-                            continue;
-                        }
-
-                        std::stringstream cardStream(line);
-                        std::getline(cardStream, token, ',');
-                        auto cardType = token;
-
-                        std::getline(cardStream, token, ',');
-                        int index = std::stoi(token);
-
-                        std::shared_ptr<Card> card;
-                        if (cardType == "Yellow1") card = std::make_shared<Yellow1>();
-                        else if (cardType == "Yellow2") card = std::make_shared<Yellow2>();
-                        else if (cardType == "Yellow3") card = std::make_shared<Yellow3>();
-                        else if (cardType == "Yellow4") card = std::make_shared<Yellow4>();
-                        else if (cardType == "Yellow5") card = std::make_shared<Yellow5>();
-                        else if (cardType == "Yellow6") card = std::make_shared<Yellow6>();
-                        else if (cardType == "Yellow10") card = std::make_shared<Yellow10>();
-
-                        if (card) {
-                            card->setindexOfOwner(index);
-                            player.addCardToYellowOnTable(card);
-                            qDebug() << "Yellow on table added : " << QString::fromStdString(cardType);
-                        }
-                    }
-                }
-            }
-
-            // Read purple table details
-            if (std::getline(inputFile, line)) {
-                try {
-                    purpleCardsCount = std::stoi(line);
-                    qDebug() << "purpleCardsCount: " << purpleCardsCount;
-                } catch (const std::invalid_argument& e) {
-                    qDebug() << "Invalid argument for purpleCardsCount: " << QString::fromStdString(line);
-                    continue;
-                } catch (const std::out_of_range& e) {
-                    qDebug() << "Out of range error for purpleCardsCount: " << QString::fromStdString(line);
-                    continue;
-                }
-
-                for (int j = 0; j < purpleCardsCount; j++) {
-                    if (std::getline(inputFile, line)) {
-                        if (line == "None") {
-                            continue;
-                        }
-
-                        std::stringstream cardStream(line);
-                        std::getline(cardStream, token, ',');
-                        auto cardType = token;
-
-                        std::getline(cardStream, token, ',');
-                        int index = std::stoi(token);
-
-                        std::shared_ptr<Card> card;
-                        if (cardType == "TablZan") card = std::make_shared<TablZan>();
-                        else if (cardType == "ShirZan") card = std::make_shared<ShirZan>();
-                        else if (cardType == "Winter") card = std::make_shared<Winter>();
-                        else if (cardType == "Spring") card = std::make_shared<Spring>();
-                        else if (cardType == "Matarsak") card = std::make_shared<Matarsak>();
-                        else if (cardType == "ParchamDar") card = std::make_shared<ParchamDar>();
-                        else if (cardType == "RishSefid") card = std::make_shared<RishSefid>();
-
-                        if (card) {
-                            card->setindexOfOwner(index);
-                            player.addCardToPurpleOnTable(card);
-                            qDebug() << "Purple on table added : " << QString::fromStdString(cardType);
-                        }
-                    }
-                }
-            }
-
-            players.push_back(&player);
+            players.push_back(player); // Add valid player to the list
+        } else {
+            delete player; // Clean up if unable to read player line
         }
     }
-    inputFile.close(); // Close the file after reading
-}
 
+    inputFile.close();
+}
 std::vector<Player*> Save::getPlayers()
 {
     return players ;
@@ -348,8 +354,8 @@ int Save::getCountRishSefid()
 {
     return countRishSefid ;
 }
-
-std::string Save::getBattleCompleted()
+bool Save::getBattleCompleted()
 {
     return battleCompleted ;
 }
+

@@ -923,27 +923,9 @@ std::string Game::toString() const {
     // Player details
     for (const auto &player : players) {
         if (player) {
-            oss << player->toString() << "\n";
+            oss << player->toString() ;
         }
     }
-    /*
-
-    // Main deck details
-    oss << "Main Deck:\n";
-    for (const auto &card : mainDeck) {
-        if (card) {
-            oss << card->toString() << "\n";
-        }
-    }
-
-    // Additional game state details
-    oss << "Last Winner: " << (lastWinner ? lastWinner->getName() : "None") << "\n";
-    oss << "Neshane Solhg Owner: " << (NeshaneSolhgOwner ? NeshaneSolhgOwner->getName() : "None") << "\n";
-    oss << "Neshane Jang Owner: " << (NeshaneJangOwner ? NeshaneJangOwner->getName() : "None") << "\n";
-
-    // Game flags or counters can be added here
-    oss << "Count Rish Sefid: " << countRishSefid << "\n";
-    */
     return oss.str();
 }
 
@@ -956,14 +938,13 @@ void Game::saveThisGame()
 int Game::loadFromFile()
 {
    auto save = new Save();
-   save->loadGame();
-   auto savedplayers = save->getPlayers();
+   players.clear();
+   save->loadGame("saved_games.txt" , players );
    auto savedCount = save->getplayerCount();
    setPlayersCount(savedCount);
    players.clear();
-   for(auto player : savedplayers)
+   for(auto player : players)
    {
-       players.push_back(player);
        qDebug() << QString::fromStdString( player->getName());
        qDebug() << "*****************************"
                    "**********************************"
@@ -974,7 +955,8 @@ int Game::loadFromFile()
    }
 
    auto battleCompleted = save->getBattleCompleted();
-   if (battleCompleted == "Yes"){
+   if (battleCompleted){
+       firstRound = false ;
        qDebug() <<"im here in battle completed function ";
        return 1; // battle completed
    }

@@ -407,8 +407,8 @@ std::string Player::toString() const {
     oss << "\n";
     // hand and table
     oss << yellowHand.size() << "\n";
-    if (yellowHand.size() == 0){
-        oss << "None";
+    if (yellowHand.empty()){
+        oss << "None" << "\n";
     }
     else{
     for (auto &card : yellowHand){
@@ -417,10 +417,9 @@ std::string Player::toString() const {
 
     }
     }
-
-    oss << purpleHand.size() << "\n";
-    if (purpleHand.size() == 0 ){
-        oss << "None";
+    oss << purpleHand.size() << "\n" ;
+    if (purpleHand.empty()){
+        oss << "None" << "\n";
     }
     else{
     for (auto &card : purpleHand){
@@ -431,8 +430,8 @@ std::string Player::toString() const {
     }
 
     oss << yellowOnTable.size() << "\n";
-    if (yellowOnTable.size() == 0){
-        oss <<"None";
+    if (yellowOnTable.empty()){
+        oss << "None" << "\n";
     }
     else {
     for (auto &card : yellowOnTable){
@@ -442,12 +441,12 @@ std::string Player::toString() const {
     }
     }
     oss << purpleOnTable.size() << "\n";
-    if (purpleOnTable.size() == 0){
-        oss << "None";
+    if (purpleOnTable.empty()){
+        oss << "None" << "\n";
     }
     else {
     for (auto &card : purpleOnTable){
-        card->toString();
+        oss << card->toString();
         oss << "\n";
 
     }

@@ -15,7 +15,6 @@ public:
     int getplayerCount();
     int getNumberOfGames() const;
     bool addGameToFile(const std::string game);
-    void loadGame();
 
 
     std::vector<Player*> getPlayers() ;
@@ -25,13 +24,18 @@ public:
     std::string getNeshaneSolhgOwner();
     std::string NgeteshaneJangOwner();
     int getCountRishSefid();
-    std::string getBattleCompleted();
+    bool getBattleCompleted();
 
-
+    bool readMetaData(const std::string& playerLine);
+    bool readPlayerDetails(Player &player, const std::string &playerLine);
+    bool readProvinceDetails(Player &player, std::ifstream &inputFile);
+    bool readCardDetails(Player &player, std::ifstream &inputFile, const std::string &handType);
+    std::shared_ptr<Card> createCard(const std::string &cardType);
+    void loadGame(const std::string &fileName, std::vector<Player *> &players);
 private:
-    std::string battleCompleted ;
-    int playerCount;
-    int numberOfGames;
+    bool battleCompleted ;
+    int  playerCount;
+    int  numberOfGames;
     std::vector<Player*> players;
     std::vector<std::shared_ptr<Card>> mainDeck;
     std::string lastWinner;
@@ -43,8 +47,7 @@ private:
 
     int numberOfProvinces ;
 
-    int yellowCardsCount;
-    int purpleCardsCount;
+    int cardCount ;
 
 };
 //std::vector<Game> games;
