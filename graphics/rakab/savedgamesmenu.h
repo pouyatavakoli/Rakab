@@ -2,6 +2,7 @@
 #define SAVEDGAMESMENU_H
 
 #include <QWidget>
+#include "game.hpp"
 #include "save.h"
 
 namespace Ui {
@@ -13,7 +14,7 @@ class savedGamesMenu : public QWidget
     Q_OBJECT
 
 public:
-    explicit savedGamesMenu(Save &save , QWidget *parent = nullptr);
+    explicit savedGamesMenu(Game & game , QWidget *parent = nullptr);
     ~savedGamesMenu();
 
 private slots:
@@ -22,8 +23,9 @@ private slots:
     void on_load1_btn_clicked();
 
 private:
+    Game &game;
     Ui::savedGamesMenu *ui;
-    Save *save ;
+
 };
 
 #endif // SAVEDGAMESMENU_H

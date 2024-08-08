@@ -197,20 +197,50 @@ void mapwindow::dropEvent(QDropEvent *event)
                 qDebug() << "Dropped in area:" << labelName;
                 // ask to start battle in area if available
                 if (checkAvailable(labelName)){
-
+                qDebug() <<  labelName << "was available";
                     if (askToStartBattle(this , labelName))
                     {
-                        if(game.getIsFirstRound() == true)
+                        if (game.getIsFirstRound() == true)
                         {
-                            game.setBattleStarter(game.findSmallestPlayer());
-                            Playground *pg = new Playground(game , labelNameStd);
-                            pg->show();
-                            //this->hide();
+                            qDebug() << "First battle started, setting starter";
+
+                            try {
+                                auto &smallestPlayer = game.findSmallestPlayer();
+                                qDebug() << "Smallest player found:" << QString::fromStdString(smallestPlayer.getName());
+                                game.setBattleStarter(smallestPlayer);
+                                qDebug() << "Battle starter set";
+                            } catch (const std::length_error& e) {
+                                qDebug() << "Caught a length_error during smallest player search or battle starter set:" << e.what();
+                               // return;
+                                continue;
+                            } catch (const std::exception& e) {
+                                qDebug() << "Caught an exception during smallest player search or battle starter set:" << e.what();
+                               // return;
+                                continue;
+                            }
+
+                            qDebug() << "Creating Playground object";
+                            try {
+                                Playground *pg = new Playground(game, labelNameStd);
+                                qDebug() << "Playground object created";
+                                pg->show();
+                                qDebug() << "Playground shown";
+                            } catch (const std::length_error& e) {
+                                qDebug() << "Caught a length_error during Playground creation or show:" << e.what();
+                                return; // Early exit or appropriate error handling
+                            } catch (const std::exception& e) {
+                                qDebug() << "Caught an exception during Playground creation or show:" << e.what();
+                                return; // Early exit or appropriate error handling
+                            }
+
+
                             isDroppedInArea = true;
                             break;
                         }
+
                         else
                         {
+                            qDebug() << "battle started but its not the first";
                             game.setNeshaneJangOwner();
                             game.setBattleStarter(game.getPlayerWhoShouldStart());
                             Playground *pg = new Playground(game , labelNameStd);
@@ -224,7 +254,7 @@ void mapwindow::dropEvent(QDropEvent *event)
 
                 }
                 else {
-
+                    qDebug() << "province was taken" ;
                     QDialog *provinceTaken = new QDialog(this);
 
                     // Set text for the dialog
@@ -387,14 +417,32 @@ void mapwindow::initializeLabels()
 }
 
 bool mapwindow::checkAvailable(QString province) {
+    qDebug() << "checking availability";
 
     std::vector<std::vector<std::string>> captured;
 
-    for (int i = 0; i < game.getPlayerCount(); i++) {
-        captured.push_back(game.getPlayer(i).getOwnedProvinces());
+    try {
+        for (int i = 0; i < game.getPlayerCount(); ++i) {
+            qDebug() << "getplayer and get provinces will be called after this";
+            try {
+                captured.push_back(game.getPlayer(i).getOwnedProvinces());
+            } catch (const std::runtime_error& e) {
+                qDebug() << "Player" << i << "error:" << e.what();
+                // Handle the error appropriately, for example by pushing an empty vector
+                captured.push_back(std::vector<std::string>());
+            }
+        }
+    } catch (const std::exception& e) {
+        qDebug() << "Caught an exception:" << e.what();
+        // Handle other exceptions if necessary
+        return true; // Returning true to indicate province is available as a fallback
+    } catch (...) {
+        qDebug() << "Caught an unknown exception.";
+        // Handle any other unknown exceptions
+        return true; // Returning true to indicate province is available as a fallback
     }
 
-    for (size_t j = 0; j < captured.size(); j++) {
+    for (size_t j = 0; j < captured.size(); ++j) {
         for (const auto& iterator : captured[j]) {
             if (QString::fromStdString(iterator) == province) {
                 return false; // Province is owned
@@ -404,6 +452,7 @@ bool mapwindow::checkAvailable(QString province) {
 
     return true; // Province is available
 }
+
 
 bool mapwindow::askToStartBattle(QWidget *parent, QString provinceName) {
     // Create dialog

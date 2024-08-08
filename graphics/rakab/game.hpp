@@ -18,9 +18,10 @@ class Game : public QObject {
     Q_OBJECT
 public:
 
-    Game(Save &save , QObject *parent = nullptr);
+    Game( QObject *parent = nullptr);
     void setPlayersCount(int);
     void setPlayers(const std::vector<std::string>&, const std::vector<int>&);
+    void setPlayers(std::vector<std::shared_ptr<Player> >);
     void nextTurn();
     int getPlayerCount() const;
     // getplayer used to return const value but now returns non const to change player eligibility
@@ -82,6 +83,7 @@ public:
     std::string toString() const;
 
     void saveThisGame();
+    int loadFromFile();
 
 signals:
     void cardPlayed(int playerIndex, const std::shared_ptr<Card>& card);
@@ -103,7 +105,6 @@ private:
     Player *lastPlayerWhoPassed;
     int countRishSefid{0};
     bool firstRound{true};
-    Save &save ;
 
 };
 

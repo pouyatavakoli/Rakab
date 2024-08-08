@@ -15,6 +15,7 @@ public:
     int getNumberOnTheCard() const override;
     int getPoints() const override;
     void setPoints(int pointsVal) override;
+
 };
 
 #endif // YELLOW1_HPP

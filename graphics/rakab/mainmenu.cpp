@@ -22,7 +22,6 @@ mainmenu::mainmenu(QWidget *parent)
 
     // title
     this->ui->title_lbl->setStyleSheet("color: red");
-    save = new Save();
 
 
 
@@ -46,10 +45,9 @@ void mainmenu::on_exit_btn_clicked()
 void mainmenu::on_saved_btn_clicked()
 {
 
-    // Show the saved games menu window
-    savedGamesMenu *sgMenu = new savedGamesMenu(*save);
+    Game *game = new Game();
+    savedGamesMenu *sgMenu = new savedGamesMenu(*game);
     sgMenu->show();
-    // close the current window
     this->close();
 
 
@@ -59,7 +57,7 @@ void mainmenu::on_saved_btn_clicked()
 
 void mainmenu::on_newgame_btn_clicked()
 {
-    Game *game = new Game(*save);
+    Game *game = new Game();
     getPlayersInfoWindow *getinfo = new getPlayersInfoWindow(*game);
     getinfo->show();
     this->close();

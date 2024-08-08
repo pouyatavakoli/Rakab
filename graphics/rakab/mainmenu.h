@@ -19,7 +19,6 @@ public:
 
 private:
     Ui::mainmenu *ui;
-    Save *save ;
    // savedGamesMenu *sgMenu;
 
 private slots:

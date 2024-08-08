@@ -18,12 +18,18 @@ public:
     virtual std::string getType() const = 0;
     virtual int getNumberOnTheCard() const = 0;
     virtual int getPoints() const = 0;
+    virtual void setName(std::string);
+    virtual void setType(std::string);
+    virtual void setNumberOnTheCard(int);
     virtual void setPoints(int pointsVal) = 0;
     virtual void setindexOfOwner(int) ;
     virtual int getindexOfOwner() const;
     virtual void setImage(const QString &);
 
     void mouseReleaseEvent(QMouseEvent *event) override;
+
+    virtual void setFaceURL(std::string);
+    virtual void setBackURL(std::string);
 
     QString getFaceURL();
     QString getBackURL();

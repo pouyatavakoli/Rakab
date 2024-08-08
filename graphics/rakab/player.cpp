@@ -26,6 +26,11 @@ void Player::setCanPutNeshaneJang(bool x)
     canPutNeshaneJang = x;
 }
 
+void Player::setCanPutNeshaneSolh(bool x)
+{
+    canPutNeshaneSolh = x ;
+}
+
 void Player::setWinStatus(bool statusVal)
 {
     winStatus = statusVal;
@@ -64,7 +69,7 @@ void Player::addCardToPurpleHand(std::shared_ptr<Card> card)
 std::shared_ptr<Card> Player::removeCardFromYellowOnTable(const std::string &cardName)
 {
     auto it = std::find_if(yellowOnTable.begin(), yellowOnTable.end(), [&cardName](const std::shared_ptr<Card> &card)
-                           { return card->getName() == cardName; });
+    { return card->getName() == cardName; });
     if (it != yellowOnTable.end())
     {
         std::shared_ptr<Card> targetCard = *it;
@@ -92,6 +97,9 @@ void Player::setPurpleOnTable(std::vector<std::shared_ptr<Card>> cards)
 
 std::vector<std::string> Player::getOwnedProvinces() const
 {
+    if (dominatedAreas.empty()) {
+        throw std::runtime_error("Error: No provinces are owned.");
+    }
     return dominatedAreas;
 }
 std::vector<std::shared_ptr<Card>> Player::getYellowOnTable() const
@@ -135,11 +143,16 @@ bool Player::getCanPutNeshaneJang() const
     return canPutNeshaneJang;
 }
 
+bool Player::getCanPutNeshaneSolh() const
+{
+    return canPutNeshaneSolh;
+}
+
 int Player::PlayThisCard(const std::string userChoice)
 {
     if (userChoice == "pass")
     {
-//        updatePlayerEligibility(false);
+        //        updatePlayerEligibility(false);
         return -1;
     }
     else
@@ -200,7 +213,7 @@ int Player::PlayThisCard(const std::string userChoice)
 bool Player::playYellowCard(const std::string &cardName)
 {
     auto it = std::find_if(yellowHand.begin(), yellowHand.end(), [&cardName](const std::shared_ptr<Card> &card)
-                           { return card->getName() == cardName; });
+    { return card->getName() == cardName; });
     if (it != yellowHand.end())
     {
         std::shared_ptr<Card> playedCard = *it; // Store the card to be played
@@ -218,7 +231,7 @@ int Player::playPurpleCard(const std::string &cardName)
 
     // TODO: add if else for each purple card name
     auto it = std::find_if(purpleHand.begin(), purpleHand.end(), [&cardName](const std::shared_ptr<Card> &card)
-                           { return card->getName() == cardName; });
+    { return card->getName() == cardName; });
     if (it != purpleHand.end())
     {
         std::shared_ptr<Card> playedCard = *it; // Store the card to be played
@@ -229,7 +242,7 @@ int Player::playPurpleCard(const std::string &cardName)
             {
                 if (!yellowOnTable.empty())
                 {
-//                  purpleCard->startEffect(*this);
+                    //                  purpleCard->startEffect(*this);
                     purpleOnTable.push_back(playedCard);
                     playedCards.push_back(playedCard);
                     purpleHand.erase(it);
@@ -369,7 +382,7 @@ void Player::flushTable()
     burntCards.insert(burntCards.end(), yellowOnTable.rbegin(), yellowOnTable.rend());
 
     purpleOnTable.clear();
-    yellowOnTable.clear();   
+    yellowOnTable.clear();
 }
 
 std::string Player::toString() const {
@@ -378,23 +391,67 @@ std::string Player::toString() const {
         << age << ", "
         << totalScore << ", "
         << (winStatus ? "Yes" : "No") << ", "
+        << (canPutNeshaneSolh ? "Yes" : "No") ; oss << ", "
         << (canPutNeshaneJang ? "Yes" : "No") ; oss << "\n";
 
     // dominated areas
     if (dominatedAreas.empty()) {
+        oss << 0 << "\n";
         oss << "None";
     } else {
+        oss << dominatedAreas.size() << "\n";
         for (const auto& area : dominatedAreas) {
             oss << area << ", ";
         }
     }
+    oss << "\n";
+    // hand and table
+    oss << yellowHand.size() << "\n";
+    if (yellowHand.size() == 0){
+        oss << "None";
+    }
+    else{
+    for (auto &card : yellowHand){
+        oss<< card->toString();
+        oss << "\n";
 
-     // todo : save the autual cards instead of count
-    /*
-    oss << "\nYellow Cards on Table: " << yellowOnTable.size() << "\n"
-        << "Purple Cards on Table: " << purpleOnTable.size() << "\n"
-        << "Yellow Cards in Hand: " << yellowHand.size() << "\n"
-        << "Purple Cards in Hand: " << purpleHand.size() << "\n";
-   */
+    }
+    }
+
+    oss << purpleHand.size() << "\n";
+    if (purpleHand.size() == 0 ){
+        oss << "None";
+    }
+    else{
+    for (auto &card : purpleHand){
+        oss <<card->toString();
+        oss << "\n";
+
+    }
+    }
+
+    oss << yellowOnTable.size() << "\n";
+    if (yellowOnTable.size() == 0){
+        oss <<"None";
+    }
+    else {
+    for (auto &card : yellowOnTable){
+        oss<< card->toString();
+        oss << "\n";
+
+    }
+    }
+    oss << purpleOnTable.size() << "\n";
+    if (purpleOnTable.size() == 0){
+        oss << "None";
+    }
+    else {
+    for (auto &card : purpleOnTable){
+        card->toString();
+        oss << "\n";
+
+    }
+    }
+
     return oss.str();
 }

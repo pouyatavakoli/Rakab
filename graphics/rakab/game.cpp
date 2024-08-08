@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <QMessageBox>
 
+#include "mapwindow.h"
+
 #include "game.hpp"
 #include "card.h"
 #include "matarsak.h"
@@ -24,9 +26,9 @@
 
 
 // Constructor
-Game::Game(Save &save , QObject *parent) : QObject(parent), playerCount(0), currentPlayerIndex(0)
+Game::Game( QObject *parent) : QObject(parent), playerCount(0), currentPlayerIndex(0)
                              ,lastWinner(nullptr) , NeshaneJangOwner(nullptr) , NeshaneSolhgOwner(nullptr)
-                             , lastPlayerWhoPassed(nullptr) , save(save){}
+                             , lastPlayerWhoPassed(nullptr) {}
 
 // Setter for player count
 void Game::setPlayersCount(int PlayerCountVal) {
@@ -43,6 +45,24 @@ void Game::setPlayers(const std::vector<std::string>& names, const std::vector<i
         players.push_back(player);
     }
 }
+
+void Game::setPlayers(std::vector<std::shared_ptr<Player>> playersVal)
+{
+    players.clear();          // Clear the existing players vector
+
+    for (auto player : playersVal){
+        auto name = player->getName();
+        auto age  = player->getAge();
+        auto yellowHand = player->getYellowHand();
+
+        Player* newplayer = new Player(age , name);
+        for(auto card : yellowHand){
+            newplayer->addCardToYellowHand(card);
+        }
+        players.push_back(newplayer);
+    }
+}
+
 
 
 void Game::fillMainDeck()
@@ -249,7 +269,7 @@ void Game::handCardsToPLayers()
             }
             else
             {
-//                std::cout << "main deck is empty cant give cards to players";
+                qDebug() << "main deck is empty cant give cards to players";
             }
         }
     }
@@ -929,5 +949,35 @@ std::string Game::toString() const {
 
 void Game::saveThisGame()
 {
-    save.addGameToFile(this->toString());
+    auto save = new Save();
+    save->addGameToFile(this->toString());
+}
+
+int Game::loadFromFile()
+{
+   auto save = new Save();
+   save->loadGame();
+   auto savedplayers = save->getPlayers();
+   auto savedCount = save->getplayerCount();
+   setPlayersCount(savedCount);
+   players.clear();
+   for(auto player : savedplayers)
+   {
+       players.push_back(player);
+       qDebug() << QString::fromStdString( player->getName());
+       qDebug() << "*****************************"
+                   "**********************************"
+                   "**********************************"
+                   "************************************"
+                   "********************************* why this does not worrk";
+
+   }
+
+   auto battleCompleted = save->getBattleCompleted();
+   if (battleCompleted == "Yes"){
+       qDebug() <<"im here in battle completed function ";
+       return 1; // battle completed
+   }
+   qDebug() << "oh i think the battle is not completed";
+   return 2 ; // battle not completed
 }

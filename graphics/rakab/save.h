@@ -11,12 +11,14 @@ public:
 
     Save();
     //bool saveGame(const Game &game);
+
+    int getplayerCount();
     int getNumberOfGames() const;
     bool addGameToFile(const std::string game);
     void loadGame();
 
 
-    std::vector<std::shared_ptr<Player>> getPlayers() ;
+    std::vector<Player*> getPlayers() ;
     std::vector<std::shared_ptr<Card>> getMainDeck() ;
 
 
@@ -30,7 +32,7 @@ private:
     std::string battleCompleted ;
     int playerCount;
     int numberOfGames;
-    std::vector<std::shared_ptr<Player>> players;
+    std::vector<Player*> players;
     std::vector<std::shared_ptr<Card>> mainDeck;
     std::string lastWinner;
     std::string neshaneSolhgOwner;
@@ -38,6 +40,11 @@ private:
     int countRishSefid;
     int currentPlayerIndex;
     std::string anyPlayerCanPlay;
+
+    int numberOfProvinces ;
+
+    int yellowCardsCount;
+    int purpleCardsCount;
 
 };
 //std::vector<Game> games;

@@ -20,6 +20,7 @@ public:
     void setName(const std::string &name);
     void setScore(int score);
     void setCanPutNeshaneJang(bool);
+    void setCanPutNeshaneSolh(bool);
     void setWinStatus(bool status);
 
     void addOwnedProvinces(const std::string &);
@@ -42,6 +43,7 @@ public:
     int getNumberOfOwnedProvinces();
     int getCountShirZan() const;
     bool getCanPutNeshaneJang() const;
+    bool getCanPutNeshaneSolh() const;
 
     int getAge() const;
     std::string getName() const;
