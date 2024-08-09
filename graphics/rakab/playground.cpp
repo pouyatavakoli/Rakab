@@ -13,7 +13,15 @@ Playground::Playground(Game &game, const std::string provinceName, QWidget *pare
     qDebug() << "filled deck";
     game.shuffleDeck();
     qDebug() << "shuffed deck" ;
-    game.handCardsToPLayers();
+    bool isLoaded = false;
+    for (int i = 0; i < game.getPlayerCount(); i++) {
+        if (game.getPlayer(i).getYellowHand().size() > 0) {
+            isLoaded = true;
+            break; // Exit the loop early since we found at least one player with a yellow hand
+        }
+    }
+
+   if(!isLoaded) game.handCardsToPLayers();
     qDebug() << "handed cards to players ";
 
     playerLayouts.append(ui->player1_hand);

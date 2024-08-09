@@ -242,7 +242,9 @@ void mapwindow::dropEvent(QDropEvent *event)
                         {
                             qDebug() << "battle started but its not the first";
                             game.setNeshaneJangOwner();
+                            qDebug() << "setNeshaneJangOwner";
                             game.setBattleStarter(game.getPlayerWhoShouldStart());
+
                             Playground *pg = new Playground(game , labelNameStd);
                             pg->show();
                             //this->hide();

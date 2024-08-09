@@ -294,38 +294,33 @@ void Save::loadGame(const std::string& fileName, std::vector<Player*>& players) 
         return;
     }
 
-
-    for (int i = 0; i <= playerCount; i++) {
+    int validPlayers = 0;
+    for (int i = 0; i < playerCount; i++) {
         Player* player = new Player(); // Allocate a new Player
         std::string playerLine;
 
         if (std::getline(inputFile, playerLine)) {
-            if (playerLine == "None") {
-                delete player; // Clean up if no valid player data
-                continue;
+            if (playerLine != "None" &&
+                readPlayerDetails(*player, playerLine) &&
+                readProvinceDetails(*player, inputFile) &&
+                readCardDetails(*player, inputFile, "YellowHand") &&
+                readCardDetails(*player, inputFile, "PurpleHand") &&
+                readCardDetails(*player, inputFile, "YellowTable") &&
+                readCardDetails(*player, inputFile, "PurpleTable"))
+            {
+                players.push_back(player); // Add valid player to the list
+                validPlayers++;
+            } else {
+                delete player; // Clean up if any of the checks fail
             }
-
-            if (!readPlayerDetails(*player, playerLine) ||
-                    !readProvinceDetails(*player, inputFile)) {
-                delete player; // Clean up if an error occurred
-                continue;
-            }
-
-            if (!readCardDetails(*player, inputFile, "YellowHand") ||
-                    !readCardDetails(*player, inputFile, "PurpleHand") ||
-                    !readCardDetails(*player, inputFile, "YellowTable") ||
-                    !readCardDetails(*player, inputFile, "PurpleTable")) {
-                delete player; // Clean up if an error occurred
-                continue;
-            }
-
-            players.push_back(player); // Add valid player to the list
         } else {
             delete player; // Clean up if unable to read player line
         }
     }
 
+
     inputFile.close();
+    qDebug() << "validPlayers count :  " << validPlayers ;
 }
 std::vector<Player*> Save::getPlayers()
 {

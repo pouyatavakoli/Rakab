@@ -522,6 +522,7 @@ const Player &Game::findSmallestPlayer()
 
     for (const auto &player : players)
     {
+        qDebug()<< QString::fromStdString(player->getName()) << " age  : "  << player->getAge();
         if (player->getAge() < minAge)
         {
             minAge = player->getAge();
@@ -942,7 +943,7 @@ int Game::loadFromFile()
    save->loadGame("saved_games.txt" , players );
    auto savedCount = save->getplayerCount();
    setPlayersCount(savedCount);
-   players.clear();
+
    for(auto player : players)
    {
        qDebug() << QString::fromStdString( player->getName());
@@ -956,7 +957,7 @@ int Game::loadFromFile()
 
    auto battleCompleted = save->getBattleCompleted();
    if (battleCompleted){
-       firstRound = false ;
+       firstRound = true ;
        qDebug() <<"im here in battle completed function ";
        return 1; // battle completed
    }
