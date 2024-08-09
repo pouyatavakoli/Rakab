@@ -10,11 +10,11 @@ class Save {
 public:
 
     Save();
-    //bool saveGame(const Game &game);
+
 
     int getplayerCount();
     int getNumberOfGames() const;
-    bool addGameToFile(const std::string game);
+    bool addGameToFile(const std::string game , std::string fileName);
 
 
     std::vector<Player*> getPlayers() ;
@@ -37,7 +37,10 @@ public:
     std::string getSeasonSituation();
     void setBattleIsOnThis(std::string);
     std::string getBattleIsOnThis();
+    void writeEmptyToFile(const std::string &filename);
+    bool containsEmptyWord(const std::string &filename);
 private:
+
     bool battleCompleted ;
     int  playerCount;
     int  numberOfGames;

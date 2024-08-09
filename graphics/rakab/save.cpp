@@ -28,8 +28,8 @@ int Save::getplayerCount()
 }
 
 // File saving logic
-bool Save::addGameToFile(const std::string game) {
-    std::string filename = "saved_games.txt";
+bool Save::addGameToFile(const std::string game , std::string filename) {
+
 
     // Open file
     std::ofstream outFile(filename, std::ios::trunc);
@@ -397,3 +397,43 @@ bool Save::getBattleCompleted()
     return battleCompleted ;
 }
 
+// this function is for clearing a file
+void Save::writeEmptyToFile(const std::string& filename) {
+    std::ofstream outFile(filename); // Create an ofstream object to handle file operations
+
+    if (outFile.is_open()) { // Check if the file was opened successfully
+        outFile << "empty"; // Write the word "empty" to the file
+        outFile.close(); // Close the file
+        qDebug() << "Successfully wrote 'empty' to " << QString::fromStdString(filename);
+    } else {
+        qDebug() << "Error opening file: " << QString::fromStdString(filename);
+    }
+}
+
+bool Save::containsEmptyWord(const std::string& filename) {
+    std::ifstream file(filename);
+
+    // Check if the file was opened successfully
+    if (!file.is_open()) {
+        qDebug() << "Error opening file: " << QString::fromStdString(filename);
+        return false;
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        // Create a string stream to process the line
+        std::istringstream iss(line);
+        std::string word;
+
+        // Read words from the line
+        while (iss >> word) {
+            // Check if the current word is "empty"
+            if (word == "empty") {
+                return true; // Found the word "empty"
+            }
+        }
+    }
+
+    file.close();
+    return false; // Word "empty" not found
+}

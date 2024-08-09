@@ -11,6 +11,8 @@
 #include <QDialog>
 
 #include "ui_playground.h"
+
+#include "selectsaveloacation.h"
 #include "game.hpp"
 #include "card.h"
 
@@ -54,6 +56,7 @@ private:
 private slots:
     void handleCardClick(Card* card);
     void on_pushButton_clicked();
+    void on_save_pb_clicked();
 };
 
 #endif // PLAYGROUND_H

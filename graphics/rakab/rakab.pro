@@ -23,6 +23,7 @@ SOURCES += \
     card.cpp \
     player.cpp \
     purplecard.cpp \
+    selectsaveloacation.cpp \
     tablzan.cpp \
     yellowcard.cpp \
     season.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     card.h \
     player.h \
     purplecard.h \
+    selectsaveloacation.h \
     tablzan.h \
     yellowcard.h \
     season.h \
@@ -76,7 +78,8 @@ FORMS += \
     mainmenu.ui \
     mapwindow.ui \
     playground.ui \
-    savedgamesmenu.ui
+    savedgamesmenu.ui \
+    selectsaveloacation.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

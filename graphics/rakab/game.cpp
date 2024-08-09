@@ -944,10 +944,10 @@ std::string Game::toString() const {
     return oss.str();
 }
 
-void Game::saveThisGame()
+void Game::saveThisGame(std::string filename)
 {
     auto save = new Save();
-    save->addGameToFile(this->toString());
+    save->addGameToFile(this->toString() , filename);
 }
 
 int Game::loadFromFile()
