@@ -950,11 +950,11 @@ void Game::saveThisGame(std::string filename)
     save->addGameToFile(this->toString() , filename);
 }
 
-int Game::loadFromFile()
+int Game::loadFromFile(std::string filename)
 {
     auto save = new Save();
     players.clear();
-    save->loadGame("saved_games.txt" , players );
+    save->loadGame(filename , players );
     auto savedCount = save->getplayerCount();
     setPlayersCount(savedCount);
     battleIsOnThis = save->getBattleIsOnThis();

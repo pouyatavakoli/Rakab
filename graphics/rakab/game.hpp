@@ -83,7 +83,7 @@ public:
     std::string toString() const;
 
     void saveThisGame(std::string);
-    int loadFromFile();
+    int loadFromFile(std::string);
 
     void gameFlusher();
 
