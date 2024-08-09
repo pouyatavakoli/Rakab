@@ -22,7 +22,7 @@ mainmenu::mainmenu(QWidget *parent)
 
     // title
     this->ui->title_lbl->setStyleSheet("color: red");
-
+    checkGameResources();
 
 
 }
@@ -62,4 +62,29 @@ void mainmenu::on_newgame_btn_clicked()
     getinfo->show();
     this->close();
 }
+
+void mainmenu::checkGameResources() {
+    qDebug()<< "checking game resources";
+    for (int i = 1; i <= 5; ++i) {
+        QString fileName = QString("saved_games_%1.txt").arg(i); // Create the filename
+
+        // Check if the file exists
+        std::ifstream file(fileName.toStdString());
+        if (!file.good()) {
+            // Create the file if it doesn't exist
+            std::ofstream newFile(fileName.toStdString());
+            if (newFile.is_open()) {
+                newFile << "empty";
+                newFile.close();
+                qDebug()<< "created file : " << fileName ;
+
+            } else {
+                // Handle file creation error
+                qDebug()<< "Error creating file: " << fileName ;
+            }
+        }
+    }
+    qDebug()<< "game resources checked";
+}
+
 

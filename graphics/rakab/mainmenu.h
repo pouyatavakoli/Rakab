@@ -5,6 +5,11 @@
 #include "savedgamesmenu.h"
 #include "game.hpp"
 
+#include <fstream>
+#include <iostream>
+
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class mainmenu; }
 QT_END_NAMESPACE
@@ -17,6 +22,7 @@ public:
     mainmenu(QWidget *parent = nullptr);
     ~mainmenu();
 
+    void checkGameResources();
 private:
     Ui::mainmenu *ui;
    // savedGamesMenu *sgMenu;
