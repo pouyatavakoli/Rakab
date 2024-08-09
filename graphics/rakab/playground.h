@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 #include <QPixmap>
+#include <QDialog>
 
 #include "ui_playground.h"
 #include "game.hpp"
@@ -17,13 +18,19 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class Playground; }
 QT_END_NAMESPACE
 
-class Playground : public QWidget {
+class Playground : public QDialog  {
     Q_OBJECT
+
+signals:
+    void playgroundClosed();
 
 public:
     explicit Playground(Game& game, std::string province, QWidget *parent = nullptr);
      ~Playground();
     void setupUI();
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 
 private:

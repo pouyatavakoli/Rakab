@@ -16,6 +16,11 @@ void Player::setName(const std::string &name) {
     this->name = name;
 }
 
+void Player::setColor(const std::string &color)
+{
+    this->color = color;
+}
+
 void Player::setScore(int scoreVal)
 {
     totalScore = scoreVal;
@@ -97,9 +102,6 @@ void Player::setPurpleOnTable(std::vector<std::shared_ptr<Card>> cards)
 
 std::vector<std::string> Player::getOwnedProvinces() const
 {
-    if (dominatedAreas.empty()) {
-        throw std::runtime_error("Error: No provinces are owned.");
-    }
     return dominatedAreas;
 }
 std::vector<std::shared_ptr<Card>> Player::getYellowOnTable() const
@@ -377,12 +379,21 @@ void Player::updatePlayerEligibility(bool canPlayVal)
 
 void Player::flushTable()
 {
+    winStatus = false;
+    usedTablZan = false;
+    countShirZan = 0;
+    canPutNeshaneSolh = false;
+    canPutNeshaneJang = false;
 
     burntCards.insert(burntCards.end(), purpleOnTable.rbegin(), purpleOnTable.rend());
-    burntCards.insert(burntCards.end(), yellowOnTable.rbegin(), yellowOnTable.rend());
-
     purpleOnTable.clear();
+    burntCards.insert(burntCards.end(), yellowOnTable.rbegin(), yellowOnTable.rend());
     yellowOnTable.clear();
+    burntCards.insert(burntCards.end(), purpleHand.rbegin(), purpleHand.rend());
+    purpleHand.clear();
+    burntCards.insert(burntCards.end(), yellowHand.rbegin(), yellowHand.rend());
+    yellowHand.clear();
+
 }
 
 std::string Player::toString() const {

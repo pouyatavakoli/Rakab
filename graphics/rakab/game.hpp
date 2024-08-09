@@ -20,7 +20,7 @@ public:
 
     Game( QObject *parent = nullptr);
     void setPlayersCount(int);
-    void setPlayers(const std::vector<std::string>&, const std::vector<int>&);
+    void setPlayers(const std::vector<std::string>&, const std::vector<int>& ,const std::vector<std::string>& );
     void setPlayers(std::vector<std::shared_ptr<Player> >);
     void nextTurn();
     int getPlayerCount() const;
@@ -43,7 +43,7 @@ public:
     void setNeshaneJangOwner();
     void setBattleStarter(const Player &);
 
-    Player getPlayerWhoShouldStart();
+    const Player &getPlayerWhoShouldStart();
     const Player &findSmallestPlayer();
 
 
@@ -73,7 +73,7 @@ public:
 
     bool winGame1();
     bool winGame2();
-    void findWinner();
+    std::string findWinner();
 
     void setLastWinner(Player &);
     int checkThisBattleWinner(const std::string &);
@@ -84,6 +84,8 @@ public:
 
     void saveThisGame();
     int loadFromFile();
+
+    void gameFlusher();
 
 signals:
     void cardPlayed(int playerIndex, const std::shared_ptr<Card>& card);

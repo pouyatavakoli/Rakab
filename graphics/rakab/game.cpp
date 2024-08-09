@@ -35,13 +35,14 @@ void Game::setPlayersCount(int PlayerCountVal) {
     playerCount = PlayerCountVal;
 }
 
-void Game::setPlayers(const std::vector<std::string>& names, const std::vector<int>& ages) {
+void Game::setPlayers(const std::vector<std::string>& names, const std::vector<int>& ages , const std::vector<std::string>& colors) {
 
     // Create new players based on names and ages
     for (size_t i = 0; i < names.size(); ++i) {
         Player* player = new Player();
         player->setName(names[i]);
         player->setAge(ages[i]);
+        player->setColor(colors[i]);
         players.push_back(player);
     }
 }
@@ -490,23 +491,34 @@ void Game::setBattleStarter(const Player &player1)
 
 }
 
-Player Game::getPlayerWhoShouldStart()
+const Player &Game::getPlayerWhoShouldStart()
 {
-    if (NeshaneJangOwner->getCanPutNeshaneJang())
+    if (NeshaneJangOwner)
     {
-        return NeshaneJangOwner;
-    }
-    else
-    {
-        if (lastWinner->getName().empty())
+        if (NeshaneJangOwner->getCanPutNeshaneJang())
         {
-            return lastPlayerWhoPassed;
-        }
-        else
-        {
-            return lastWinner;
+            qDebug() << "NeshaneJangOwner is the starting player";
+            return *NeshaneJangOwner;
         }
     }
+
+    if (lastWinner)
+    {
+        if (!lastWinner->getName().empty())
+        {
+            qDebug() << "lastWinner is the starting player";
+            return *lastWinner;
+        }
+    }
+
+    if (lastPlayerWhoPassed)
+    {
+        qDebug() << "lastPlayerWhoPassed is the starting player";
+        return *lastPlayerWhoPassed;
+    }
+
+    qDebug() << "Error: No valid player found to start the battle!";
+    throw std::runtime_error("No valid player found to start the battle.");
 }
 
 const Player &Game::findSmallestPlayer()
@@ -877,14 +889,14 @@ bool Game::winGame2()
     return false;
 }
 
-void Game::findWinner()
+std::string Game::findWinner()
 {
+    qDebug() << "findWinner";
     for (auto player : players)
     {
         if (player->getWinStatus())
         {
-//            std::cout << player.getName() << "is the winner of Game" << std::endl;
-            break;
+            return player->getName();
         }
     }
 }
@@ -963,4 +975,20 @@ int Game::loadFromFile()
    }
    qDebug() << "oh i think the battle is not completed";
    return 2 ; // battle not completed
+}
+
+void Game::gameFlusher()
+{
+    seasonSituation = "normal";
+    anyPlayerCanPlay = true;
+    parchamDarIsPlayed = false;
+    countRishSefid = 0;
+    for (int i{0} ; i < playerCount ; i++)
+        {
+            players[i]->updatePlayerEligibility(true);
+            // Move cards from table to burnt cards
+            players[i]->flushTable();
+            updateTotalScore();
+            updateCardHoldersCount();
+        }
 }

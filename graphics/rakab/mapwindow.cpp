@@ -20,6 +20,7 @@
 #include <iostream>
 #include <QDialog>
 #include <QHBoxLayout>
+#include <QMessageBox>
 
 
 
@@ -225,6 +226,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                                 qDebug() << "Playground object created";
                                 pg->show();
                                 qDebug() << "Playground shown";
+                                connect(pg, &Playground::playgroundClosed, this, &mapwindow::checkAndHandleGameWinner);
                             } catch (const std::length_error& e) {
                                 qDebug() << "Caught a length_error during Playground creation or show:" << e.what();
                                 return; // Early exit or appropriate error handling
@@ -235,22 +237,32 @@ void mapwindow::dropEvent(QDropEvent *event)
 
 
                             isDroppedInArea = true;
+                            game.setIsFirstRound(false);
                             break;
                         }
 
                         else
                         {
-                            qDebug() << "battle started but its not the first";
+                            qDebug() << "Battle started but it's not the first round";
                             game.setNeshaneJangOwner();
                             qDebug() << "setNeshaneJangOwner";
                             game.setBattleStarter(game.getPlayerWhoShouldStart());
+                            qDebug() << "Battle started setNeshaneJangOwner";
 
-                            Playground *pg = new Playground(game , labelNameStd);
-                            pg->show();
-                            //this->hide();
+                            try {
+                                qDebug() << "Creating Playground object for subsequent round";
+                                Playground *pg = new Playground(game, labelNameStd);
+                                qDebug() << "Playground object created for subsequent round";
+                                pg->show();
+                                qDebug() << "Playground shown for subsequent round";
+                                connect(pg, &Playground::playgroundClosed, this, &mapwindow::checkAndHandleGameWinner);
+                            } catch (const std::exception& e) {
+                                qDebug() << "Caught an exception during Playground creation or show in subsequent round:" << e.what();
+                                return; // Handle the error or decide how to proceed
+                            }
+
                             isDroppedInArea = true;
                             break;
-
                         }
                     }
 
@@ -294,6 +306,34 @@ void mapwindow::dropEvent(QDropEvent *event)
         currentDropAreas.clear();
         update();
     }
+}
+
+void mapwindow::checkAndHandleGameWinner() {
+    // Call the function to check for the game winner
+    qDebug() << "checkForGameWinner started";
+        if (game.winGame1() || game.winGame2())
+        {
+            try {
+                QString winnerName = QString::fromStdString(game.findWinner()); // Example getter for winner's name
+
+                // Display the winner
+                QString message = "The winner of the game is: " + winnerName;
+                QMessageBox::information(this, "Game Over", message);
+
+                // Close the MapWindow
+                mainmenu *menu = new mainmenu();
+                menu->show();
+                this->close();
+            }
+            catch (const std::runtime_error& e) {
+                qWarning() << "Error determining winner:" << e.what();
+                // Handle or log the error as needed, maybe prompt a message or take another action
+            }
+            catch (const std::exception& e) {
+                qWarning() << "Unexpected error:" << e.what();
+                // Handle or log the error as needed
+            }
+        }
 }
 
 void mapwindow::mousePressEvent(QMouseEvent *event)

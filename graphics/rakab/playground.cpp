@@ -1,13 +1,15 @@
 #include "playground.h"
 #include <QMessageBox>
+#include <QDialog>
 
 
 Playground::Playground(Game &game, const std::string provinceName, QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::playground),game(game),province(provinceName)
 {
     ui->setupUi(this);
-    //mainDeck  = game.getMainDeck();
+
+    game.gameFlusher();
 
     game.fillMainDeck();
     qDebug() << "filled deck";
@@ -41,14 +43,15 @@ Playground::Playground(Game &game, const std::string provinceName, QWidget *pare
 }
 
 Playground::~Playground()
-{
-    // remember to save here befor clearing
-    int playersCount = game.getPlayerCount();
-    for (int i = 0 ; i < playersCount ; i++){
-        game.getPlayer(i).flushTable();
-    }
-    displayCards();
+{   
+    qDebug() << "playgroundClosed" ;
+    emit playgroundClosed();
+}
 
+void Playground::closeEvent(QCloseEvent *event) {
+    // Emit signal when the dialog is closed
+    emit playgroundClosed();
+    QDialog::closeEvent(event); // Call the base class implementation to ensure proper dialog closure
 }
 
 /*
@@ -240,6 +243,7 @@ void Playground::handleCardClick(Card* card) {
                 QMessageBox::information(nullptr, "Status", message);
 
             }
+            close();
 
         }
     }
@@ -279,6 +283,7 @@ void Playground::on_pushButton_clicked()
             QMessageBox::information(nullptr, "Status", message);
 
         }
+        close();
     }
 }
 

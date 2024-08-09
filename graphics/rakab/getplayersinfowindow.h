@@ -8,6 +8,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QComboBox>
+
 
 class getPlayersInfoWindow : public QDialog {
     Q_OBJECT
@@ -17,7 +19,7 @@ public:
 
 private slots:
     void submitPlayerCount();
-    void submitInfo();
+//    void submitInfo();
 
 private:
     Game &game;
@@ -25,14 +27,20 @@ private:
     QLabel *playerCountLabel;
     QLineEdit *playerCountInput;
     QPushButton *playerCountSubmitButton;
+
     QVector<QLabel*> playerNameLabels;
     QVector<QLineEdit*> playerNameInputs;
     QVector<QLabel*> playerAgeLabels;
     QVector<QLineEdit*> playerAgeInputs;
+    QList<QLabel *> colorLabels;
+    QList<QComboBox *> colorCombos;
     QPushButton *submitButton;
+
+    QStringList colors;
 
     void createPlayerFields(int count);
     void submitPlayerInfo();
+    bool validatePlayerInfo();
 };
 
 #endif

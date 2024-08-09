@@ -4,6 +4,9 @@
 #include "getplayersinfowindow.h"
 #include <QMessageBox>
 #include <QPushButton>
+#include <QComboBox>
+#include <set>
+#include <algorithm>
 
 getPlayersInfoWindow::getPlayersInfoWindow(Game &game ,QWidget *parent)
     :
@@ -13,7 +16,8 @@ getPlayersInfoWindow::getPlayersInfoWindow(Game &game ,QWidget *parent)
       playerCountLabel(new QLabel("Enter the number of players:")),
       playerCountInput(new QLineEdit),
       playerCountSubmitButton(new QPushButton("Submit")),
-      submitButton(new QPushButton("Submit"))
+      submitButton(new QPushButton("Submit")),
+      colors({"Red", "Blue", "Green", "Yellow", "Orange", "Purple"})
 {
     setWindowTitle("Player Sign-up Wizard");
 
@@ -23,13 +27,13 @@ getPlayersInfoWindow::getPlayersInfoWindow(Game &game ,QWidget *parent)
     setLayout(layout);
 
     connect(playerCountSubmitButton, &QPushButton::clicked, this, &getPlayersInfoWindow::submitPlayerCount);
-    connect(submitButton ,  &QPushButton::clicked, this, &getPlayersInfoWindow::submitInfo );
+//    connect(submitButton ,  &QPushButton::clicked, this, &getPlayersInfoWindow::submitInfo );
     };
 
 void getPlayersInfoWindow::submitPlayerCount() {
     bool ok;
     int count = playerCountInput->text().toInt(&ok);
-    if (ok && count >= 3 && count <= 6) {
+    if (ok && count >= 3 && count <= 4) {
         createPlayerFields(count);
         game.setPlayersCount(count);
     } else {
@@ -37,11 +41,12 @@ void getPlayersInfoWindow::submitPlayerCount() {
     }
 }
 
-void getPlayersInfoWindow::submitInfo(){
+/*void getPlayersInfoWindow::submitInfo(){
     mapwindow* map = new mapwindow(game);
     map ->show();
     this ->close();
-}
+}*/
+
 void getPlayersInfoWindow::createPlayerFields(int count) {
     // Clear any existing player fields
     qDeleteAll(playerNameLabels);
@@ -52,6 +57,10 @@ void getPlayersInfoWindow::createPlayerFields(int count) {
     playerAgeLabels.clear();
     qDeleteAll(playerAgeInputs);
     playerAgeInputs.clear();
+    qDeleteAll(colorLabels);
+    colorLabels.clear();
+    qDeleteAll(colorCombos);
+    colorCombos.clear();
 
     for (int i = 0; i < count; ++i) {
         QLabel *nameLabel = new QLabel("Enter name for Player " + QString::number(i + 1) + ":");
@@ -67,6 +76,14 @@ void getPlayersInfoWindow::createPlayerFields(int count) {
         layout->addWidget(ageInput);
         playerAgeLabels.append(ageLabel);
         playerAgeInputs.append(ageInput);
+
+        QLabel *colorLabel = new QLabel("Choose color for Player " + QString::number(i + 1) + ":");
+        QComboBox *colorCombo = new QComboBox;
+        colorCombo->addItems(colors);
+        layout->addWidget(colorLabel);
+        layout->addWidget(colorCombo);
+        colorLabels.append(colorLabel);
+        colorCombos.append(colorCombo);
     }
 
     // Remove the previous widgets and add the new ones
@@ -84,20 +101,53 @@ void getPlayersInfoWindow::createPlayerFields(int count) {
 }
 
 void getPlayersInfoWindow::submitPlayerInfo() {
-    std::vector<std::string> playerNames;
-    std::vector<int> playerAges;
+    if (validatePlayerInfo()) {
+        std::vector<std::string> playerNames;
+        std::vector<int> playerAges;
+        std::vector<std::string> playerColors;
 
-    // Collect names and ages from the input fields
-    for (int i = 0; i < playerNameInputs.size(); ++i) {
-        std::string name = playerNameInputs[i]->text().toStdString(); // Convert QString to std::string
-        int age = playerAgeInputs[i]->text().toInt(); // Convert age input to integer
-        playerNames.push_back(name);
-        playerAges.push_back(age);
+        // Collect names, ages, and colors from the input fields
+        for (int i = 0; i < playerNameInputs.size(); ++i) {
+            std::string name = playerNameInputs[i]->text().toStdString(); // Convert QString to std::string
+            int age = playerAgeInputs[i]->text().toInt(); // Convert age input to integer
+            std::string color = colorCombos[i]->currentText().toStdString(); // Convert color to std::string
+
+            playerNames.push_back(name);
+            playerAges.push_back(age);
+            playerColors.push_back(color);
+        }
+
+        // Set the collected names, ages, and colors in the game class
+        game.setPlayers(playerNames, playerAges, playerColors);
+
+        // Open the map window and close the current window
+        mapwindow *map = new mapwindow(game);
+        map->show();
+        this->close();
     }
-
-    // Set the collected names and ages in the game class
-    game.setPlayers(playerNames, playerAges);
-
-    // Optionally, you can close this window or provide feedback to the user
-    this->close();
 }
+
+bool getPlayersInfoWindow::validatePlayerInfo() {
+    std::set<std::string> uniqueColors;
+    for (int i = 0; i < colorCombos.size(); ++i) {
+        // Check for valid age
+        bool ageOk;
+        int age = playerAgeInputs[i]->text().toInt(&ageOk);
+        if (!ageOk || age <= 0) {
+            QMessageBox::critical(this, "Invalid Age", "Age must be a positive number for Player " + QString::number(i + 1) + ".");
+            return false;
+        }
+
+        // Check for unique colors
+        std::string color = colorCombos[i]->currentText().toStdString();
+        if (uniqueColors.find(color) != uniqueColors.end()) {
+            QMessageBox::critical(this, "Duplicate Color", "Color " + QString::fromStdString(color) + " is already chosen. Please select a different color.");
+            return false;
+        }
+        uniqueColors.insert(color);
+    }
+    return true;
+}
+
+
+

@@ -18,6 +18,7 @@ public:
 
     void setAge(int age);
     void setName(const std::string &name);
+    void setColor(const std::string &color);
     void setScore(int score);
     void setCanPutNeshaneJang(bool);
     void setCanPutNeshaneSolh(bool);
@@ -67,6 +68,7 @@ public:
 private:
     int age;
     std::string name;
+    std::string color;
     int totalScore;
     bool isAbleToPlay{true};
     bool winStatus;

@@ -31,6 +31,8 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
     void mousePressEvent (QMouseEvent*) override ;
 
+    void checkAndHandleGameWinner();
+
 signals:
     void resized();
 
