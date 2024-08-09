@@ -87,6 +87,12 @@ public:
 
     void gameFlusher();
 
+    void setBattleCompleted(std::string);
+    std::string getBattleCompleted();
+
+    void setBattleIsOnThis(std::string);
+    std::string getBattleIsOnThis ();
+
 signals:
     void cardPlayed(int playerIndex, const std::shared_ptr<Card>& card);
 
@@ -107,6 +113,9 @@ private:
     Player *lastPlayerWhoPassed;
     int countRishSefid{0};
     bool firstRound{true};
+    std::string battleCompleted ;
+    std::string battleIsOnThis;
+
 
 };
 

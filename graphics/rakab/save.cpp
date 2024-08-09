@@ -73,18 +73,32 @@ bool Save::readMetaData(const std::string& line)
         currentPlayerIndex = std::stoi(token);
         qDebug() << "current index: " << QString::fromStdString(token);
 
-        // Read and trim the fourth token (anyPlayerCanPlay)
+
         std::getline(ss, token, ',');
         token.erase(0, token.find_first_not_of(" "));
         token.erase(token.find_last_not_of(" ") + 1);
         anyPlayerCanPlay = token;
         qDebug() << "any player can play: " << QString::fromStdString(token);
 
+        std::getline(ss, token, ',');
+        token.erase(0, token.find_first_not_of(" "));
+        token.erase(token.find_last_not_of(" ") + 1);
+        seasonSituation = token;
+        qDebug() << "seasonSituation : " << QString::fromStdString(token);
+
+        std::getline(ss, token, ',');
+        token.erase(0, token.find_first_not_of(" "));
+        token.erase(token.find_last_not_of(" ") + 1);
+        battleIsOnThis = token;
+        qDebug() << "battleIsOn : " << QString::fromStdString(token);
+
+        /*
         // Optionally, check if there are any extra tokens or trailing data
         std::getline(ss, token, ',');
         if (!token.empty() && token.find_first_not_of(" ") != std::string::npos) {
             throw std::runtime_error("Unexpected extra data after last field.");
         }
+        */
     } catch (const std::exception& e) {
         qDebug() << "Error parsing metadata: " << QString::fromStdString(e.what());
         return false;
@@ -311,10 +325,14 @@ void Save::loadGame(const std::string& fileName, std::vector<Player*>& players) 
                 players.push_back(player); // Add valid player to the list
                 validPlayers++;
             } else {
-                delete player; // Clean up if any of the checks fail
+                players.push_back(player); // Add valid player to the list
+                validPlayers++;
+                //delete player; // Clean up if any of the checks fail
             }
         } else {
-            delete player; // Clean up if unable to read player line
+            players.push_back(player); // Add valid player to the list
+            validPlayers++;
+            //delete player; // Clean up if unable to read player line
         }
     }
 
@@ -322,6 +340,27 @@ void Save::loadGame(const std::string& fileName, std::vector<Player*>& players) 
     inputFile.close();
     qDebug() << "validPlayers count :  " << validPlayers ;
 }
+
+void Save::setSeasonSituation(std::string val)
+{
+    seasonSituation = val   ;
+}
+
+std::string Save::getSeasonSituation()
+{
+    return seasonSituation;
+}
+
+void Save::setBattleIsOnThis(std::string val)
+{
+    battleIsOnThis = val;
+}
+
+std::string Save::getBattleIsOnThis()
+{
+    return battleIsOnThis;
+}
+
 std::vector<Player*> Save::getPlayers()
 {
     return players ;

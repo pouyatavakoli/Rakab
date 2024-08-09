@@ -27,8 +27,8 @@
 
 // Constructor
 Game::Game( QObject *parent) : QObject(parent), playerCount(0), currentPlayerIndex(0)
-                             ,lastWinner(nullptr) , NeshaneJangOwner(nullptr) , NeshaneSolhgOwner(nullptr)
-                             , lastPlayerWhoPassed(nullptr) {}
+  ,lastWinner(nullptr) , NeshaneJangOwner(nullptr) , NeshaneSolhgOwner(nullptr)
+  , lastPlayerWhoPassed(nullptr) {}
 
 // Setter for player count
 void Game::setPlayersCount(int PlayerCountVal) {
@@ -182,14 +182,14 @@ void Game::fillMainDeck()
     for (int i = 1; i <= 16; ++i)
     {
         std::shared_ptr<Matarsak> matarsak = std::make_shared<Matarsak>();
-//      matarsak->setImage(QString::fromStdString(cardImages["Matarsak"]));
+        //      matarsak->setImage(QString::fromStdString(cardImages["Matarsak"]));
         mainDeck.push_back(matarsak);
     }
 
     for (int i = 1; i <= 6; ++i)
     {
         std::shared_ptr<TablZan> tablzan = std::make_shared<TablZan>();
-//      matarsak->setImage(QString::fromStdString(cardImages["Matarsak"]));
+        //      matarsak->setImage(QString::fromStdString(cardImages["Matarsak"]));
         mainDeck.push_back(tablzan);
     }
 
@@ -247,7 +247,7 @@ void Game::updateCardHoldersCount()
 
 void Game::handCardsToPLayers()
 {
-//    std::cout << "handing cards to players..." << std::endl;
+    //    std::cout << "handing cards to players..." << std::endl;
     for (int i = 0 ; i < playerCount ; i++)
     {
         for (int j = 0; j < 10 + players[i]->getNumberOfOwnedProvinces(); j++)
@@ -289,7 +289,7 @@ void Game::removeCardFromDeck(std::shared_ptr<Card> card, std::vector<std::share
 void Game::updateTotalScore()
 {
     // find better place to call this
-    saveThisGame();
+    //saveThisGame();
 
     refreshEffects();
     for (auto &player : players)
@@ -372,7 +372,7 @@ void Game::startAllEffects()
         {
             for (auto &player : players)
             {
-            player->applyEffect();
+                player->applyEffect();
             }
         }
     }
@@ -398,7 +398,7 @@ void Game::startAllEffects()
         {
             for (auto &player : players)
             {
-            player->applyEffect();
+                player->applyEffect();
             }
         }
 
@@ -624,18 +624,18 @@ void Game::endSeason(const std::string &userChoice)
 
 int Game::playPlayerCard(int playerIndex, const std::string& cardName) {
     //qDebug() << "playing card for player";
-//    if (playerIndex < 0 || playerIndex >= players.size()) {
-//        qDebug() << "invalid player index";
-//        return; // Invalid player index
-//    }
+    //    if (playerIndex < 0 || playerIndex >= players.size()) {
+    //        qDebug() << "invalid player index";
+    //        return; // Invalid player index
+    //    }
     qDebug() <<"playing card for" << QString::fromStdString(players[playerIndex]->getName());
     int situation{0};
     if(cardName == "Winter" || cardName == "Spring")
     {
         if(canStartSeason(cardName))
         {
-         situation = players[playerIndex]->PlayThisCard(cardName);
-         qDebug() <<"chanegd sit to ";
+            situation = players[playerIndex]->PlayThisCard(cardName);
+            qDebug() <<"chanegd sit to ";
         }
         else
         {
@@ -644,21 +644,21 @@ int Game::playPlayerCard(int playerIndex, const std::string& cardName) {
     }
     else
     {
-       situation = players[playerIndex]->PlayThisCard(cardName);
+        situation = players[playerIndex]->PlayThisCard(cardName);
     }
 
 
     // Handle result and update game state
     if (situation == -1) {
-       nextTurn(); // Move to the next player's turn TODO:it should pass
-       if(!anyPlayerCanPlay)
-       {
-           return 11; //the match has ended
-       }
-       else
-       {
-           return -1;
-       }
+        nextTurn(); // Move to the next player's turn TODO:it should pass
+        if(!anyPlayerCanPlay)
+        {
+            return 11; //the match has ended
+        }
+        else
+        {
+            return -1;
+        }
     }
     else if (situation == 0) {
         // was not found so we are not going next player.
@@ -667,9 +667,9 @@ int Game::playPlayerCard(int playerIndex, const std::string& cardName) {
     }
     else if (situation == 1){ // Successfully played a card
         if(cardName != "Matarsak"){
-        qDebug() << "card played successfully";
-        nextTurn();
-        return 1;
+            qDebug() << "card played successfully";
+            nextTurn();
+            return 1;
         }
         else
         {
@@ -789,7 +789,7 @@ void Game::updateAnyPlayerCanPlay()
     }
     else
     {
-       anyPlayerCanPlay = true;
+        anyPlayerCanPlay = true;
     }
 }
 
@@ -832,19 +832,20 @@ int Game::checkThisBattleWinner(const std::string &province)
     if (tieCounter > 1)
     {
         return 0;
-//      std::cout << "The game has no winner, it's a tie." << std::endl;
+        //      std::cout << "The game has no winner, it's a tie." << std::endl;
     }
     else if (winner != nullptr)
     {
-//      std::cout << winner->getName() << " captured " << province << " with " << winner->getPoints() << " points." << std::endl;
+        //      std::cout << winner->getName() << " captured " << province << " with " << winner->getPoints() << " points." << std::endl;
         winner->addOwnedProvinces(province);
+        battleCompleted  = "Yes";
         setLastWinner(*winner);
         return 1;
     }
     else
     {
-//        std::cout << "No winner could be determined." << std::endl;
-          return 2;
+        //        std::cout << "No winner could be determined." << std::endl;
+        return 2;
     }
 }
 
@@ -917,20 +918,21 @@ int Game::handleMatarsakEffect(int playerIndex, const std::string& cardName) {
 
 std::string Game::toString() const {
     std::ostringstream oss;
-    std::string battleCompleted  = "No";
-    // current battle completed or not
-    for (const auto &player : players){
-       if (player->getWinStatus()){
-           battleCompleted = "Yes";
-       }
-    }
+
     oss << battleCompleted << ", ";
     // Basic game information
     oss << playerCount  << ", ";
     oss << currentPlayerIndex << ", ";
-    // oss << (firstRound ? "Yes" : "No") << ", ";
     oss << (anyPlayerCanPlay ? "Yes" : "No") << ", ";
-    // oss << seasonSituation << ", ";
+    oss << seasonSituation << ", ";
+    if (battleCompleted == "Yes")
+    {
+        oss << "None";
+    }
+    else
+    {
+        oss << battleIsOnThis ;
+    }
     oss << "\n";
 
     // Player details
@@ -950,31 +952,30 @@ void Game::saveThisGame()
 
 int Game::loadFromFile()
 {
-   auto save = new Save();
-   players.clear();
-   save->loadGame("saved_games.txt" , players );
-   auto savedCount = save->getplayerCount();
-   setPlayersCount(savedCount);
+    auto save = new Save();
+    players.clear();
+    save->loadGame("saved_games.txt" , players );
+    auto savedCount = save->getplayerCount();
+    setPlayersCount(savedCount);
+    battleIsOnThis = save->getBattleIsOnThis();
+    for(auto player : players)
+    {
+        qDebug() << QString::fromStdString( player->getName());
+        qDebug() << "*****************************"
+                    "**********************************"
+                    "**********************************"
+                    "************************************"
+                    "********************************* why this does not worrk";
 
-   for(auto player : players)
-   {
-       qDebug() << QString::fromStdString( player->getName());
-       qDebug() << "*****************************"
-                   "**********************************"
-                   "**********************************"
-                   "************************************"
-                   "********************************* why this does not worrk";
+    }
 
-   }
-
-   auto battleCompleted = save->getBattleCompleted();
-   if (battleCompleted){
-       firstRound = true ;
-       qDebug() <<"im here in battle completed function ";
-       return 1; // battle completed
-   }
-   qDebug() << "oh i think the battle is not completed";
-   return 2 ; // battle not completed
+    auto battleCompleted = save->getBattleCompleted();
+    if (battleCompleted){
+        qDebug() <<"im here in battle completed function ";
+        return 1; // battle completed
+    }
+    qDebug() << "oh i think the battle is not completed";
+    return 2 ; // battle not completed
 }
 
 void Game::gameFlusher()
@@ -984,11 +985,31 @@ void Game::gameFlusher()
     parchamDarIsPlayed = false;
     countRishSefid = 0;
     for (int i{0} ; i < playerCount ; i++)
-        {
-            players[i]->updatePlayerEligibility(true);
-            // Move cards from table to burnt cards
-            players[i]->flushTable();
-            updateTotalScore();
-            updateCardHoldersCount();
-        }
+    {
+        players[i]->updatePlayerEligibility(true);
+        // Move cards from table to burnt cards
+        players[i]->flushTable();
+        updateTotalScore();
+        updateCardHoldersCount();
+    }
+}
+
+void Game::setBattleCompleted(std::string val)
+{
+    battleCompleted = val ;
+}
+
+std::string Game::getBattleCompleted()
+{
+    return battleCompleted;
+}
+
+void Game::setBattleIsOnThis(std::string val)
+{
+    battleIsOnThis = val ;
+}
+
+std::string Game::getBattleIsOnThis()
+{
+    return battleIsOnThis;
 }

@@ -32,6 +32,11 @@ public:
     bool readCardDetails(Player &player, std::ifstream &inputFile, const std::string &handType);
     std::shared_ptr<Card> createCard(const std::string &cardType);
     void loadGame(const std::string &fileName, std::vector<Player *> &players);
+
+    void setSeasonSituation (std::string);
+    std::string getSeasonSituation();
+    void setBattleIsOnThis(std::string);
+    std::string getBattleIsOnThis();
 private:
     bool battleCompleted ;
     int  playerCount;
@@ -48,6 +53,8 @@ private:
     int numberOfProvinces ;
 
     int cardCount ;
+    std::string seasonSituation ;
+    std::string battleIsOnThis ;
 
 };
 //std::vector<Game> games;

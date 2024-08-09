@@ -40,7 +40,15 @@ void savedGamesMenu::on_load1_btn_clicked()
     }
     else
     {
-        // open on playground
+        mapwindow* map = new mapwindow(game);
+        map ->show();
+
+        Playground* pg = new Playground(game , game.getBattleIsOnThis());
+        pg->show();
+
+        this->close();
+
+
     }
     this->close();
     qDebug() << "loaded game from file ";

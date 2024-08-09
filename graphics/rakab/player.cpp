@@ -389,10 +389,10 @@ void Player::flushTable()
     purpleOnTable.clear();
     burntCards.insert(burntCards.end(), yellowOnTable.rbegin(), yellowOnTable.rend());
     yellowOnTable.clear();
-    burntCards.insert(burntCards.end(), purpleHand.rbegin(), purpleHand.rend());
-    purpleHand.clear();
-    burntCards.insert(burntCards.end(), yellowHand.rbegin(), yellowHand.rend());
-    yellowHand.clear();
+    //burntCards.insert(burntCards.end(), purpleHand.rbegin(), purpleHand.rend());
+   // purpleHand.clear();
+    //burntCards.insert(burntCards.end(), yellowHand.rbegin(), yellowHand.rend());
+   // yellowHand.clear();
 
 }
 

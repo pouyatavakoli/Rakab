@@ -10,16 +10,17 @@ Playground::Playground(Game &game, const std::string provinceName, QWidget *pare
     ui->setupUi(this);
 
     game.gameFlusher();
-
+    game.setBattleCompleted("No");
+    game.setBattleIsOnThis(provinceName);
     game.fillMainDeck();
     qDebug() << "filled deck";
     game.shuffleDeck();
     qDebug() << "shuffed deck" ;
     bool isLoaded = false;
     for (int i = 0; i < game.getPlayerCount(); i++) {
-        if (game.getPlayer(i).getYellowHand().size() > 0) {
+        if (game.getPlayer(i).getYellowHand().size() > 0 || game.getPlayer(i).getPurpleHand().size() > 0) {
             isLoaded = true;
-            break; // Exit the loop early since we found at least one player with a yellow hand
+            break;
         }
     }
 
@@ -223,6 +224,7 @@ void Playground::handleCardClick(Card* card) {
 
         }
         game.updateTotalScore();
+        game.saveThisGame();
         updateUi();
         if(situation == 11)
         {
@@ -235,6 +237,7 @@ void Playground::handleCardClick(Card* card) {
             else if(winstat == 1)
             {
                 QString message = " We have a winner.";
+                game.setBattleCompleted("Yes");
                 QMessageBox::information(nullptr, "Winner", message);
             }
             else if (winstat == 2)
@@ -266,19 +269,23 @@ void Playground::on_pushButton_clicked()
     else
     {
         game.updateTotalScore();
+        game.saveThisGame();
         int winstat = game.checkThisBattleWinner(province);
         if(winstat == 0)
         {
+            game.saveThisGame();
             QString message = " The game has no winner, it's a tie.";
             QMessageBox::information(this, "Status", message);
         }
         else if(winstat == 1)
         {
+            game.saveThisGame();
             QString message = " We have a winner.";
             QMessageBox::information(nullptr, "Winner", message);
         }
         else if (winstat == 2)
         {
+            game.saveThisGame();
             QString message = "No winner could be determined.";
             QMessageBox::information(nullptr, "Status", message);
 
