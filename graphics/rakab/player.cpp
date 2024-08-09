@@ -403,7 +403,8 @@ std::string Player::toString() const {
         << totalScore << ", "
         << (winStatus ? "Yes" : "No") << ", "
         << (canPutNeshaneSolh ? "Yes" : "No") ; oss << ", "
-        << (canPutNeshaneJang ? "Yes" : "No") ; oss << "\n";
+        << (canPutNeshaneJang ? "Yes" : "No") ; oss << ", "
+        << color << "\n";
 
     // dominated areas
     if (dominatedAreas.empty()) {

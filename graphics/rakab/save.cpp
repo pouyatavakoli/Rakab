@@ -139,6 +139,10 @@ bool Save::readPlayerDetails(Player& player, const std::string& playerLine) {
         player.setCanPutNeshaneJang(token == " Yes");
         qDebug() << "Player neshanJang set: " << QString::fromStdString(token);
 
+        std::getline(ss, token, ',');
+        player.setColor(token);
+        qDebug() << "Player color set: " << QString::fromStdString(token);
+
     } catch (const std::exception& e) {
         qDebug() << "Error parsing player details: " << QString::fromStdString(e.what());
         return false;
