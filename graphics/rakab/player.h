@@ -72,7 +72,7 @@ private:
     std::string name;
     std::string color;
     int totalScore;
-    bool isAbleToPlay{true};
+    bool isAbleToPlay;
     bool winStatus;
     bool usedTablZan;
     int countShirZan;

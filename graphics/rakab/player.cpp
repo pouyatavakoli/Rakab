@@ -2,11 +2,15 @@
 #include "purplecard.h"
 
 // Default constructor
-Player::Player(QObject *parent) : QObject(parent), age(0) {}
+Player::Player(QObject *parent) : QObject(parent), age(0) {
+    isAbleToPlay = true;
+}
 
 // Parameterized constructor
 Player::Player(int age, const std::string &name, QObject *parent)
-    : QObject(parent), age(age), name(name) {}
+    : QObject(parent), age(age), name(name) {
+    isAbleToPlay = true;
+}
 
 void Player::setAge(int age) {
     this->age = age;
@@ -409,7 +413,7 @@ std::string Player::toString() const {
         << (winStatus ? "Yes" : "No") << ","
         << (canPutNeshaneSolh ? "Yes" : "No") ; oss << ","
         << (canPutNeshaneJang ? "Yes" : "No") ; oss << ","
-        << color << "\n";
+        << color << "," << isAbleToPlay << "\n";
 
     // dominated areas
     if (dominatedAreas.empty()) {

@@ -147,6 +147,10 @@ bool Save::readPlayerDetails(Player& player, const std::string& playerLine) {
         player.setColor(token);
         qDebug() << "Player color set: " << QString::fromStdString(token);
 
+        std::getline(ss, token, ',');
+        player.updatePlayerEligibility(token == "1");
+        qDebug() << "Player able to play set: " << QString::fromStdString(token);
+
     } catch (const std::exception& e) {
         qDebug() << "Error parsing player details: " << QString::fromStdString(e.what());
         return false;
