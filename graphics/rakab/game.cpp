@@ -440,17 +440,17 @@ void Game::setNeshaneJangOwner()
 {
     Player* defaultPlayer = nullptr;
     std::vector<Player *> NeshaneJangOwners;
-    int min = players[0]->getCountShirZan();
+    int max = players[0]->getCountShirZan();
 
     for (auto &player : players)
     {
-        if (player->getCountShirZan() < min)
+        if (player->getCountShirZan() > max)
         {
-            min = player->getCountShirZan();
+            max = player->getCountShirZan();
             NeshaneJangOwners.clear();
             NeshaneJangOwners.push_back(player);
         }
-        else if (player->getCountShirZan() == min)
+        else if (player->getCountShirZan() == max)
         {
             NeshaneJangOwners.push_back(player);
         }
