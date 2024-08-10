@@ -98,6 +98,30 @@ bool Save::readMetaData(const std::string& line)
         neshaneSolhProvince = token;
         qDebug() << "neshaneSolhProvince : " << QString::fromStdString(token);
 
+        std::getline(ss, token, ',');
+                token.erase(0, token.find_first_not_of(" "));
+                token.erase(token.find_last_not_of(" ") + 1);
+                lastWinnerColor = token;
+                qDebug() << "lastWinnerColor : " << QString::fromStdString(token);
+
+                std::getline(ss, token, ',');
+                token.erase(0, token.find_first_not_of(" "));
+                token.erase(token.find_last_not_of(" ") + 1);
+                neshaneJangOwnerColor = token;
+                qDebug() << "neshaneJangOwnerColor : " << QString::fromStdString(token);
+
+                std::getline(ss, token, ',');
+                token.erase(0, token.find_first_not_of(" "));
+                token.erase(token.find_last_not_of(" ") + 1);
+                neshaneSolhgOwnerColor = token;
+                qDebug() << "neshaneSolhgOwnerColor : " << QString::fromStdString(token);
+
+                std::getline(ss, token, ',');
+                token.erase(0, token.find_first_not_of(" "));
+                token.erase(token.find_last_not_of(" ") + 1);
+                lastPlayerWhoPassedColor = token;
+                qDebug() << "lastPlayerWhoPassedColor : " << QString::fromStdString(token);
+
 
     } catch (const std::exception& e) {
         qDebug() << "Error parsing metadata: " << QString::fromStdString(e.what());
@@ -418,16 +442,20 @@ std::vector<std::shared_ptr<Card> > Save::getMainDeck()
 }
 
 
-
-
-std::string Save::getNeshaneSolhgOwner()
+std::string Save::getLastWinnerColor(){
+    return lastWinnerColor;
+}
+std::string Save::getlastPlayerWhoPassedColor(){
+    return lastPlayerWhoPassedColor;
+}
+std::string Save::getNeshaneSolhgOwnerColor()
 {
-    return neshaneSolhgOwner;
+    return neshaneSolhgOwnerColor;
 }
 
-std::string Save::NgeteshaneJangOwner()
+std::string Save::getNeshaneJangOwnerColor()
 {
-    return neshaneJangOwner ;
+    return neshaneJangOwnerColor ;
 }
 
 int Save::getCountRishSefid()

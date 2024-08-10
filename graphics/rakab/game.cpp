@@ -507,7 +507,7 @@ void Game::setLastPlayerWhoPassed(int index)
 
 const Player *Game::getNeshaneSolhOwner() const
 {
-   return NeshaneSolhOwner;
+    return NeshaneSolhOwner;
 }
 
 const Player &Game::getPlayerWhoShouldStart()
@@ -839,39 +839,39 @@ int Game::checkThisBattleWinner(const std::string &province)
 
     int tieCounter{0};
     if (winner == nullptr)
+    {
+        // find max score
+        for (auto &player : players)
         {
-            // find max score
-            for (auto &player : players)
+            int luckyPoints = static_cast<int>(player->getPoints()) % luckyNumber;
+            int unLuckyPoints = static_cast<int>(player->getPoints()) % unluckyNumber;
+
+            if (luckyPoints == 0)
             {
-                int luckyPoints = static_cast<int>(player->getPoints()) % luckyNumber;
-                int unLuckyPoints = static_cast<int>(player->getPoints()) % unluckyNumber;
+                player->setScore(player->getPoints() * 2);
+            }
 
-                if (luckyPoints == 0)
+            if (unLuckyPoints == 0)
+            {
+                continue;
+            }
+            else
+            {
+                if (player->getPoints() >= max)
                 {
-                    player->setScore(player->getPoints() * 2);
-                }
-
-                if (unLuckyPoints == 0)
-                {
-                    continue;
-                }
-                else
-                {
-                    if (player->getPoints() >= max)
-                    {
-                        max = player->getPoints();
-                        winner = player;
-                    }
+                    max = player->getPoints();
+                    winner = player;
                 }
             }
-    // count players with max score
-    for (auto &player : players)
-    {
-        if (player->getPoints() == max)
-        {
-            tieCounter++;
         }
-    }
+        // count players with max score
+        for (auto &player : players)
+        {
+            if (player->getPoints() == max)
+            {
+                tieCounter++;
+            }
+        }
     }
     // if there are more than 1 max, its a tie
     if (tieCounter > 1)
@@ -979,7 +979,23 @@ std::string Game::toString() const {
         oss << battleIsOnThis ;
     }
     oss<<",";
-    oss << neshaneSolhProvince ;
+    oss << neshaneSolhProvince  << ",";
+    if(lastWinner){
+        oss <<lastWinner->getColor()<< ",";
+    }
+    else oss << "None,";
+    if(NeshaneSolhOwner){
+        oss <<NeshaneJangOwner->getColor() <<",";
+    }
+    else oss << "None,";
+    if(NeshaneJangOwner){
+        oss <<NeshaneJangOwner->getColor() <<",";
+    }
+    else oss << "None,";
+    if(lastPlayerWhoPassed){
+        oss <<lastPlayerWhoPassed->getColor();
+    }
+    else oss << "None";
     oss << "\n";
 
     // Player details
@@ -1010,6 +1026,51 @@ int Game::loadFromFile(std::string filename)
     battleIsOnThis = save->getBattleIsOnThis();
     neshaneSolhProvince = save->getNeshaneSolhProvince();
     seasonSituation = save->getSeasonSituation();
+
+    auto lastWinnerColor        = save ->getLastWinnerColor();
+    auto NeshaneJangOwnerColor = save->getNeshaneJangOwnerColor();
+    auto NeshaneSolggOwnerColor= save ->getNeshaneSolhgOwnerColor();
+    auto lastPlayerWhoPassedColor= save->getlastPlayerWhoPassedColor();
+
+    for (auto player: players){
+        if (player->getColor() == lastWinnerColor){
+            lastWinner = player;
+            break;
+        }
+        else {
+            lastWinner = nullptr;
+        }
+    }
+
+    for (auto player: players){
+        if (player->getColor() == NeshaneJangOwnerColor){
+            NeshaneJangOwner = player;
+            break;
+        }
+        else {
+            NeshaneJangOwner = nullptr;
+        }
+    }
+
+    for (auto player: players){
+        if (player->getColor() == NeshaneSolggOwnerColor){
+            NeshaneSolhOwner = player;
+            break;
+        }
+        else {
+            NeshaneSolhOwner = nullptr;
+        }
+    }
+
+    for (auto player: players){
+        if (player->getColor() == lastPlayerWhoPassedColor){
+            lastPlayerWhoPassed = player;
+            break;
+        }
+        else {
+            lastPlayerWhoPassed = nullptr;
+        }
+    }
 
     for(auto player : players)
     {
