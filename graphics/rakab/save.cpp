@@ -122,6 +122,20 @@ bool Save::readMetaData(const std::string& line)
                 lastPlayerWhoPassedColor = token;
                 qDebug() << "lastPlayerWhoPassedColor : " << QString::fromStdString(token);
 
+                std::getline(ss, token, ',');
+                token.erase(0, token.find_first_not_of(" "));
+                token.erase(token.find_last_not_of(" ") + 1);
+                luckyNumber = std::stoi(token);
+                qDebug() << "luckyNumber: " << QString::fromStdString(token);
+
+                std::getline(ss, token, ',');
+                token.erase(0, token.find_first_not_of(" "));
+                token.erase(token.find_last_not_of(" ") + 1);
+                unluckyNumber = std::stoi(token);
+                qDebug() << "unluckyNumber: " << QString::fromStdString(token);
+
+
+
 
     } catch (const std::exception& e) {
         qDebug() << "Error parsing metadata: " << QString::fromStdString(e.what());
@@ -174,6 +188,15 @@ bool Save::readPlayerDetails(Player& player, const std::string& playerLine) {
         std::getline(ss, token, ',');
         player.updatePlayerEligibility(token == "1");
         qDebug() << "Player able to play set: " << QString::fromStdString(token);
+
+        std::getline(ss, token, ',');
+        player.setTablZanCounter(std::stoi(token));
+        qDebug() << "Player TablZanCounter set: " << QString::fromStdString(token);
+
+        std::getline(ss, token, ',');
+        player.setUsedRakhshSefid(token == "1");
+        qDebug() << "Player UsedRakhshSefid set: " << QString::fromStdString(token);
+
 
     } catch (const std::exception& e) {
         qDebug() << "Error parsing player details: " << QString::fromStdString(e.what());
@@ -447,6 +470,16 @@ std::string Save::getLastWinnerColor(){
 }
 std::string Save::getlastPlayerWhoPassedColor(){
     return lastPlayerWhoPassedColor;
+}
+
+int Save::getluckyNumber()
+{
+    return luckyNumber;
+}
+
+int Save::getunluckyNumber()
+{
+    return unluckyNumber;
 }
 std::string Save::getNeshaneSolhgOwnerColor()
 {

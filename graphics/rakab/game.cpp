@@ -993,9 +993,10 @@ std::string Game::toString() const {
     }
     else oss << "None,";
     if(lastPlayerWhoPassed){
-        oss <<lastPlayerWhoPassed->getColor();
+        oss <<lastPlayerWhoPassed->getColor() <<",";
     }
-    else oss << "None";
+    else oss << "None,";
+    oss <<luckyNumber<<","<<unluckyNumber;
     oss << "\n";
 
     // Player details
@@ -1026,6 +1027,9 @@ int Game::loadFromFile(std::string filename)
     battleIsOnThis = save->getBattleIsOnThis();
     neshaneSolhProvince = save->getNeshaneSolhProvince();
     seasonSituation = save->getSeasonSituation();
+
+    luckyNumber = save->getluckyNumber();
+    unluckyNumber = save ->getunluckyNumber();
 
     auto lastWinnerColor        = save ->getLastWinnerColor();
     auto NeshaneJangOwnerColor = save->getNeshaneJangOwnerColor();

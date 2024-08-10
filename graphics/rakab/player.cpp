@@ -432,7 +432,7 @@ std::string Player::toString() const {
         << (winStatus ? "Yes" : "No") << ","
         << (canPutNeshaneSolh ? "Yes" : "No") ; oss << ","
         << (canPutNeshaneJang ? "Yes" : "No") ; oss << ","
-        << color << "," << isAbleToPlay << "\n";
+        << color << "," << isAbleToPlay <<","<< tablZanCounter <<","<<usedRakhshSefid<<"\n";
 
     // dominated areas
     if (dominatedAreas.empty()) {
@@ -504,5 +504,15 @@ void Player::reset() {
         canPutNeshaneSolh = false;
         canPutNeshaneJang = false;
         color = "";
-    }
+}
+
+void Player::setTablZanCounter(int val)
+{
+    tablZanCounter = val;
+}
+
+void Player::setUsedRakhshSefid(bool val)
+{
+    usedRakhshSefid = val ;
+}
 

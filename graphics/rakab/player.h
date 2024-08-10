@@ -71,6 +71,9 @@ public:
     std::string toString() const;
 
     void reset();
+
+    void setTablZanCounter(int);
+    void setUsedRakhshSefid(bool);
 private:
     int age;
     std::string name;

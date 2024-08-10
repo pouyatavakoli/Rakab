@@ -46,6 +46,12 @@ public:
 
     std::string getLastWinnerColor();
     std::string getlastPlayerWhoPassedColor();
+
+    int getluckyNumber();
+    int getunluckyNumber();
+
+    int luckyNumber;
+    int unluckyNumber;
 private:
 
     bool battleCompleted ;
