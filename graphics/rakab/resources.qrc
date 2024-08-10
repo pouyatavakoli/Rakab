@@ -24,6 +24,7 @@
         <file>assets/cards/banafsh/Shah_Dokht.png</file>
         <file>assets/cards/banafsh/Parcham_Dar.png</file>
         <file>assets/cards/banafsh/Rish_Sefid.png</file>
+        <file>assets/cards/banafsh/Rakhsh_Sefid.png</file>
     </qresource>
     <qresource prefix="/new/cards/qermez">
         <file>assets/cards/qermez/Roh_Jangal.png</file>

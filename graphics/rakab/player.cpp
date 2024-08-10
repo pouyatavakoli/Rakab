@@ -212,13 +212,26 @@ int Player::PlayThisCard(const std::string userChoice)
             {
                 return 5; // RishSefid should be played
             }
-            else if (situation == 6)
+            else if (situation == 6 || situation == 12)
             {
-                return 6; // ParchamDar should be played
+                return 6; // ParchamDar or RakhshSefid should be played
             }
         }
         return 0;
     }
+}
+
+int Player::getTablZanCounter() const {
+    return tablZanCounter;
+}
+
+void Player::incrementTablZanCounter() {
+    tablZanCounter++;
+}
+
+bool Player::getUsedRakhshSefid() const
+{
+    return usedRakhshSefid;
 }
 
 bool Player::playYellowCard(const std::string &cardName)
@@ -268,17 +281,12 @@ int Player::playPurpleCard(const std::string &cardName)
             }
             else if (playedCard->getName() == "TablZan")
             {
-                if (!usedTablZan)
-                {
-                    purpleCard->startEffect(*this);
                     purpleOnTable.push_back(playedCard);
                     playedCards.push_back(playedCard);
                     purpleHand.erase(it);
                     purpleHand.shrink_to_fit();
                     usedTablZan = true;
                     return 1; // we found TablZan
-                }
-                return 4; // The card can not be played
             }
 
             else if (playedCard->getName() == "Winter" || playedCard->getName() == "Spring")
@@ -325,6 +333,15 @@ int Player::playPurpleCard(const std::string &cardName)
                 purpleHand.erase(it);
                 purpleHand.shrink_to_fit();
                 return 6; // we found ParchamDar
+            }
+            else if (playedCard->getName() == "RakhshSefid")
+            {
+                usedRakhshSefid = true;
+                purpleOnTable.push_back(playedCard);
+                playedCards.push_back(playedCard);
+                purpleHand.erase(it);
+                purpleHand.shrink_to_fit();
+                return 12; // we found RakhshSefid
             }
         }
     }
@@ -390,7 +407,9 @@ void Player::flushTable()
 {
     winStatus = false;
     usedTablZan = false;
+    usedRakhshSefid = false;
     countShirZan = 0;
+    tablZanCounter = 0;
     canPutNeshaneSolh = false;
     canPutNeshaneJang = false;
 

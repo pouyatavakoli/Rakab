@@ -54,6 +54,10 @@ public:
     bool playYellowCard(const std::string &);
     int PlayThisCard(const std::string);
 
+    int getTablZanCounter() const;
+    void incrementTablZanCounter();
+    bool getUsedRakhshSefid() const;
+
     void applyEffect();
     void cancelEffects();
     void burnHand();
@@ -75,7 +79,7 @@ private:
     bool isAbleToPlay;
     bool winStatus;
     bool usedTablZan;
-    int countShirZan;
+    int countShirZan{0};
     bool canPutNeshaneSolh; // can be changed by RishSefid
     bool canPutNeshaneJang; // can be changed by ShirZan
     std::vector<std::string> dominatedAreas;
@@ -85,6 +89,9 @@ private:
     std::vector<std::shared_ptr<Card>> purpleHand;
     std::vector<std::shared_ptr<Card>> burntCards;
     std::vector<std::shared_ptr<Card>> playedCards;
+
+    int tablZanCounter{0};
+    bool usedRakhshSefid{false};
 };
 
 #endif // PLAYER_HPP

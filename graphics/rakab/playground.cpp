@@ -224,6 +224,7 @@ void Playground::handleCardClick(Card* card) {
         updateUi();
         if(situation == 11)
         {
+            game.setNeshaneJangOwner();
             int winstat = game.checkThisBattleWinner(province);
             if(winstat == 0)
             {
@@ -242,7 +243,7 @@ void Playground::handleCardClick(Card* card) {
                 QMessageBox::information(nullptr, "Status", message);
 
             }
-            //close();
+            close();
 
         }
     }
@@ -285,6 +286,7 @@ void Playground::on_pushButton_clicked()
     }
     else
     {
+        game.setNeshaneJangOwner();
         game.updateTotalScore();
         int winstat = game.checkThisBattleWinner(province);
         if(winstat == 0)

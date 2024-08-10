@@ -15,6 +15,7 @@
 #include "tablzan.h"
 #include "parchamdar.h"
 #include "rishsefid.h"
+#include "rakhshsefid.h"
 #include "shirzan.h"
 #include "yellow1.h"
 #include "yellow2.h"
@@ -193,6 +194,12 @@ void Game::fillMainDeck()
         std::shared_ptr<TablZan> tablzan = std::make_shared<TablZan>();
         //      matarsak->setImage(QString::fromStdString(cardImages["Matarsak"]));
         mainDeck.push_back(tablzan);
+    }
+    for (int i = 1; i <= 2; ++i)
+    {
+        std::shared_ptr<RakhshSefid> rakhshsefid = std::make_shared<RakhshSefid>();
+        //      matarsak->setImage(QString::fromStdString(cardImages["Matarsak"]));
+        mainDeck.push_back(rakhshsefid);
     }
 
 }
@@ -431,7 +438,7 @@ void Game::StartEffectOfRishSefid()
 
 void Game::setNeshaneJangOwner()
 {
-    static Player* defaultPlayer;
+    Player* defaultPlayer = nullptr;
     std::vector<Player *> NeshaneJangOwners;
     int min = players[0]->getCountShirZan();
 
@@ -580,10 +587,7 @@ void Game::startSeason(const std::string userChoice)
         {
             for (auto &yellowcards : changePlayer->getYellowOnTable())
             {
-                if (yellowcards->getPoints() != 1)
-                {
-                    yellowcards->setPoints(1);
-                }
+                yellowcards->setPoints(yellowcards->getPoints() / 2);
             }
         }
     }
@@ -707,7 +711,7 @@ int Game::playPlayerCard(int playerIndex, const std::string& cardName) {
         nextTurn();
         return 5;
     }
-    else if (situation == 6) // It is ParchamDar
+    else if (situation == 6) // It is ParchamDar or RakhshSefid
     {
         parchamDarIsPlayed = true;
         nextTurn(); // TODO:it should end game
@@ -823,16 +827,43 @@ int Game::checkThisBattleWinner(const std::string &province)
 
     int max{0};
     Player *winner = nullptr;
-    // find max score
+    // RakhshSefid
     for (auto &player : players)
     {
-        if (player->getPoints() >= max)
+        if (player->getUsedRakhshSefid())
         {
-            max = player->getPoints();
             winner = player;
+            break;
         }
     }
+
     int tieCounter{0};
+    if (winner == nullptr)
+        {
+            // find max score
+            for (auto &player : players)
+            {
+                int luckyPoints = static_cast<int>(player->getPoints()) % luckyNumber;
+                int unLuckyPoints = static_cast<int>(player->getPoints()) % unluckyNumber;
+
+                if (luckyPoints == 0)
+                {
+                    player->setScore(player->getPoints() * 2);
+                }
+
+                if (unLuckyPoints == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    if (player->getPoints() >= max)
+                    {
+                        max = player->getPoints();
+                        winner = player;
+                    }
+                }
+            }
     // count players with max score
     for (auto &player : players)
     {
@@ -840,6 +871,7 @@ int Game::checkThisBattleWinner(const std::string &province)
         {
             tieCounter++;
         }
+    }
     }
     // if there are more than 1 max, its a tie
     if (tieCounter > 1)
@@ -1045,5 +1077,14 @@ void Game::setNeshaneSolhProvince(std::string province)
 std::string Game::getNeshaneSolhProvince() const
 {
     return neshaneSolhProvince;
+}
+
+void Game::setLuckyNumber(int num)
+{
+    luckyNumber = num;
+}
+void Game::setUnLuckyNumber(int num)
+{
+    unluckyNumber = num;
 }
 

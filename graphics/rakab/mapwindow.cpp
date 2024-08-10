@@ -4,6 +4,8 @@
 #include "playground.h"
 
 #include <QPainter>
+#include <QLineEdit>
+#include <QIntValidator>
 #include <QLabel>
 #include <QPoint>
 #include <QRect>
@@ -277,6 +279,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                                 qDebug() << "Creating Playground object";
                                 try {
                                     Playground *pg = new Playground(game, labelNameStd);
+                                    askForTwoNumbers(game , this);
                                     game.setBattleIsOnThis(labelNameStd);
                                     qDebug() << "Playground object created";
                                     pg->show();
@@ -307,6 +310,7 @@ void mapwindow::dropEvent(QDropEvent *event)
 
                                 try {
                                     qDebug() << "Creating Playground object for subsequent round";
+                                    askForTwoNumbers(game , this);
                                     Playground *pg = new Playground(game, labelNameStd);
                                     game.setBattleIsOnThis(labelNameStd);
                                     qDebug() << "Playground object created for subsequent round";
@@ -511,7 +515,7 @@ void mapwindow::initializeLabels()
             label->setObjectName(QString("OLIVADI"));
             break;
         case 10:
-            label->setObjectName(QString("ENNA"));
+            label->setObjectName(QString("LIA"));
             break;
         case 11:
             label->setObjectName(QString("ATELA"));
@@ -520,7 +524,7 @@ void mapwindow::initializeLabels()
             label->setObjectName(QString("DISMASE"));
             break;
         case 13:
-            label->setObjectName(QString("LIA"));
+            label->setObjectName(QString("ENNA"));
             break;
         }
         label->setGeometry(dropAreas[i]);
@@ -653,4 +657,49 @@ void mapwindow::on_pushButton_2_clicked()
     SelectSaveLoacation* ssl = new SelectSaveLoacation(game , this);
     ssl->show();
 }
+
+void mapwindow::askForTwoNumbers(Game &game, QWidget *parent = nullptr)
+{
+    QDialog dialog(parent);
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+
+    QLabel *firstNumberLabel = new QLabel("Enter the LUCKY number (between 10 and 99):");
+    QLineEdit *firstNumberInput = new QLineEdit;
+    firstNumberInput->setValidator(new QIntValidator(10, 99, firstNumberInput));
+    layout->addWidget(firstNumberLabel);
+    layout->addWidget(firstNumberInput);
+
+    QLabel *secondNumberLabel = new QLabel("Enter the UnLUCKY number (between 10 and 99):");
+    QLineEdit *secondNumberInput = new QLineEdit;
+    secondNumberInput->setValidator(new QIntValidator(10, 99, secondNumberInput));
+    layout->addWidget(secondNumberLabel);
+    layout->addWidget(secondNumberInput);
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    QPushButton *okButton = new QPushButton("OK");
+    QPushButton *cancelButton = new QPushButton("Cancel");
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+    layout->addLayout(buttonLayout);
+
+    // Connect buttons to dialog actions
+    connect(okButton, &QPushButton::clicked, &dialog, [&]() {
+        int firstNumber = firstNumberInput->text().toInt();
+        int secondNumber = secondNumberInput->text().toInt();
+
+        // Check if the numbers are within the valid range
+        if (firstNumber < 10 || firstNumber > 99 || secondNumber < 10 || secondNumber > 99) {
+            QMessageBox::critical(&dialog, "Invalid Input", "Both numbers must be between 10 and 99.");
+        } else {
+            game.setLuckyNumber(firstNumber);    // Call setLuckyNumber with the first number
+            game.setUnLuckyNumber(secondNumber); // Call setUnLuckyNumber with the second number
+            dialog.accept();  // Close the dialog if input is valid
+        }
+    });
+
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    dialog.exec();  // Execute the dialog
+}
+
 

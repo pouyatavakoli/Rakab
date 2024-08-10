@@ -19,7 +19,7 @@ Map::Map()
 
     map["BELLA"] = {"PLADACI", "CALINE", "BORGE"};
     map["CALINE"] = {"ENNA", "ATELA", "BORGE", "PLADACI"};
-    map["ENNA"] = {"BORGE", "CALINE", "DIMASE", "ATELA"};
+    map["LIA"] = {"BORGE", "CALINE", "DIMASE", "ATELA"}; //fixed
     map["ATELA"] = {"CALINE", "ENNA", "DISAME"};
     map["BORGE"] = {"ENNA", "CALINE", "DIMASE", "PLADACI", "MORINA", "OLIVADI", "BELLA"};
     map["PLADACI"] = {"BELLA", "BORGE", "MORINA", "ROLLO", "CALINE"};
@@ -30,7 +30,7 @@ Map::Map()
     map["TALMONE"] = {"MORINA", "ROLLO", "ELINIA", "ARMENTO"};
     map["ELINIA"] = {"ROLLO", "TALMONE"};
     map["ARMENTO"] = {"LIA", "OLIVADI", "MORINA", "TALMONE"};
-    map["LIA"] = {"OLIVADI", "ARMENTO"};
+    map["ENNA"] = {"OLIVADI", "ARMENTO"}; //fixed
 }
 
 const std::vector<std::string> &Map::get_adjacent_provinces(const std::string &key)

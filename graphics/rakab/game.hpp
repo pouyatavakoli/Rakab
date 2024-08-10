@@ -98,8 +98,8 @@ public:
     void setNeshaneSolhProvince(std::string);
     std::string getNeshaneSolhProvince() const;
 
-    void setNeshaneSolhDropped(bool);
-    bool getNeshaneSolhDropped() const;
+    void setLuckyNumber(int);
+    void setUnLuckyNumber(int);
 
 
 signals:
@@ -126,6 +126,9 @@ private:
     std::string battleIsOnThis;
 
     std::string neshaneSolhProvince;
+
+    int luckyNumber{0};
+    int unluckyNumber{0};
 
 
 };
