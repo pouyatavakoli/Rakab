@@ -14,7 +14,6 @@ void TablZan::startEffect(Player &player) {
     for (auto &card : deck) {
         card->setPoints(static_cast<int>(card->getPoints() * multiplier));
     }
-    player.incrementTablZanCounter();
 }
 
 void TablZan::endEffect(Player &player)
@@ -23,7 +22,7 @@ void TablZan::endEffect(Player &player)
     for (auto &card : deck)
     {
         /* card is now worth 2 times number written on it */
-        card->setPoints(card->getPoints()/ 2);
+        card->setPoints(card->getNumberOnTheCard());
     }
 }
 

@@ -281,12 +281,27 @@ int Player::playPurpleCard(const std::string &cardName)
             }
             else if (playedCard->getName() == "TablZan")
             {
+
+                if(!usedTablZan)
+                {
                     purpleOnTable.push_back(playedCard);
                     playedCards.push_back(playedCard);
                     purpleHand.erase(it);
                     purpleHand.shrink_to_fit();
                     usedTablZan = true;
                     return 1; // we found TablZan
+                }
+                else
+                {
+                    purpleOnTable.push_back(playedCard);
+                    playedCards.push_back(playedCard);
+                    purpleHand.erase(it);
+                    purpleHand.shrink_to_fit();
+                    usedTablZan = true;
+                    incrementTablZanCounter();
+                    return 1; // we found TablZan
+
+                }
             }
 
             else if (playedCard->getName() == "Winter" || playedCard->getName() == "Spring")
@@ -431,8 +446,8 @@ std::string Player::toString() const {
         << totalScore << ","
         << (winStatus ? "Yes" : "No") << ","
         << (canPutNeshaneSolh ? "Yes" : "No") ; oss << ","
-        << (canPutNeshaneJang ? "Yes" : "No") ; oss << ","
-        << color << "," << isAbleToPlay <<","<< tablZanCounter <<","<<usedRakhshSefid<<"\n";
+                                                    << (canPutNeshaneJang ? "Yes" : "No") ; oss << ","
+                                                                                                << color << "," << isAbleToPlay <<","<< tablZanCounter <<","<<usedRakhshSefid<<"\n";
 
     // dominated areas
     if (dominatedAreas.empty()) {
@@ -451,22 +466,22 @@ std::string Player::toString() const {
         oss << "None" << "\n";
     }
     else{
-    for (auto &card : yellowHand){
-        oss<< card->toString();
-        oss << "\n";
+        for (auto &card : yellowHand){
+            oss<< card->toString();
+            oss << "\n";
 
-    }
+        }
     }
     oss << purpleHand.size() << "\n" ;
     if (purpleHand.empty()){
         oss << "None" << "\n";
     }
     else{
-    for (auto &card : purpleHand){
-        oss <<card->toString();
-        oss << "\n";
+        for (auto &card : purpleHand){
+            oss <<card->toString();
+            oss << "\n";
 
-    }
+        }
     }
 
     oss << yellowOnTable.size() << "\n";
@@ -474,22 +489,22 @@ std::string Player::toString() const {
         oss << "None" << "\n";
     }
     else {
-    for (auto &card : yellowOnTable){
-        oss<< card->toString();
-        oss << "\n";
+        for (auto &card : yellowOnTable){
+            oss<< card->toString();
+            oss << "\n";
 
-    }
+        }
     }
     oss << purpleOnTable.size() << "\n";
     if (purpleOnTable.empty()){
         oss << "None" << "\n";
     }
     else {
-    for (auto &card : purpleOnTable){
-        oss << card->toString();
-        oss << "\n";
+        for (auto &card : purpleOnTable){
+            oss << card->toString();
+            oss << "\n";
 
-    }
+        }
     }
 
     return oss.str();
@@ -497,13 +512,13 @@ std::string Player::toString() const {
 
 //clear player data (used in reading from file)
 void Player::reset() {
-        name = "";
-        age = 0;
-        totalScore = 0;
-        winStatus = false;
-        canPutNeshaneSolh = false;
-        canPutNeshaneJang = false;
-        color = "";
+    name = "";
+    age = 0;
+    totalScore = 0;
+    winStatus = false;
+    canPutNeshaneSolh = false;
+    canPutNeshaneJang = false;
+    color = "";
 }
 
 void Player::setTablZanCounter(int val)
