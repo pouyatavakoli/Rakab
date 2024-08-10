@@ -102,6 +102,7 @@ public:
     bool getNeshaneSolhDropped() const;
 
 
+    Player* WhosColorIsThis(std::string color);
 signals:
     void cardPlayed(int playerIndex, const std::shared_ptr<Card>& card);
 

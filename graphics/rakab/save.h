@@ -21,8 +21,8 @@ public:
     std::vector<std::shared_ptr<Card>> getMainDeck() ;
 
 
-    std::string getNeshaneSolhgOwner();
-    std::string NgeteshaneJangOwner();
+    std::string getNeshaneSolhgOwnerColor();
+    std::string getNeshaneJangOwnerColor();
     int getCountRishSefid();
     bool getBattleCompleted();
 
@@ -43,6 +43,9 @@ public:
 
     std::string getNeshaneSolhProvince();
     std::string getAnyPlayerCanPlay();
+    std::string getLastWinnerColor();
+    std::string getlastPlayerWhoPassedColor();
+
 private:
 
     bool battleCompleted ;
@@ -50,9 +53,10 @@ private:
     int  numberOfGames;
     std::vector<Player*> players;
     std::vector<std::shared_ptr<Card>> mainDeck;
-    std::string lastWinner;
-    std::string neshaneSolhgOwner;
-    std::string neshaneJangOwner;
+    std::string lastWinnerColor;
+    std::string neshaneSolhgOwnerColor;
+    std::string neshaneJangOwnerColor;
+    std::string lastPlayerWhoPassedColor;
     int countRishSefid;
     int currentPlayerIndex;
     std::string anyPlayerCanPlay;
@@ -64,7 +68,6 @@ private:
     std::string battleIsOnThis ;
 
     std::string neshaneSolhProvince;
-
 };
 //std::vector<Game> games;
 

@@ -947,7 +947,23 @@ std::string Game::toString() const {
         oss << battleIsOnThis ;
     }
     oss<<",";
-    oss << neshaneSolhProvince ;
+    oss << neshaneSolhProvince  << ",";
+    if(lastWinner){
+        oss <<lastWinner->getColor()<< ",";
+    }
+    else oss << "None,";
+    if(NeshaneSolhOwner){
+        oss <<NeshaneJangOwner->getColor() <<",";
+    }
+    else oss << "None,";
+    if(NeshaneJangOwner){
+        oss <<NeshaneJangOwner->getColor() <<",";
+    }
+    else oss << "None,";
+    if(lastPlayerWhoPassed){
+        oss <<lastPlayerWhoPassed->getColor();
+    }
+    else oss << "None";
     oss << "\n";
 
     // Player details
@@ -978,6 +994,52 @@ int Game::loadFromFile(std::string filename)
     battleIsOnThis = save->getBattleIsOnThis();
     neshaneSolhProvince = save->getNeshaneSolhProvince();
     seasonSituation = save->getSeasonSituation();
+
+    auto lastWinnerColor        = save ->getLastWinnerColor();
+    auto NeshaneJangOwnerColor = save->getNeshaneJangOwnerColor();
+    auto NeshaneSolggOwnerColor= save ->getNeshaneSolhgOwnerColor();
+    auto lastPlayerWhoPassedColor= save->getlastPlayerWhoPassedColor();
+
+    for (auto player: players){
+        if (player->getColor() == lastWinnerColor){
+            lastWinner = player;
+            break;
+        }
+        else {
+            lastWinner = nullptr;
+        }
+    }
+
+    for (auto player: players){
+        if (player->getColor() == NeshaneJangOwnerColor){
+            NeshaneJangOwner = player;
+            break;
+        }
+        else {
+            NeshaneJangOwner = nullptr;
+        }
+    }
+
+    for (auto player: players){
+        if (player->getColor() == NeshaneSolggOwnerColor){
+            NeshaneSolhOwner = player;
+            break;
+        }
+        else {
+            NeshaneSolhOwner = nullptr;
+        }
+    }
+
+    for (auto player: players){
+        if (player->getColor() == lastPlayerWhoPassedColor){
+            lastPlayerWhoPassed = player;
+            break;
+        }
+        else {
+            lastPlayerWhoPassed = nullptr;
+        }
+    }
+
 
     for(auto player : players)
     {
@@ -1045,5 +1107,14 @@ void Game::setNeshaneSolhProvince(std::string province)
 std::string Game::getNeshaneSolhProvince() const
 {
     return neshaneSolhProvince;
+}
+
+ Player* Game::WhosColorIsThis(std::string color) {
+    for (auto *player : players){
+        if (player->getColor() == color){
+            return player;
+        }
+    }
+        return nullptr ;
 }
 
