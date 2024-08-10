@@ -92,13 +92,13 @@ bool Save::readMetaData(const std::string& line)
         battleIsOnThis = token;
         qDebug() << "battleIsOn : " << QString::fromStdString(token);
 
-        /*
-        // Optionally, check if there are any extra tokens or trailing data
         std::getline(ss, token, ',');
-        if (!token.empty() && token.find_first_not_of(" ") != std::string::npos) {
-            throw std::runtime_error("Unexpected extra data after last field.");
-        }
-        */
+        token.erase(0, token.find_first_not_of(" "));
+        token.erase(token.find_last_not_of(" ") + 1);
+        neshaneSolhProvince = token;
+        qDebug() << "neshaneSolhProvince : " << QString::fromStdString(token);
+
+
     } catch (const std::exception& e) {
         qDebug() << "Error parsing metadata: " << QString::fromStdString(e.what());
         return false;
@@ -478,4 +478,19 @@ bool Save::containsEmptyWord(const std::string& filename) {
 
     file.close();
     return false; // Word "empty" not found
+}
+
+int Save::getCurrentPlayerIndex()
+{
+    return currentPlayerIndex;
+}
+
+std::string Save::getNeshaneSolhProvince()
+{
+    return neshaneSolhProvince;
+}
+
+std::string Save::getAnyPlayerCanPlay()
+{
+    return anyPlayerCanPlay;
 }

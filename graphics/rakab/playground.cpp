@@ -315,6 +315,5 @@ void Playground::on_save_pb_clicked()
     game.setBattleCompleted("No");
     SelectSaveLoacation* ssl = new SelectSaveLoacation(game , this);
     ssl->show();
-    // code to save
 }
 

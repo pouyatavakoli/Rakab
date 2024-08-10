@@ -77,10 +77,10 @@ mapwindow::mapwindow(Game &game ,QWidget *parent) :
     }
     else
     {
-      qDebug() << "No";
-      Playground *pg = new Playground(game, game.getBattleIsOnThis());
-      pg->show();
-      connect(pg, &Playground::playgroundClosed, this, &mapwindow::checkAndHandleGameWinner);
+        qDebug() << "No";
+        Playground *pg = new Playground(game, game.getBattleIsOnThis());
+        pg->show();
+        connect(pg, &Playground::playgroundClosed, this, &mapwindow::checkAndHandleGameWinner);
     }
 
 }
@@ -218,8 +218,111 @@ void mapwindow::dropEvent(QDropEvent *event)
                     if (checkAvailable(labelName) && game.getNeshaneSolhProvince() == "None")
                     {
                         game.setNeshaneSolhProvince(labelNameStd);
+                        qDebug() << "neshan solh province was set : " << QString::fromStdString(labelNameStd) ;
                         isDroppedInArea = true;
                         break;
+                    }
+                    else {
+                        qDebug() << "province can't be played" ;
+                        QDialog *provinceTaken = new QDialog(this);
+
+                        // Set text for the dialog
+                        QLabel *provinceTaken_lbl = new QLabel("this province is not available try onother one");
+                        provinceTaken_lbl->setAlignment(Qt::AlignCenter); // Optionally set alignment
+
+                        // Set layout for the dialog
+                        QVBoxLayout *mainLayout = new QVBoxLayout(provinceTaken);
+
+                        // Add the message label to the main layoutmessageLabel
+                        mainLayout->addWidget(provinceTaken_lbl);
+
+                        // Create buttons
+                        QPushButton *okButton = new QPushButton("OK", provinceTaken);
+                        // Create layout for buttons
+                        QHBoxLayout *buttonLayout = new QHBoxLayout;
+                        buttonLayout->addWidget(okButton);
+                        mainLayout->addLayout(buttonLayout);
+
+                        QObject::connect(okButton, &QPushButton::clicked, provinceTaken , &QDialog::accept);
+
+                        provinceTaken->show();
+                        continue;
+                    }
+                }
+                else if(provinceLabelName == "NeshaneJang")
+                {
+                    if (checkAvailable(labelName)){
+                        qDebug() <<  labelName << "was available";
+                        if (askToStartBattle(this , labelName))
+                        {
+                            if (game.getIsFirstRound() == true)
+                            {
+                                qDebug() << "First battle started, setting starter";
+
+                                try {
+                                    auto &smallestPlayer = game.findSmallestPlayer();
+                                    qDebug() << "Smallest player found:" << QString::fromStdString(smallestPlayer.getName());
+                                    game.setBattleStarter(smallestPlayer);
+                                    qDebug() << "Battle starter set";
+                                } catch (const std::length_error& e) {
+                                    qDebug() << "Caught a length_error during smallest player search or battle starter set:" << e.what();
+                                    // return;
+                                    continue;
+                                } catch (const std::exception& e) {
+                                    qDebug() << "Caught an exception during smallest player search or battle starter set:" << e.what();
+                                    // return;
+                                    continue;
+                                }
+
+                                qDebug() << "Creating Playground object";
+                                try {
+                                    Playground *pg = new Playground(game, labelNameStd);
+                                    game.setBattleIsOnThis(labelNameStd);
+                                    qDebug() << "Playground object created";
+                                    pg->show();
+                                    qDebug() << "Playground shown";
+                                    connect(pg, &Playground::playgroundClosed, this, &mapwindow::checkAndHandleGameWinner);
+                                } catch (const std::length_error& e) {
+                                    qDebug() << "Caught a length_error during Playground creation or show:" << e.what();
+                                    return; // Early exit or appropriate error handling
+                                } catch (const std::exception& e) {
+                                    qDebug() << "Caught an exception during Playground creation or show:" << e.what();
+                                    return; // Early exit or appropriate error handling
+                                }
+
+
+                                isDroppedInArea = true;
+                                game.setIsFirstRound(false);
+                                break;
+                            }
+
+                            else
+                            {
+                                qDebug() << "Battle started but it's not the first round";
+                                game.setNeshaneJangOwner();
+                                qDebug() << "setNeshaneJangOwner";
+                                game.setBattleStarter(game.getPlayerWhoShouldStart());
+                                //                            game.setBattleStarter(game.getPlayer(0));
+                                qDebug() << "Battle started setNeshaneJangOwner";
+
+                                try {
+                                    qDebug() << "Creating Playground object for subsequent round";
+                                    Playground *pg = new Playground(game, labelNameStd);
+                                    game.setBattleIsOnThis(labelNameStd);
+                                    qDebug() << "Playground object created for subsequent round";
+                                    pg->show();
+                                    qDebug() << "Playground shown for subsequent round";
+                                    connect(pg, &Playground::playgroundClosed, this, &mapwindow::checkAndHandleGameWinner);
+                                } catch (const std::exception& e) {
+                                    qDebug() << "Caught an exception during Playground creation or show in subsequent round:" << e.what();
+                                    return; // Handle the error or decide how to proceed
+                                }
+
+                                isDroppedInArea = true;
+                                break;
+                            }
+                        }
+
                     }
                     else {
                         qDebug() << "province can't be played" ;
@@ -248,108 +351,6 @@ void mapwindow::dropEvent(QDropEvent *event)
                         continue;
                     }
                 }
-                else if(provinceLabelName == "NeshaneJang")
-                {
-                if (checkAvailable(labelName)){
-                qDebug() <<  labelName << "was available";
-                    if (askToStartBattle(this , labelName))
-                    {
-                        if (game.getIsFirstRound() == true)
-                        {
-                            qDebug() << "First battle started, setting starter";
-
-                            try {
-                                auto &smallestPlayer = game.findSmallestPlayer();
-                                qDebug() << "Smallest player found:" << QString::fromStdString(smallestPlayer.getName());
-                                game.setBattleStarter(smallestPlayer);
-                                qDebug() << "Battle starter set";
-                            } catch (const std::length_error& e) {
-                                qDebug() << "Caught a length_error during smallest player search or battle starter set:" << e.what();
-                               // return;
-                                continue;
-                            } catch (const std::exception& e) {
-                                qDebug() << "Caught an exception during smallest player search or battle starter set:" << e.what();
-                               // return;
-                                continue;
-                            }
-
-                            qDebug() << "Creating Playground object";
-                            try {
-                                Playground *pg = new Playground(game, labelNameStd);
-                                game.setBattleIsOnThis(labelNameStd);
-                                qDebug() << "Playground object created";
-                                pg->show();
-                                qDebug() << "Playground shown";
-                                connect(pg, &Playground::playgroundClosed, this, &mapwindow::checkAndHandleGameWinner);
-                            } catch (const std::length_error& e) {
-                                qDebug() << "Caught a length_error during Playground creation or show:" << e.what();
-                                return; // Early exit or appropriate error handling
-                            } catch (const std::exception& e) {
-                                qDebug() << "Caught an exception during Playground creation or show:" << e.what();
-                                return; // Early exit or appropriate error handling
-                            }
-
-
-                            isDroppedInArea = true;
-                            game.setIsFirstRound(false);
-                            break;
-                        }
-
-                        else
-                        {
-                            qDebug() << "Battle started but it's not the first round";
-                            game.setNeshaneJangOwner();
-                            qDebug() << "setNeshaneJangOwner";
-                            game.setBattleStarter(game.getPlayerWhoShouldStart());
-//                            game.setBattleStarter(game.getPlayer(0));
-                            qDebug() << "Battle started setNeshaneJangOwner";
-
-                            try {
-                                qDebug() << "Creating Playground object for subsequent round";
-                                Playground *pg = new Playground(game, labelNameStd);
-                                game.setBattleIsOnThis(labelNameStd);
-                                qDebug() << "Playground object created for subsequent round";
-                                pg->show();
-                                qDebug() << "Playground shown for subsequent round";
-                                connect(pg, &Playground::playgroundClosed, this, &mapwindow::checkAndHandleGameWinner);
-                            } catch (const std::exception& e) {
-                                qDebug() << "Caught an exception during Playground creation or show in subsequent round:" << e.what();
-                                return; // Handle the error or decide how to proceed
-                            }
-
-                            isDroppedInArea = true;
-                            break;
-                        }
-                    }
-
-                }
-                else {
-                    qDebug() << "province can't be played" ;
-                    QDialog *provinceTaken = new QDialog(this);
-
-                    // Set text for the dialog
-                    QLabel *provinceTaken_lbl = new QLabel("this province is taken try onother one");
-                    provinceTaken_lbl->setAlignment(Qt::AlignCenter); // Optionally set alignment
-
-                    // Set layout for the dialog
-                    QVBoxLayout *mainLayout = new QVBoxLayout(provinceTaken);
-
-                    // Add the message label to the main layoutmessageLabel
-                    mainLayout->addWidget(provinceTaken_lbl);
-
-                    // Create buttons
-                    QPushButton *okButton = new QPushButton("OK", provinceTaken);
-                    // Create layout for buttons
-                    QHBoxLayout *buttonLayout = new QHBoxLayout;
-                    buttonLayout->addWidget(okButton);
-                    mainLayout->addLayout(buttonLayout);
-
-                    QObject::connect(okButton, &QPushButton::clicked, provinceTaken , &QDialog::accept);
-
-                    provinceTaken->show();
-                    continue;
-                }
-                }
             }
         }
 
@@ -369,29 +370,29 @@ void mapwindow::checkAndHandleGameWinner() {
     // Call the function to check for the game winner
     colorProvinceLabels();
     qDebug() << "checkForGameWinner started";
-        if (game.winGame1() || game.winGame2())
-        {
-            try {
-                QString winnerName = QString::fromStdString(game.findWinner()); // Example getter for winner's name
+    if (game.winGame1() || game.winGame2())
+    {
+        try {
+            QString winnerName = QString::fromStdString(game.findWinner()); // Example getter for winner's name
 
-                // Display the winner
-                QString message = "The winner of the game is: " + winnerName;
-                QMessageBox::information(this, "Game Over", message);
+            // Display the winner
+            QString message = "The winner of the game is: " + winnerName;
+            QMessageBox::information(this, "Game Over", message);
 
-                // Close the MapWindow
-                mainmenu *menu = new mainmenu();
-                menu->show();
-                this->close();
-            }
-            catch (const std::runtime_error& e) {
-                qWarning() << "Error determining winner:" << e.what();
-                // Handle or log the error as needed, maybe prompt a message or take another action
-            }
-            catch (const std::exception& e) {
-                qWarning() << "Unexpected error:" << e.what();
-                // Handle or log the error as needed
-            }
+            // Close the MapWindow
+            mainmenu *menu = new mainmenu();
+            menu->show();
+            this->close();
         }
+        catch (const std::runtime_error& e) {
+            qWarning() << "Error determining winner:" << e.what();
+            // Handle or log the error as needed, maybe prompt a message or take another action
+        }
+        catch (const std::exception& e) {
+            qWarning() << "Unexpected error:" << e.what();
+            // Handle or log the error as needed
+        }
+    }
 }
 
 void mapwindow::mousePressEvent(QMouseEvent *event)
@@ -524,7 +525,7 @@ void mapwindow::initializeLabels()
         }
         label->setGeometry(dropAreas[i]);
         label->setStyleSheet("background-color: white; border: 1px solid black;");
-         // For visibility
+        // For visibility
         label->setText(label->objectName()); // Set text with the label number
         label->setAlignment(Qt::AlignCenter); // Center-align text
         label->show(); // Ensure the label is visible
@@ -645,3 +646,11 @@ void mapwindow::colorProvinceLabels()
         }
     }
 }
+
+void mapwindow::on_pushButton_2_clicked()
+{
+    game.setBattleCompleted("Yes");
+    SelectSaveLoacation* ssl = new SelectSaveLoacation(game , this);
+    ssl->show();
+}
+

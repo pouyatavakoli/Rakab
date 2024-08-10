@@ -28,7 +28,9 @@
 // Constructor
 Game::Game( QObject *parent) : QObject(parent), playerCount(0), currentPlayerIndex(0)
   ,lastWinner(nullptr) , NeshaneJangOwner(nullptr) , NeshaneSolhOwner(nullptr)
-  , lastPlayerWhoPassed(nullptr) {}
+  , lastPlayerWhoPassed(nullptr) {
+    neshaneSolhProvince = "None";
+}
 
 // Setter for player count
 void Game::setPlayersCount(int PlayerCountVal) {
@@ -944,6 +946,8 @@ std::string Game::toString() const {
     {
         oss << battleIsOnThis ;
     }
+    oss<<",";
+    oss << neshaneSolhProvince ;
     oss << "\n";
 
     // Player details
@@ -968,7 +972,13 @@ int Game::loadFromFile(std::string filename)
     save->loadGame(filename , players );
     auto savedCount = save->getplayerCount();
     setPlayersCount(savedCount);
+    battleCompleted = save->getBattleCompleted();
+    currentPlayerIndex = save->getCurrentPlayerIndex();
+    anyPlayerCanPlay =( save->getAnyPlayerCanPlay() == "Yes" );
     battleIsOnThis = save->getBattleIsOnThis();
+    neshaneSolhProvince = save->getNeshaneSolhProvince();
+    seasonSituation = save->getSeasonSituation();
+
     for(auto player : players)
     {
         qDebug() << QString::fromStdString( player->getName());

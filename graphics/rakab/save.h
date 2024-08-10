@@ -39,6 +39,10 @@ public:
     std::string getBattleIsOnThis();
     void writeEmptyToFile(const std::string &filename);
     bool containsEmptyWord(const std::string &filename);
+    int getCurrentPlayerIndex();
+
+    std::string getNeshaneSolhProvince();
+    std::string getAnyPlayerCanPlay();
 private:
 
     bool battleCompleted ;
@@ -58,6 +62,8 @@ private:
     int cardCount ;
     std::string seasonSituation ;
     std::string battleIsOnThis ;
+
+    std::string neshaneSolhProvince;
 
 };
 //std::vector<Game> games;
