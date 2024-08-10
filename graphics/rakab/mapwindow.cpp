@@ -69,13 +69,17 @@ mapwindow::mapwindow(Game &game ,QWidget *parent) :
     ui->NeshaneJang->setAcceptDrops(true);
     ui->NeshaneSolh->setAcceptDrops(true);
 
-    if(game.getIsOnMap())
+    colorProvinceLabels();
+    qDebug() << "getBattleCompleted";
+    if(game.getBattleCompleted() == "Yes")
     {
-
+        qDebug() << "Yes";
     }
     else
     {
-      Playground *pg = new Playground(game, game.getPlayingOnThisProvince());
+      qDebug() << "No";
+      Playground *pg = new Playground(game, game.getBattleIsOnThis());
+      pg->show();
       connect(pg, &Playground::playgroundClosed, this, &mapwindow::checkAndHandleGameWinner);
     }
 
@@ -172,6 +176,7 @@ void mapwindow::dropEvent(QDropEvent *event)
 {
     bool isDroppedInArea = false;
     QPoint dropPosition = event->position().toPoint();
+    QString provinceLabelName = event->mimeData()->text();
     qDebug() << "Drop event detected at position:" << dropPosition;
 
     // Collect all QLabel widgets
@@ -182,6 +187,7 @@ void mapwindow::dropEvent(QDropEvent *event)
             labels.append(label);
         }
     }
+
 
     QLabel* nearestLabel = findNearestLabel(dropPosition, labels);
     if (nearestLabel) {
@@ -207,6 +213,43 @@ void mapwindow::dropEvent(QDropEvent *event)
 
                 qDebug() << "Dropped in area:" << labelName;
                 // ask to start battle in area if available
+                if (provinceLabelName == "NeshaneSolh")
+                {
+                    if (checkAvailable(labelName) && game.getNeshaneSolhProvince() == "None")
+                    {
+                        game.setNeshaneSolhProvince(labelNameStd);
+                        isDroppedInArea = true;
+                        break;
+                    }
+                    else {
+                        qDebug() << "province can't be played" ;
+                        QDialog *provinceTaken = new QDialog(this);
+
+                        // Set text for the dialog
+                        QLabel *provinceTaken_lbl = new QLabel("this province is taken try onother one");
+                        provinceTaken_lbl->setAlignment(Qt::AlignCenter); // Optionally set alignment
+
+                        // Set layout for the dialog
+                        QVBoxLayout *mainLayout = new QVBoxLayout(provinceTaken);
+
+                        // Add the message label to the main layoutmessageLabel
+                        mainLayout->addWidget(provinceTaken_lbl);
+
+                        // Create buttons
+                        QPushButton *okButton = new QPushButton("OK", provinceTaken);
+                        // Create layout for buttons
+                        QHBoxLayout *buttonLayout = new QHBoxLayout;
+                        buttonLayout->addWidget(okButton);
+                        mainLayout->addLayout(buttonLayout);
+
+                        QObject::connect(okButton, &QPushButton::clicked, provinceTaken , &QDialog::accept);
+
+                        provinceTaken->show();
+                        continue;
+                    }
+                }
+                else if(provinceLabelName == "NeshaneJang")
+                {
                 if (checkAvailable(labelName)){
                 qDebug() <<  labelName << "was available";
                     if (askToStartBattle(this , labelName))
@@ -233,7 +276,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                             qDebug() << "Creating Playground object";
                             try {
                                 Playground *pg = new Playground(game, labelNameStd);
-                                game.setPlayingOnThisProvince(labelNameStd);
+                                game.setBattleIsOnThis(labelNameStd);
                                 qDebug() << "Playground object created";
                                 pg->show();
                                 qDebug() << "Playground shown";
@@ -264,7 +307,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                             try {
                                 qDebug() << "Creating Playground object for subsequent round";
                                 Playground *pg = new Playground(game, labelNameStd);
-                                game.setPlayingOnThisProvince(labelNameStd);
+                                game.setBattleIsOnThis(labelNameStd);
                                 qDebug() << "Playground object created for subsequent round";
                                 pg->show();
                                 qDebug() << "Playground shown for subsequent round";
@@ -281,7 +324,7 @@ void mapwindow::dropEvent(QDropEvent *event)
 
                 }
                 else {
-                    qDebug() << "province was taken" ;
+                    qDebug() << "province can't be played" ;
                     QDialog *provinceTaken = new QDialog(this);
 
                     // Set text for the dialog
@@ -306,6 +349,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                     provinceTaken->show();
                     continue;
                 }
+                }
             }
         }
 
@@ -323,6 +367,7 @@ void mapwindow::dropEvent(QDropEvent *event)
 
 void mapwindow::checkAndHandleGameWinner() {
     // Call the function to check for the game winner
+    colorProvinceLabels();
     qDebug() << "checkForGameWinner started";
         if (game.winGame1() || game.winGame2())
         {
@@ -370,6 +415,20 @@ bool mapwindow::eventFilter(QObject *obj, QEvent *event)
 {
     QLabel *label = qobject_cast<QLabel *>(obj);
     if (label) {
+        if(label->objectName() == "NeshaneSolh") {
+            if (game.getNeshaneSolhOwner() == nullptr) {
+                return true; // Prevent drag if there is no owner
+            } else if (game.getNeshaneSolhProvince() != "None") {
+                return true; // Prevent dragging if NeshaneSolh has already been dropped
+            }
+        }
+
+        if (label->objectName() == "NeshaneJang") {
+            if (game.getNeshaneSolhOwner() != nullptr && game.getNeshaneSolhProvince() == "None") {
+                return true; // Block drag if NeshaneSolh is not dropped
+            }
+        }
+
         if (event->type() == QEvent::MouseButtonPress) {
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (mouseEvent->button() == Qt::LeftButton) {
@@ -464,7 +523,8 @@ void mapwindow::initializeLabels()
             break;
         }
         label->setGeometry(dropAreas[i]);
-        label->setStyleSheet("background-color: lightblue; border: 1px solid black;"); // For visibility
+        label->setStyleSheet("background-color: white; border: 1px solid black;");
+         // For visibility
         label->setText(label->objectName()); // Set text with the label number
         label->setAlignment(Qt::AlignCenter); // Center-align text
         label->show(); // Ensure the label is visible
@@ -473,6 +533,11 @@ void mapwindow::initializeLabels()
 
 bool mapwindow::checkAvailable(QString province) {
     qDebug() << "checking availability";
+
+    if (province == QString::fromStdString(game.getNeshaneSolhProvince())) {
+        return false;
+    }
+
 
     std::vector<std::vector<std::string>> captured;
 
@@ -555,3 +620,28 @@ bool mapwindow::askToStartBattle(QWidget *parent, QString provinceName) {
     delete askToStartBattle;
 }
 
+void mapwindow::colorProvinceLabels()
+{
+    for (int playerIndex = 0; playerIndex < game.getPlayerCount(); ++playerIndex)
+    {
+        Player& player = game.getPlayer(playerIndex);  // Assuming getPlayer returns a reference, not a pointer
+        QString playerColor = QString::fromStdString(player.getColor());  // Convert std::string to QString
+        std::vector<std::string> ownedProvincesStd = player.getOwnedProvinces();  // Assuming getOwnedProvinces returns std::vector<std::string>
+
+        QVector<QString> ownedProvinces;
+        for (const auto& province : ownedProvincesStd)
+        {
+            ownedProvinces.append(QString::fromStdString(province));  // Convert and append each std::string to QVector<QString>
+        }
+
+        // Iterate through each province owned by the player
+        for (const QString& province : ownedProvinces)
+        {
+            QLabel* label = findChild<QLabel*>(province);
+            if (label)
+            {
+                label->setStyleSheet("background-color: " + playerColor + "; border: 1px solid black;");
+            }
+        }
+    }
+}

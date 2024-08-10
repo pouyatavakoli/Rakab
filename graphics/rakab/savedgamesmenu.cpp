@@ -62,17 +62,19 @@ void savedGamesMenu::on_load1_btn_clicked()
     if(game.loadFromFile("saved_games_1.txt") == 1) // battle completed
     {
         // open on map
+        game.setBattleCompleted("Yes");
         mapwindow* map = new mapwindow(game);
         map ->show();
         this ->close();
     }
     else
     {
+        game.setBattleCompleted("No");
         mapwindow* map = new mapwindow(game);
         map ->show();
 
-        Playground* pg = new Playground(game , game.getBattleIsOnThis());
-        pg->show();
+        /*Playground* pg = new Playground(game , game.getBattleIsOnThis());
+        pg->show();*/
 
         this->close();
 
@@ -88,17 +90,21 @@ void savedGamesMenu::on_load2_btn_clicked()
     if(game.loadFromFile("saved_games_2.txt") == 1) // battle completed
     {
         // open on map
+        game.setBattleCompleted("Yes");
+        qDebug() << "battle  completed";
         mapwindow* map = new mapwindow(game);
         map ->show();
         this ->close();
     }
     else
     {
+        game.setBattleCompleted("No");
+        qDebug() << "battle not completed";
         mapwindow* map = new mapwindow(game);
         map ->show();
 
-        Playground* pg = new Playground(game , game.getBattleIsOnThis());
-        pg->show();
+//        Playground* pg = new Playground(game , game.getBattleIsOnThis());
+//        pg->show();
 
         this->close();
 
@@ -114,17 +120,19 @@ void savedGamesMenu::on_load3_btn_clicked()
     if(game.loadFromFile("saved_games_3.txt") == 1) // battle completed
     {
         // open on map
+        game.setBattleCompleted("Yes");
         mapwindow* map = new mapwindow(game);
         map ->show();
         this ->close();
     }
     else
     {
+        game.setBattleCompleted("NO");
         mapwindow* map = new mapwindow(game);
         map ->show();
 
-        Playground* pg = new Playground(game , game.getBattleIsOnThis());
-        pg->show();
+//        Playground* pg = new Playground(game , game.getBattleIsOnThis());
+//        pg->show();
 
         this->close();
 
@@ -140,17 +148,19 @@ void savedGamesMenu::on_load4_btn_clicked()
     if(game.loadFromFile("saved_games_4.txt") == 1) // battle completed
     {
         // open on map
+        game.setBattleCompleted("Yes");
         mapwindow* map = new mapwindow(game);
         map ->show();
         this ->close();
     }
     else
     {
+        game.setBattleCompleted("NO");
         mapwindow* map = new mapwindow(game);
         map ->show();
 
-        Playground* pg = new Playground(game , game.getBattleIsOnThis());
-        pg->show();
+//        Playground* pg = new Playground(game , game.getBattleIsOnThis());
+//        pg->show();
 
         this->close();
 
@@ -166,17 +176,19 @@ void savedGamesMenu::on_load5_btn_clicked()
     if(game.loadFromFile("saved_games_5.txt") == 1) // battle completed
     {
         // open on map
+        game.setBattleCompleted("Yes");
         mapwindow* map = new mapwindow(game);
         map ->show();
         this ->close();
     }
     else
     {
+        game.setBattleCompleted("NO");
         mapwindow* map = new mapwindow(game);
         map ->show();
 
-        Playground* pg = new Playground(game , game.getBattleIsOnThis());
-        pg->show();
+//        Playground* pg = new Playground(game , game.getBattleIsOnThis());
+//        pg->show();
 
         this->close();
 

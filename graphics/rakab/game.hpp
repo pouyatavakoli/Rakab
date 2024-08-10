@@ -39,11 +39,12 @@ public:
     void startAllEffects();
     void refreshEffects();
     void StartEffectOfRishSefid();
-    void setNeshaneSolhgOwner(int);
+    void setNeshaneSolhOwner(int);
     void setNeshaneJangOwner();
     void setBattleStarter(const Player &);
     void setLastPlayerWhoPassed(int);
 
+    const Player *getNeshaneSolhOwner() const;
     const Player &getPlayerWhoShouldStart();
     const Player &findSmallestPlayer();
 
@@ -94,11 +95,12 @@ public:
     void setBattleIsOnThis(std::string);
     std::string getBattleIsOnThis ();
 
-    void setIsOnMap(bool);
-    bool getIsOnMap() const;
+    void setNeshaneSolhProvince(std::string);
+    std::string getNeshaneSolhProvince() const;
 
-    void setPlayingOnThisProvince(std::string);
-    std::string getPlayingOnThisProvince() const;
+    void setNeshaneSolhDropped(bool);
+    bool getNeshaneSolhDropped() const;
+
 
 signals:
     void cardPlayed(int playerIndex, const std::shared_ptr<Card>& card);
@@ -116,15 +118,14 @@ private:
     bool parchamDarIsPlayed{false};
     Player *lastWinner;
     Player *NeshaneJangOwner;
-    Player *NeshaneSolhgOwner; //RishSefid
+    Player *NeshaneSolhOwner; //RishSefid
     Player *lastPlayerWhoPassed;
     int countRishSefid{0};
     bool firstRound{true};
-    std::string battleCompleted ;
+    std::string battleCompleted{"Yes"};
     std::string battleIsOnThis;
 
-    bool isOnMap{true};
-    std::string playingOnThisProvince;
+    std::string neshaneSolhProvince;
 
 
 };

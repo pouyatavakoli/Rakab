@@ -9,9 +9,10 @@ Playground::Playground(Game &game, const std::string provinceName, QWidget *pare
 {
     ui->setupUi(this);
 
-    if(game.getIsOnMap())
+    qDebug() << QString::fromStdString(game.getBattleCompleted());
+    if(game.getBattleCompleted() == "Yes")
     {
-        game.setIsOnMap(false);
+        game.setBattleCompleted("No");
         game.gameFlusher();
         game.fillMainDeck();
         game.shuffleDeck();
@@ -21,12 +22,6 @@ Playground::Playground(Game &game, const std::string provinceName, QWidget *pare
     {
         //The saved game will continue
     }
-
-    game.setBattleCompleted("No");
-    game.setBattleIsOnThis(provinceName);
-
-
-    qDebug() << "handed cards to players ";
 
     playerLayouts.append(ui->player1_hand);
     playerLayouts.append(ui->player2_hand);
@@ -52,7 +47,7 @@ Playground::~Playground()
 
 void Playground::closeEvent(QCloseEvent *event) {
     // Emit signal when the dialog is closed
-    game.setIsOnMap(true);
+    game.setBattleCompleted("Yes");
     emit playgroundClosed();
     QDialog::closeEvent(event); // Call the base class implementation to ensure proper dialog closure
 }
@@ -317,6 +312,7 @@ void Playground::on_pushButton_clicked()
 
 void Playground::on_save_pb_clicked()
 {
+    game.setBattleCompleted("No");
     SelectSaveLoacation* ssl = new SelectSaveLoacation(game , this);
     ssl->show();
     // code to save

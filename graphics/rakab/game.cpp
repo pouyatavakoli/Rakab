@@ -27,7 +27,7 @@
 
 // Constructor
 Game::Game( QObject *parent) : QObject(parent), playerCount(0), currentPlayerIndex(0)
-  ,lastWinner(nullptr) , NeshaneJangOwner(nullptr) , NeshaneSolhgOwner(nullptr)
+  ,lastWinner(nullptr) , NeshaneJangOwner(nullptr) , NeshaneSolhOwner(nullptr)
   , lastPlayerWhoPassed(nullptr) {}
 
 // Setter for player count
@@ -459,9 +459,9 @@ void Game::setNeshaneJangOwner()
 }
 
 
-void Game::setNeshaneSolhgOwner(int index)
+void Game::setNeshaneSolhOwner(int index)
 {
-    NeshaneSolhgOwner = players[index];
+    NeshaneSolhOwner = players[index];
 }
 
 bool Game::canStartSeason(const std::string season) const
@@ -494,6 +494,11 @@ void Game::setBattleStarter(const Player &player1)
 void Game::setLastPlayerWhoPassed(int index)
 {
     lastPlayerWhoPassed = players[index];
+}
+
+const Player *Game::getNeshaneSolhOwner() const
+{
+   return NeshaneSolhOwner;
 }
 
 const Player &Game::getPlayerWhoShouldStart()
@@ -696,7 +701,7 @@ int Game::playPlayerCard(int playerIndex, const std::string& cardName) {
     else if (situation == 5) // It is RishSefid
     {
         countRishSefid++;
-        setNeshaneSolhgOwner(playerIndex);
+        setNeshaneSolhOwner(playerIndex);
         nextTurn();
         return 5;
     }
@@ -987,8 +992,11 @@ int Game::loadFromFile(std::string filename)
 void Game::gameFlusher()
 {
     seasonSituation = "normal";
+    neshaneSolhProvince = "None";
     anyPlayerCanPlay = true;
     parchamDarIsPlayed = false;
+    NeshaneJangOwner = nullptr;
+    NeshaneSolhOwner = nullptr;
     countRishSefid = 0;
     for (int i{0} ; i < playerCount ; i++)
     {
@@ -1020,22 +1028,12 @@ std::string Game::getBattleIsOnThis()
     return battleIsOnThis;
 }
 
-void Game::setIsOnMap(bool sit)
+void Game::setNeshaneSolhProvince(std::string province)
 {
-    isOnMap = sit;
+    neshaneSolhProvince = province;
 }
-bool Game::getIsOnMap() const
+std::string Game::getNeshaneSolhProvince() const
 {
-    return isOnMap;
-}
-
-void Game::setPlayingOnThisProvince(std::string province)
-{
-    playingOnThisProvince = province;
+    return neshaneSolhProvince;
 }
 
-std::string Game::getPlayingOnThisProvince() const
-{
-    return playingOnThisProvince;
-
-}

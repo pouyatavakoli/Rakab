@@ -32,6 +32,7 @@ protected:
     void mousePressEvent (QMouseEvent*) override ;
 
     void checkAndHandleGameWinner();
+    void colorProvinceLabels();
 
 signals:
     void resized();
