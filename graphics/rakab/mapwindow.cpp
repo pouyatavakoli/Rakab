@@ -214,7 +214,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                 }
 
                 qDebug() << "Dropped in area:" << labelName;
-
+                // ask to start battle in area if available
                 if (provinceLabelName == "NeshaneSolh")
                 {
                     if (checkAvailable(labelName) && game.getNeshaneSolhProvince() == "None")
@@ -255,7 +255,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                 {
                     if (checkAvailable(labelName)){
                         qDebug() <<  labelName << "was available";
-                        if (askToStartBattle(this , labelName))
+                        if (askToStartBattle(this , labelName) && askForTwoNumbers(game , this))
                         {
                             if (game.getIsFirstRound() == true)
                             {
@@ -293,11 +293,9 @@ void mapwindow::dropEvent(QDropEvent *event)
                                 }
 
 
-
                                 isDroppedInArea = true;
                                 game.setIsFirstRound(false);
                                 break;
-                            }
                             }
 
                             else
@@ -311,7 +309,6 @@ void mapwindow::dropEvent(QDropEvent *event)
 
                                 try {
                                     qDebug() << "Creating Playground object for subsequent round";
-                                    askForTwoNumbers(game , this);
                                     Playground *pg = new Playground(game, labelNameStd);
                                     game.setBattleIsOnThis(labelNameStd);
                                     qDebug() << "Playground object created for subsequent round";
@@ -369,7 +366,7 @@ void mapwindow::dropEvent(QDropEvent *event)
         currentDropAreas.clear();
         update();
     }
-
+}
 
 void mapwindow::checkAndHandleGameWinner() {
     // Call the function to check for the game winner
@@ -516,7 +513,7 @@ void mapwindow::initializeLabels()
             label->setObjectName(QString("OLIVADI"));
             break;
         case 10:
-            label->setObjectName(QString("LIA"));
+            label->setObjectName(QString("ENNA"));
             break;
         case 11:
             label->setObjectName(QString("ATELA"));
@@ -525,7 +522,7 @@ void mapwindow::initializeLabels()
             label->setObjectName(QString("DISMASE"));
             break;
         case 13:
-            label->setObjectName(QString("ENNA"));
+            label->setObjectName(QString("LIA"));
             break;
         }
         label->setGeometry(dropAreas[i]);
@@ -582,49 +579,48 @@ bool mapwindow::checkAvailable(QString province) {
 
 bool mapwindow::askToStartBattle(QWidget *parent, QString provinceName) {
     // Create dialog
-    QDialog askToStartBattle(parent);
+    QDialog *askToStartBattle = new QDialog(parent);
 
     // Set text for the dialog
-    QLabel *messageLabel = new QLabel("Do you want to start a battle on " + provinceName + " province?", &askToStartBattle);
-    messageLabel->setAlignment(Qt::AlignCenter);
+    QLabel *messageLabel = new QLabel("Do you want to start a battle on " + provinceName + " province?", askToStartBattle);
+    messageLabel->setAlignment(Qt::AlignCenter); // Optionally set alignment
 
     // Set layout for the dialog
-    QVBoxLayout *mainLayout = new QVBoxLayout(&askToStartBattle);
+    QVBoxLayout *mainLayout = new QVBoxLayout(askToStartBattle);
+
+    // Add the message label to the main layout
     mainLayout->addWidget(messageLabel);
 
     // Create buttons
-    QPushButton *okButton = new QPushButton("OK", &askToStartBattle);
-    QPushButton *cancelButton = new QPushButton("Cancel", &askToStartBattle);
+    QPushButton *okButton = new QPushButton("OK", askToStartBattle);
+    QPushButton *cancelButton = new QPushButton("Cancel", askToStartBattle);
 
     // Create layout for buttons
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(cancelButton);
 
+
     mainLayout->addLayout(buttonLayout);
 
-    // Connect button signals to dialog slots
-    QObject::connect(okButton, &QPushButton::clicked, &askToStartBattle, &QDialog::accept);
-    QObject::connect(cancelButton, &QPushButton::clicked, &askToStartBattle, &QDialog::reject);
+    // Connect button signals to slots
+    QObject::connect(okButton, &QPushButton::clicked, askToStartBattle, &QDialog::accept);
+    QObject::connect(cancelButton, &QPushButton::clicked, askToStartBattle, &QDialog::reject);
 
-    // Execute dialog and wait for user input
-    int result = askToStartBattle.exec();
+    // Wait for user input
+    int result = askToStartBattle->exec();
 
-    // Handle dialog result
+    // Handle button presses
     if (result == QDialog::Accepted) {
         // OK button pressed
-        if (askForTwoNumbers(game, this)) {
-            // Connect the openPlayground slot before returning true
-            connect(okButton, &QPushButton::clicked, this, &mapwindow::openPlayground);
-            return true;
-        } else {
-            // Handle the case where askForTwoNumbers fails
-            return false;
-        }
+        // Handle OK button press here (open playground)
+        connect(askToStartBattle , &QDialog::accepted, this, &mapwindow::openPlayground);
+        return true ;
     }
+    // clicked cancel
+    return false ;
 
-    // Cancel button pressed or dialog rejected
-    return false;
+    delete askToStartBattle;
 }
 
 void mapwindow::colorProvinceLabels()
@@ -663,50 +659,46 @@ void mapwindow::on_pushButton_2_clicked()
 bool mapwindow::askForTwoNumbers(Game &game, QWidget *parent)
 {
     QDialog dialog(parent);
+    dialog.setWindowTitle("Enter Numbers"); // Set dialog title
+
     QVBoxLayout *layout = new QVBoxLayout(&dialog);
 
-    QLabel *firstNumberLabel = new QLabel("Enter the LUCKY number (between 10 and 99):");
-    QLineEdit *firstNumberInput = new QLineEdit;
+    QLabel *firstNumberLabel = new QLabel("Enter the LUCKY number (between 10 and 99):", &dialog);
+    QLineEdit *firstNumberInput = new QLineEdit(&dialog);
     firstNumberInput->setValidator(new QIntValidator(10, 99, firstNumberInput));
     layout->addWidget(firstNumberLabel);
     layout->addWidget(firstNumberInput);
 
-    QLabel *secondNumberLabel = new QLabel("Enter the UnLUCKY number (between 10 and 99):");
-    QLineEdit *secondNumberInput = new QLineEdit;
+    QLabel *secondNumberLabel = new QLabel("Enter the UnLUCKY number (between 10 and 99):", &dialog);
+    QLineEdit *secondNumberInput = new QLineEdit(&dialog);
     secondNumberInput->setValidator(new QIntValidator(10, 99, secondNumberInput));
     layout->addWidget(secondNumberLabel);
     layout->addWidget(secondNumberInput);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
-    QPushButton *okButton = new QPushButton("OK");
-    QPushButton *cancelButton = new QPushButton("Cancel");
+    QPushButton *okButton = new QPushButton("OK", &dialog);
+    QPushButton *cancelButton = new QPushButton("Cancel", &dialog);
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(cancelButton);
     layout->addLayout(buttonLayout);
 
-    // Connect buttons to dialog actions
+    // Connect OK button to accept the dialog
     connect(okButton, &QPushButton::clicked, &dialog, [&]() {
         int firstNumber = firstNumberInput->text().toInt();
         int secondNumber = secondNumberInput->text().toInt();
 
-        // Check if the numbers are within the valid range
-        if (firstNumber < 10 || firstNumber > 99 || secondNumber < 10 || secondNumber > 99) {
-            QMessageBox::critical(&dialog, "Invalid Input", "Both numbers must be between 10 and 99.");
-        } else {
-            game.setLuckyNumber(firstNumber);    // Call setLuckyNumber with the first number
-            game.setUnLuckyNumber(secondNumber); // Call setUnLuckyNumber with the second number
+        if (firstNumber >= 10 && firstNumber <= 99 && secondNumber >= 10 && secondNumber <= 99) {
+            game.setLuckyNumber(firstNumber);
+            game.setUnLuckyNumber(secondNumber);
             dialog.accept();  // Close the dialog if input is valid
+        } else {
+            QMessageBox::critical(&dialog, "Invalid Input", "Both numbers must be between 10 and 99.");
         }
     });
 
+    // Connect Cancel button to reject the dialog
     connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
 
-    if (dialog.exec() == QDialog::Accepted) {
-        return true;  // Return true if OK was pressed and input is valid
-    } else {
-        return false; // Return false if Cancel was pressed
-    }
+    // Execute the dialog and return true if accepted, otherwise false
+    return dialog.exec() == QDialog::Accepted;
 }
-
-
-
