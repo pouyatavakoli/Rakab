@@ -69,6 +69,16 @@ mapwindow::mapwindow(Game &game ,QWidget *parent) :
     ui->NeshaneJang->setAcceptDrops(true);
     ui->NeshaneSolh->setAcceptDrops(true);
 
+    if(game.getIsOnMap())
+    {
+
+    }
+    else
+    {
+      Playground *pg = new Playground(game, game.getPlayingOnThisProvince());
+      connect(pg, &Playground::playgroundClosed, this, &mapwindow::checkAndHandleGameWinner);
+    }
+
 }
 
 void mapwindow::paintEvent(QPaintEvent *event)
@@ -223,6 +233,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                             qDebug() << "Creating Playground object";
                             try {
                                 Playground *pg = new Playground(game, labelNameStd);
+                                game.setPlayingOnThisProvince(labelNameStd);
                                 qDebug() << "Playground object created";
                                 pg->show();
                                 qDebug() << "Playground shown";
@@ -253,6 +264,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                             try {
                                 qDebug() << "Creating Playground object for subsequent round";
                                 Playground *pg = new Playground(game, labelNameStd);
+                                game.setPlayingOnThisProvince(labelNameStd);
                                 qDebug() << "Playground object created for subsequent round";
                                 pg->show();
                                 qDebug() << "Playground shown for subsequent round";

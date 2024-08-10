@@ -1019,3 +1019,23 @@ std::string Game::getBattleIsOnThis()
 {
     return battleIsOnThis;
 }
+
+void Game::setIsOnMap(bool sit)
+{
+    isOnMap = sit;
+}
+bool Game::getIsOnMap() const
+{
+    return isOnMap;
+}
+
+void Game::setPlayingOnThisProvince(std::string province)
+{
+    playingOnThisProvince = province;
+}
+
+std::string Game::getPlayingOnThisProvince() const
+{
+    return playingOnThisProvince;
+
+}

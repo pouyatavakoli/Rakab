@@ -9,22 +9,23 @@ Playground::Playground(Game &game, const std::string provinceName, QWidget *pare
 {
     ui->setupUi(this);
 
-    game.gameFlusher();
-    game.setBattleCompleted("No");
-    game.setBattleIsOnThis(provinceName);
-    game.fillMainDeck();
-    qDebug() << "filled deck";
-    game.shuffleDeck();
-    qDebug() << "shuffed deck" ;
-    bool isLoaded = false;
-    for (int i = 0; i < game.getPlayerCount(); i++) {
-        if (game.getPlayer(i).getYellowHand().size() > 0 || game.getPlayer(i).getPurpleHand().size() > 0) {
-            isLoaded = true;
-            break;
-        }
+    if(game.getIsOnMap())
+    {
+        game.setIsOnMap(false);
+        game.gameFlusher();
+        game.fillMainDeck();
+        game.shuffleDeck();
+        game.handCardsToPLayers();
+    }
+    else
+    {
+        //The saved game will continue
     }
 
-   if(!isLoaded) game.handCardsToPLayers();
+    game.setBattleCompleted("No");
+    game.setBattleIsOnThis(provinceName);
+
+
     qDebug() << "handed cards to players ";
 
     playerLayouts.append(ui->player1_hand);
@@ -51,6 +52,7 @@ Playground::~Playground()
 
 void Playground::closeEvent(QCloseEvent *event) {
     // Emit signal when the dialog is closed
+    game.setIsOnMap(true);
     emit playgroundClosed();
     QDialog::closeEvent(event); // Call the base class implementation to ensure proper dialog closure
 }

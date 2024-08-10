@@ -94,6 +94,12 @@ public:
     void setBattleIsOnThis(std::string);
     std::string getBattleIsOnThis ();
 
+    void setIsOnMap(bool);
+    bool getIsOnMap() const;
+
+    void setPlayingOnThisProvince(std::string);
+    std::string getPlayingOnThisProvince() const;
+
 signals:
     void cardPlayed(int playerIndex, const std::shared_ptr<Card>& card);
 
@@ -116,6 +122,9 @@ private:
     bool firstRound{true};
     std::string battleCompleted ;
     std::string battleIsOnThis;
+
+    bool isOnMap{true};
+    std::string playingOnThisProvince;
 
 
 };
