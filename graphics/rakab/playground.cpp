@@ -245,7 +245,7 @@ void Playground::handleCardClick(Card* card) {
                 QMessageBox::information(nullptr, "Status", message);
 
             }
-            close();
+            //close();
 
         }
     }

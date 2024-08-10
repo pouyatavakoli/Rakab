@@ -65,6 +65,7 @@ public:
 
     std::string toString() const;
 
+    void reset();
 private:
     int age;
     std::string name;

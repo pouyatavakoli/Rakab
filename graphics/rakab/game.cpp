@@ -490,7 +490,7 @@ void Game::setBattleStarter(const Player &player1)
 
 
 }
-
+/*
 const Player &Game::getPlayerWhoShouldStart()
 {
     if (NeshaneJangOwner)
@@ -520,6 +520,7 @@ const Player &Game::getPlayerWhoShouldStart()
     qDebug() << "Error: No valid player found to start the battle!";
     throw std::runtime_error("No valid player found to start the battle.");
 }
+*/
 
 const Player &Game::findSmallestPlayer()
 {
@@ -919,12 +920,12 @@ int Game::handleMatarsakEffect(int playerIndex, const std::string& cardName) {
 std::string Game::toString() const {
     std::ostringstream oss;
 
-    oss << battleCompleted << ", ";
+    oss << battleCompleted << ",";
     // Basic game information
-    oss << playerCount  << ", ";
-    oss << currentPlayerIndex << ", ";
-    oss << (anyPlayerCanPlay ? "Yes" : "No") << ", ";
-    oss << seasonSituation << ", ";
+    oss << playerCount  << ",";
+    oss << currentPlayerIndex << ",";
+    oss << (anyPlayerCanPlay ? "Yes" : "No") << ",";
+    oss << seasonSituation << ",";
     if (battleCompleted == "Yes")
     {
         oss << "None";

@@ -111,10 +111,14 @@ bool Save::readMetaData(const std::string& line)
 
 
 bool Save::readPlayerDetails(Player& player, const std::string& playerLine) {
+    // Create a new stringstream for each call to the function
     std::stringstream ss(playerLine);
     std::string token;
 
     try {
+        // Reset the player's state before parsing
+        player.reset(); // Assuming Player has a reset() function to clear its data
+
         std::getline(ss, token, ',');
         player.setName(token);
         qDebug() << "Player name set: " << QString::fromStdString(token);
@@ -149,6 +153,7 @@ bool Save::readPlayerDetails(Player& player, const std::string& playerLine) {
     }
     return true;
 }
+
 
 // Helper method to read province details
 bool Save::readProvinceDetails(Player& player, std::ifstream& inputFile) {
@@ -208,32 +213,43 @@ bool Save::readCardDetails(Player& player, std::ifstream& inputFile, const std::
             line.erase(0, line.find_first_not_of(" "));
             line.erase(line.find_last_not_of(" ") + 1);
             cardCount = std::stoi(line);
-            qDebug() << QString::fromStdString(handType) + " count: " << cardCount;
+            qDebug() << QString::fromStdString(handType) << " count: " << cardCount;
         } catch (const std::exception& e) {
             qDebug() << "Error parsing card count for " << QString::fromStdString(handType) << ": " << QString::fromStdString(e.what());
             return false;
         }
+        if (cardCount == 0) {
+             // Read and discard the next line
+             if (!std::getline(inputFile, line)) {
+                 qDebug() << "Failed to read and discard the next line after cardCount 0";
+                 return false;
+             }
+        }
 
-        for (int j = 0; j < cardCount; j++) {
+        else {
+            for (int j = 0; j < cardCount; j++) {
             if (!std::getline(inputFile, line)) {
                 qDebug() << "Failed to read line from input file at iteration" << j;
                 return false;
             }
 
+            // Check if the line is "None" and skip if it is
             if (line == "None") {
-                continue; // Skip this iteration if the line is "None"
+                continue;
             }
 
             std::stringstream cardStream(line);
             std::string token, cardType;
             int index;
 
+            // Read card type
             if (!std::getline(cardStream, token, ',')) {
                 qDebug() << "Error reading card type.";
                 continue;
             }
             cardType = token;
 
+            // Read card index
             if (!std::getline(cardStream, token, ',')) {
                 qDebug() << "Error reading card index.";
                 continue;
@@ -248,6 +264,7 @@ bool Save::readCardDetails(Player& player, std::ifstream& inputFile, const std::
             auto card = createCard(cardType);
             if (card) {
                 card->setindexOfOwner(index);
+                // Add card to the appropriate hand or table based on handType
                 if (handType == "YellowHand") {
                     player.addCardToYellowHand(card);
                     qDebug() << "Yellow card added to hand: " << QString::fromStdString(cardType);
@@ -264,6 +281,7 @@ bool Save::readCardDetails(Player& player, std::ifstream& inputFile, const std::
             } else {
                 qDebug() << "Failed to create card of type: " << QString::fromStdString(cardType);
             }
+        }
         }
     }
     return true;
@@ -314,31 +332,51 @@ void Save::loadGame(const std::string& fileName, std::vector<Player*>& players) 
 
     int validPlayers = 0;
     for (int i = 0; i < playerCount; i++) {
-        Player* player = new Player(); // Allocate a new Player
+        Player* player = new Player();
         std::string playerLine;
 
         if (std::getline(inputFile, playerLine)) {
-            if (playerLine != "None" &&
-                readPlayerDetails(*player, playerLine) &&
-                readProvinceDetails(*player, inputFile) &&
-                readCardDetails(*player, inputFile, "YellowHand") &&
-                readCardDetails(*player, inputFile, "PurpleHand") &&
-                readCardDetails(*player, inputFile, "YellowTable") &&
-                readCardDetails(*player, inputFile, "PurpleTable"))
+            qDebug() << "Player " << i << " - Line Read: " << QString::fromStdString(playerLine);
+
+            bool lineValid = playerLine != "None";
+            qDebug() << "Player " << i << " - Line Valid: " << lineValid;
+
+            bool playerDetailsValid = readPlayerDetails(*player, playerLine);
+            qDebug() << "Player " << i << " - Player Details Valid: " << playerDetailsValid;
+
+            bool provinceDetailsValid = readProvinceDetails(*player, inputFile);
+            qDebug() << "Player " << i << " - Province Details Valid: " << provinceDetailsValid;
+
+            bool yellowHandValid = readCardDetails(*player, inputFile, "YellowHand");
+            qDebug() << "Player " << i << " - Yellow Hand Valid: " << yellowHandValid;
+
+            bool purpleHandValid = readCardDetails(*player, inputFile, "PurpleHand");
+            qDebug() << "Player " << i << " - Purple Hand Valid: " << purpleHandValid;
+
+            bool yellowTableValid = readCardDetails(*player, inputFile, "YellowTable");
+            qDebug() << "Player " << i << " - Yellow Table Valid: " << yellowTableValid;
+
+            bool purpleTableValid = readCardDetails(*player, inputFile, "PurpleTable");
+            qDebug() << "Player " << i << " - Purple Table Valid: " << purpleTableValid;
+
+            if (lineValid &&
+                playerDetailsValid &&
+                provinceDetailsValid &&
+                yellowHandValid &&
+                purpleHandValid &&
+                yellowTableValid &&
+                purpleTableValid)
             {
-                players.push_back(player); // Add valid player to the list
+                players.push_back(player);
                 validPlayers++;
             } else {
-                players.push_back(player); // Add valid player to the list
-                validPlayers++;
-                //delete player; // Clean up if any of the checks fail
+                delete player;
             }
         } else {
-            players.push_back(player); // Add valid player to the list
-            validPlayers++;
-            //delete player; // Clean up if unable to read player line
+            delete player;
         }
     }
+
 
 
     inputFile.close();

@@ -246,7 +246,8 @@ void mapwindow::dropEvent(QDropEvent *event)
                             qDebug() << "Battle started but it's not the first round";
                             game.setNeshaneJangOwner();
                             qDebug() << "setNeshaneJangOwner";
-                            game.setBattleStarter(game.getPlayerWhoShouldStart());
+                            //game.setBattleStarter(game.getPlayerWhoShouldStart());
+                            game.setBattleStarter(game.getPlayer(0));
                             qDebug() << "Battle started setNeshaneJangOwner";
 
                             try {

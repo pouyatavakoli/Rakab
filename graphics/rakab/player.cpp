@@ -398,12 +398,12 @@ void Player::flushTable()
 
 std::string Player::toString() const {
     std::ostringstream oss;
-    oss << name << ", "
-        << age << ", "
-        << totalScore << ", "
-        << (winStatus ? "Yes" : "No") << ", "
-        << (canPutNeshaneSolh ? "Yes" : "No") ; oss << ", "
-        << (canPutNeshaneJang ? "Yes" : "No") ; oss << ", "
+    oss << name << ","
+        << age << ","
+        << totalScore << ","
+        << (winStatus ? "Yes" : "No") << ","
+        << (canPutNeshaneSolh ? "Yes" : "No") ; oss << ","
+        << (canPutNeshaneJang ? "Yes" : "No") ; oss << ","
         << color << "\n";
 
     // dominated areas
@@ -413,7 +413,7 @@ std::string Player::toString() const {
     } else {
         oss << dominatedAreas.size() << "\n";
         for (const auto& area : dominatedAreas) {
-            oss << area << ", ";
+            oss << area << ",";
         }
     }
     oss << "\n";
@@ -466,3 +466,15 @@ std::string Player::toString() const {
 
     return oss.str();
 }
+
+//clear player data (used in reading from file)
+void Player::reset() {
+        name = "";
+        age = 0;
+        totalScore = 0;
+        winStatus = false;
+        canPutNeshaneSolh = false;
+        canPutNeshaneJang = false;
+        color = "";
+    }
+

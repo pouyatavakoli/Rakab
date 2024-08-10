@@ -66,7 +66,7 @@ void Card::setImage(const QString &imagePath)
 
 std::string Card::toString() const {
     std::ostringstream oss;
-    oss  << name << ", "
+    oss  << name << ","
 //        << ", Type: " << type
 //        << ", Number: " << numberOnTheCard
 //        << ", Points: " << points
