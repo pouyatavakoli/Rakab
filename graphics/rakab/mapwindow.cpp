@@ -214,7 +214,7 @@ void mapwindow::dropEvent(QDropEvent *event)
                 }
 
                 qDebug() << "Dropped in area:" << labelName;
-                // ask to start battle in area if available
+
                 if (provinceLabelName == "NeshaneSolh")
                 {
                     if (checkAvailable(labelName) && game.getNeshaneSolhProvince() == "None")
@@ -279,7 +279,6 @@ void mapwindow::dropEvent(QDropEvent *event)
                                 qDebug() << "Creating Playground object";
                                 try {
                                     Playground *pg = new Playground(game, labelNameStd);
-                                    askForTwoNumbers(game , this);
                                     game.setBattleIsOnThis(labelNameStd);
                                     qDebug() << "Playground object created";
                                     pg->show();
@@ -294,9 +293,11 @@ void mapwindow::dropEvent(QDropEvent *event)
                                 }
 
 
+
                                 isDroppedInArea = true;
                                 game.setIsFirstRound(false);
                                 break;
+                            }
                             }
 
                             else
@@ -368,7 +369,7 @@ void mapwindow::dropEvent(QDropEvent *event)
         currentDropAreas.clear();
         update();
     }
-}
+
 
 void mapwindow::checkAndHandleGameWinner() {
     // Call the function to check for the game winner
@@ -581,48 +582,49 @@ bool mapwindow::checkAvailable(QString province) {
 
 bool mapwindow::askToStartBattle(QWidget *parent, QString provinceName) {
     // Create dialog
-    QDialog *askToStartBattle = new QDialog(parent);
+    QDialog askToStartBattle(parent);
 
     // Set text for the dialog
-    QLabel *messageLabel = new QLabel("Do you want to start a battle on " + provinceName + " province?", askToStartBattle);
-    messageLabel->setAlignment(Qt::AlignCenter); // Optionally set alignment
+    QLabel *messageLabel = new QLabel("Do you want to start a battle on " + provinceName + " province?", &askToStartBattle);
+    messageLabel->setAlignment(Qt::AlignCenter);
 
     // Set layout for the dialog
-    QVBoxLayout *mainLayout = new QVBoxLayout(askToStartBattle);
-
-    // Add the message label to the main layout
+    QVBoxLayout *mainLayout = new QVBoxLayout(&askToStartBattle);
     mainLayout->addWidget(messageLabel);
 
     // Create buttons
-    QPushButton *okButton = new QPushButton("OK", askToStartBattle);
-    QPushButton *cancelButton = new QPushButton("Cancel", askToStartBattle);
+    QPushButton *okButton = new QPushButton("OK", &askToStartBattle);
+    QPushButton *cancelButton = new QPushButton("Cancel", &askToStartBattle);
 
     // Create layout for buttons
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(cancelButton);
 
-
     mainLayout->addLayout(buttonLayout);
 
-    // Connect button signals to slots
-    QObject::connect(okButton, &QPushButton::clicked, askToStartBattle, &QDialog::accept);
-    QObject::connect(cancelButton, &QPushButton::clicked, askToStartBattle, &QDialog::reject);
+    // Connect button signals to dialog slots
+    QObject::connect(okButton, &QPushButton::clicked, &askToStartBattle, &QDialog::accept);
+    QObject::connect(cancelButton, &QPushButton::clicked, &askToStartBattle, &QDialog::reject);
 
-    // Wait for user input
-    int result = askToStartBattle->exec();
+    // Execute dialog and wait for user input
+    int result = askToStartBattle.exec();
 
-    // Handle button presses
+    // Handle dialog result
     if (result == QDialog::Accepted) {
         // OK button pressed
-        // Handle OK button press here (open playground)
-        connect(askToStartBattle , &QDialog::accepted, this, &mapwindow::openPlayground);
-        return true ;
+        if (askForTwoNumbers(game, this)) {
+            // Connect the openPlayground slot before returning true
+            connect(okButton, &QPushButton::clicked, this, &mapwindow::openPlayground);
+            return true;
+        } else {
+            // Handle the case where askForTwoNumbers fails
+            return false;
+        }
     }
-    // clicked cancel
-    return false ;
 
-    delete askToStartBattle;
+    // Cancel button pressed or dialog rejected
+    return false;
 }
 
 void mapwindow::colorProvinceLabels()
@@ -658,7 +660,7 @@ void mapwindow::on_pushButton_2_clicked()
     ssl->show();
 }
 
-void mapwindow::askForTwoNumbers(Game &game, QWidget *parent = nullptr)
+bool mapwindow::askForTwoNumbers(Game &game, QWidget *parent)
 {
     QDialog dialog(parent);
     QVBoxLayout *layout = new QVBoxLayout(&dialog);
@@ -699,7 +701,12 @@ void mapwindow::askForTwoNumbers(Game &game, QWidget *parent = nullptr)
 
     connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
 
-    dialog.exec();  // Execute the dialog
+    if (dialog.exec() == QDialog::Accepted) {
+        return true;  // Return true if OK was pressed and input is valid
+    } else {
+        return false; // Return false if Cancel was pressed
+    }
 }
+
 
 

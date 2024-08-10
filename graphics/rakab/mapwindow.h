@@ -60,7 +60,7 @@ private:
     QLabel* findNearestLabel(const QPoint&, const QList<QLabel*>&);
     void initializeLabels();
     bool checkAvailable(QString province);
-    void askForTwoNumbers(Game &game, QWidget *parent);
+    bool  askForTwoNumbers(Game &game, QWidget *parent);
 
 };
 
