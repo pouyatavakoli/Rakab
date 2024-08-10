@@ -278,6 +278,7 @@ void Playground::handleMatarsakEffect(Card* card) {
 
 void Playground::on_pushButton_clicked()
 {
+    game.setLastPlayerWhoPassed(game.getPlayerIndex());
     game.updatePlayersEligibility(game.getPlayerIndex());
     game.updateAnyPlayerCanPlay();
     if(game.getAnyPlayerCanPlay() == true)

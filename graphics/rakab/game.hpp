@@ -42,6 +42,7 @@ public:
     void setNeshaneSolhgOwner(int);
     void setNeshaneJangOwner();
     void setBattleStarter(const Player &);
+    void setLastPlayerWhoPassed(int);
 
     const Player &getPlayerWhoShouldStart();
     const Player &findSmallestPlayer();

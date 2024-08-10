@@ -49,6 +49,11 @@ std::string Player::getName() const {
     return name;
 }
 
+std::string Player::getColor() const
+{
+    return color;
+}
+
 bool Player::getWinStatus()
 {
     return winStatus;

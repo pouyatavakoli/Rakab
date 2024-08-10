@@ -48,6 +48,7 @@ public:
 
     int getAge() const;
     std::string getName() const;
+    std::string getColor() const;
 
     int playPurpleCard(const std::string &);
     bool playYellowCard(const std::string &);

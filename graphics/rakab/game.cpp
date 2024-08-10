@@ -481,7 +481,7 @@ void Game::setBattleStarter(const Player &player1)
     // Find the player
     for (int i = 0; i < playerCount; i++)
     {
-        if (players[i]->getName() == player1.getName())
+        if (players[i]->getColor() == player1.getColor())
         {
             currentPlayerIndex = i;
             break;
@@ -490,7 +490,12 @@ void Game::setBattleStarter(const Player &player1)
 
 
 }
-/*
+
+void Game::setLastPlayerWhoPassed(int index)
+{
+    lastPlayerWhoPassed = players[index];
+}
+
 const Player &Game::getPlayerWhoShouldStart()
 {
     if (NeshaneJangOwner)
@@ -520,7 +525,7 @@ const Player &Game::getPlayerWhoShouldStart()
     qDebug() << "Error: No valid player found to start the battle!";
     throw std::runtime_error("No valid player found to start the battle.");
 }
-*/
+
 
 const Player &Game::findSmallestPlayer()
 {
